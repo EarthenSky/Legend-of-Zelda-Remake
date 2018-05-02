@@ -1,0 +1,15 @@
+Info:
+Scenes deal with object management and, object updating, and object drawing.
+Any objects that you have in the game have to be part of a scene.  Except Link, the main char is the exception.
+Scenes have a draw method and an update method which are called by the gameloop file if the scene is active.
+
+There is a scene for the overworld, dungeon1, shop1, etc...
+
+
+Notes:
+- Have a function called when the scene is activated?  Probably, I can make a function in the gameloop or make a scene_manager class.
+  I'll probably make a scene_manager that manages the scenes and will trigger the active function of each when a scene is set active.
+
+
+Extras:
+See the template at "test/gs/scene_template" to implement a scene.

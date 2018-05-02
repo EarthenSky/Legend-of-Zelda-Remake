@@ -1,0 +1,11 @@
+Info:
+The asset manager module has functions that make it easier to get/draw certain images.
+The asset manager loads and holds all the assets that need to be used. (This includes sound stuff.)
+
+
+Notes:
+N/A
+
+
+Extras:
+N/A
