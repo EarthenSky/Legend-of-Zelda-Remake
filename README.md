@@ -1,6 +1,6 @@
-## Legend-of-Zelda-Remake
+## Pokemon Wave Blue
 
-This is a scaled down "remake version" of the Legend of Zelda (1986)
+This is a scaled down and remade version of Pokemon Leaf Green or Fire Red, with a few small changes to make grinding more bearable and reduce total play-time.
 
 
 ## Project Structure
@@ -32,24 +32,24 @@ collision_math_CS.txt
 
 Some basic rules to follow when writing code:
 
-- Write all variables, classes, and functions with underscores between the names like so
+- Write all variables and functions with underscores between the names like so
 ```
 this_is_a_function_with_a_name_that_is_too_long()
 ```
-No camelCase variable names.
+Only **classes** are written in CamelCase. *(First letter is uppercase)*
 
-- Comments should be punctuated properly (i.e includes a capital letter and a period.)
+- Comments **should** be punctuated properly (i.e includes a capital letter and a period) and be one space after the # character.
 ```
 # This print statement tells the user the location that they have just entered.
 print "Welcome To the Abyss."
 ```
 Try to place comments either in front of blocks of code that share similar qualities, or two spaces after a line of code.
 
-- Don't let a line of code go over 70-100 characters.  Pretty much if it is going off the screen, use a variable and make it two lines.
+- Don't let a line of code go over 70-100 characters.  Ever!  Pretty much if it is going off the screen, use a variable to make it two lines.
 
-- Write any class member variables with an \*m_\* infront of them, or just an \*\_\* infront of them if they are not being accessed outside of the class.  The \*m_\* and \*\_\* tell other users which variables shouldn't be accessed or changed **outside of the class**, though it doesn't stop them.
+- Write any class member variables with either an \*m_\* infront of them, or an \*\_\* infront of them if they are not being accessed outside of the class.  The \*m_\* and \*\_\* tell other users which variables shouldn't be accessed or changed **outside of the class**, although it doesn't stop them.
 ```
-class foo:
+class NumberWithName:
     """This class holds a name that can be accessed and a secret number that should not be accessed."""
     def __init__(self, name, secret_number):
         self.m_name = name
@@ -59,14 +59,20 @@ class foo:
 - Any variable that isn't being modified is called a **constant**.  If you ever make a constant name it in all caps like so:
 ```
 SCREEN_WIDTH = 600
-FPS = 120
+FPS = 120  # This is the default frames per second for the game.
 ```
-
+Always favor making a constant instead of placing a number in the middle of a function.  Reason:
+```
+# Updates the position of my_rect.
+my_rect = that_object.convert_to_rect(100, 300, my_rect[0], my_rect[1], 8)
+```
+What does 8 mean?  The comment doesn't help either.
 
 ## Other Notes
 
 - A function in a class is called a method.
-- This is cool (http://zelda.speedruns.com/loz/generalknowledge/item-drops-chart)
-- Use this for mechanics reference (https://www.youtube.com/watch?v=4bt5VHG3Jpw)
-- Use this for finding assets (https://www.spriters-resource.com/nes/legendofzelda/sheet/8366/)
-- NES default resolution is 256x224.
+- GBA screen size is 240px x 160px.
+- Use this for the assets ( https://www.spriters-resource.com/game_boy_advance/pokemonfireredleafgreen/ ) 
+- Here is a speed run to use for mechanics examples ( https://www.youtube.com/watch?v=fAWgVLz3OZo )
+- Here is the gen 1 pokemon capture rate algorithm ( https://www.dragonflycave.com/mechanics/gen-i-capturing )
+- Some pokemon stat algorithms ( https://bulbapedia.bulbagarden.net/wiki/Statistic ), we can just use the base stats for each pokemon.
