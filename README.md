@@ -61,18 +61,18 @@ class NumberWithName:
 SCREEN_WIDTH = 600
 FPS = 120  # This is the default frames per second for the game.
 ```
-Always favor making a constant instead of placing a number in the middle of a function.  Reason:
+Always favor making a constant instead of placing a number in the middle of a function.  Example:
 ```
 # Updates the position of my_rect.
 my_rect = that_object.convert_to_rect(100, 300, my_rect[0], my_rect[1], 8)
 ```
-What does 8 mean?  The comment doesn't help either.
+What does 8 mean?  The comment doesn't help either.  No magic numbers, ok?
 
 ## Other Notes
 
 - A function in a class is called a method.
 - GBA screen size is 240px x 160px.
-- Use this for the assets ( https://www.spriters-resource.com/game_boy_advance/pokemonfireredleafgreen/ ) 
+- Use this for the assets ( https://www.spriters-resource.com/game_boy_advance/pokemonfireredleafgreen/ )
 - Here is a speed run to use for mechanics examples ( https://www.youtube.com/watch?v=fAWgVLz3OZo )
 - Here is the gen 1 pokemon capture rate algorithm ( https://www.dragonflycave.com/mechanics/gen-i-capturing )
 - Some pokemon stat algorithms ( https://bulbapedia.bulbagarden.net/wiki/Statistic ), we can just use the base stats for each pokemon.

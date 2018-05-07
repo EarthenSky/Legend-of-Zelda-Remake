@@ -1,2 +1,2 @@
-'''This file will contain the main gameloop, which updates and calls the draw method of the scene_manager.
-There is also pygame init stuff here.'''
+'''This file will contain the main gameloop, which controls sequential
+scenes (environment scenes), usually just called *settings*.'''
