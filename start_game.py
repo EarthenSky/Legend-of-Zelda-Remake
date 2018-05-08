@@ -2,3 +2,5 @@
 assign which keys do what (maybe even use a controller?), and is given a small tip
 about moving the story along (try to leave the town if you havn't played any pokemon games before.)
 before being sent into the main intro loop.'''
+
+# Start the main game scene.

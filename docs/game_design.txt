@@ -1,75 +1,61 @@
 Introduction:
 
 Pokemon Wave Blue is a pseudo parody of the classic Pokemon RPG games Fire Red and Leaf Green, that
-
 is targeted at an audience that is less inclined to spend time on repetitive grinding tasks;
-
 additionally bundled with small changes that throws the player into the action faster.
 
 
 Background:
 
 The game starts with an intro animation with two Pokemon fighting. It then fades into the main menu
-
 screen that contains a blastoise and the title of the game. When the player presses start they are
-
 given a short explanation of the world of Pokemon by Prof. Oak. After the player has chosen their
-
 gender, name, and their rival's name, the player starts in a small room. The player can exit the
-
 room and the house and they are in a small town. Attempting to exit the small town causes Prof. Oak
-
 to stop the player and bring them back to his lab, giving them a Pokemon to choose and some
-
 pokeballs. After getting a Pokemon and battling the player's rival, the player can now start
-
 exploring outside the town and start battling and capturing pokemon.  On route 101, some trainers
-
 tell the player to go to the gym in the next town over.  When the player gets to the next town and
-
 tries to go to the gym, there is a person in the way who stops them from going inside, and tells
-
 them to go to viridian forest.  In viridian forest there is a group of pokemon trainers who don't
-
 like the power kids are given these days who need to be defeated.  When the leader is defeated the
-
 gym is now open.  When the gym is defeated you can now go to victory road.  There is a single
-
 difficult trainer in victory road.  When this trainer is defeated the game is won, the timer stops
-
 and the player can keep playing against Pokemon in tall grass.
 
 
-Description:s
+Description:
 
 [insert here]
+
+
+Description:
+
+{insert}
 
 
 Key Features:
 
-[insert here]
+- You can explore a large interactive world.
+- In Pokemon Wave Blue there is a large variety of different Pokemon to catch!
+- Pokemon Wave Blue is made to mimic the retro art style and soundtrack of the original Pokemon games.
 
 
 Genre:
 
-[insert here]
+Collector RPG
 
 
 Platform:
 
-[insert here]
+Target platform is Windows 7 or higher.
 
 
 Controls:
 
-[insert here]
+Key bindings can be set by the user but the default controls are, arrow keys to move with two action buttons, a primary button (preset to z) and a secondary button (preset to x), mimicking the standard "ab" button layout of the nes era game consoles.
 
 
 Walkthrough:
 
-[insert here]
-
-
-Concept Art:
-
-[insert here]
+The game starts at a settings menu where the player can choose if the game is in full screen and what buttons do what. Maybe I can also add a high-scores menu? After they complete the settings menu the player is brought into the intro of the game. The first part of the intro is a small animation of two Pokemon battling which transitions to the game's main menu that asks the player to press any button and has the title of the game. When the player presses a button the game starts the player in their room. The player can now walk around and explore their small town. When they eventually try to leave the game the player is stopped by Prof. Oak and brought to his lab to choose a Pokemon. The player walks over to a table and chooses one of three elemental Pokemon to use to battle with. The player's rival wants to battle him so the first Pokemon battle starts.  In the pokemon battle the player can select one of their pokemon's moves to use, tackle or growl.  Tackle deals direct damage,  while growl creates a status affect, that causes the enemy pokemon to deal less damage.  The pokemon with the fastest speed attacks first; the other pokemon attacks second.
