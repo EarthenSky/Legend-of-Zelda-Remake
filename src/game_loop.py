@@ -3,6 +3,12 @@ scenes (environment scenes), usually just called different scenes.'''
 
 import pygame
 
+# Different Scene Constants.
+PLAYER_HOUSE_UPSTAIRS = 0
+PLAYER_HOUSE_DOWNSTAIRS = 1
+OUTSIDE = 2
+# TODO: add more scenes.
+
 # Constants.
 SCREEN_SIZE = [240 * 4, 160 * 4]
 
@@ -16,6 +22,7 @@ import asset_manager
 
 # Globals.
 g_game_stopped = False
+g_current_scene = OUTSIDE
 
 # This function handles any input.  Called before update.
 def handle_input():
@@ -42,6 +49,15 @@ def draw():
 
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
+    if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
+        pass
+    elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
+        pass
+    elif g_current_scene == OUTSIDE:
+        pass
+    else:
+        print "GAME IS NOT IN ANY SCENE."
+
     print "last frame elapsed {}s".format(dt)
 
 # This function returns if the game is completed or not.  Return true if game is done.

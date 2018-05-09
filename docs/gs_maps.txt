@@ -1,0 +1,11 @@
+The maps used to sometimes draw tile and used for collision and interaction are stuctured like so:
+
+( 45 67 12 8* )
+
+Each item is separated with a space.
+
+The first number represents the group while the second number represents the item in the group.
+
+A star (*) means that the group is an animation and the animation will be played.
+
+A newline means that the next item is on the next row down. 
