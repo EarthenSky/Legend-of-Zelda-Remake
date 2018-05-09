@@ -3,4 +3,12 @@ assign which keys do what (maybe even use a controller?), and is given a small t
 about moving the story along (try to leave the town if you havn't played any pokemon games before.)
 before being sent into the main intro loop.'''
 
-# Start the main game scene.
+import sys
+
+sys.path.insert(0, 'src/')  # This line tells the importer where to look for modules.
+import game_loop_hidden  # Import the hidden main gameloop class.
+
+#TODO: insert settings and name stuff here.
+
+# Start the game.
+game_loop_hidden.start_gameloop()
