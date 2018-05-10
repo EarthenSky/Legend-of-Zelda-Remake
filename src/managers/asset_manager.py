@@ -22,6 +22,9 @@ outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert()
 
 # Blits the image to the surface.
 def _draw(surface, img, position, cut_rect):
+
+    # TODO: average the position to each 4 pixels.
+
     img = img.subsurface(cut_rect)  # Crop the img.
     img = pygame.transform.scale(img, (64, 64))  # 4x scale the img.
     surface.blit(img, position)  # Draw the img.
@@ -30,11 +33,15 @@ def _draw(surface, img, position, cut_rect):
 def draw_tile(surface, position, group, index):
     # TODO: camera stuff here?
 
+    # Make group and index integers.
+    group = int(group)
+    index = int(index)
+
     # Passes the cut position for the image to the draw function.
-    if group == LIGHT_GRASS:
+    if group >= 0 and group <= SPECIAL:
         _draw( surface, outside_tiles, position, (index * 16, group * 16, 16, 16) )
-    elif group == TREE:
-        _draw( surface, outside_tiles, position, (index * 16, group * 16, 16, 16) )
+    else:
+        print "ERR 8: INCORRECT GROUP NAME PASSED in asset_manager.py"
 
 # TODO: draw the different pokemon angles.
 def draw_pokemon():

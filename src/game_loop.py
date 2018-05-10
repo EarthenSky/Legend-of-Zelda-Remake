@@ -44,7 +44,9 @@ def draw():
     elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
         pass
     elif g_current_scene == OUTSIDE:
+        DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_outside_tilemap.draw(DISPLAY_SURFACE)
+        pass
     else:
         print "GAME IS NOT IN ANY SCENE."
 
@@ -58,7 +60,7 @@ def update(dt):
     elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
         pass
     elif g_current_scene == OUTSIDE:
-        #g_outside_tilemap.update()
+        g_outside_tilemap.update(dt)
         pass
     else:
         print "GAME IS NOT IN ANY SCENE."
