@@ -4,6 +4,8 @@ scenes (environment scenes), usually just called different scenes.'''
 import sys
 import pygame
 
+import player  # The player needs to move.
+
 # Different Scene Constants.
 PLAYER_HOUSE_UPSTAIRS = 0
 PLAYER_HOUSE_DOWNSTAIRS = 1
@@ -11,7 +13,7 @@ OUTSIDE = 2
 # TODO: add more scenes.
 
 # Constants.
-SCREEN_SIZE = [240 * 4, 160 * 4]
+SCREEN_SIZE = [240 * 4 * 2, 160 * 4 * 2]
 
 # Starts and sets up pygame.
 pygame.init()

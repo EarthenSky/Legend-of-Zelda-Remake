@@ -4,7 +4,7 @@ The player class interacts with this class.'''
 import sys
 
 # Constants.
-SCREEN_SIZE = [240 * 4, 160 * 4]
+SCREEN_SIZE = [240 * 4 * 2, 160 * 4 * 2]
 
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
@@ -20,7 +20,7 @@ class Tilemap:
         with open("resc/maps/{}".format(map_file_name), 'r') as map_file:
             # Loop through each line.
             for line in map_file:
-                row_list = line.replace('\n', '').split(" ")  # Obtain each item and make it a list.
+                row_list = ' '.join(line.split()).split(" ")  # Obtain each item and make it a list..replace('\n', '')
                 self.map_matrix.append(row_list)
                 #print row_list
 
@@ -43,9 +43,12 @@ class Tilemap:
                     pos_x = column_index * 64 + self.position[0]
                     pos_y = row_index * 64 + self.position[1]
 
+                    # Get the two variables from the string.
+                    group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
+
                     # Only draw the tile if it is in the screen.
                     if pos_x >= 0 and pos_x <= SCREEN_SIZE[0] and pos_y >= 0 and pos_y <= SCREEN_SIZE[1]:
-                        asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][0], self.map_matrix[row_index][column_index][1]);
+                        asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
 
         else:
             pass
