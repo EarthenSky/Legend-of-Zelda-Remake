@@ -4,7 +4,7 @@ The player class interacts with this class.'''
 import sys
 
 # Constants.
-SCREEN_SIZE = [240 * 4 * 2, 160 * 4 * 2]
+SCREEN_SIZE = [240 * 4, 160 * 4]
 
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
@@ -22,9 +22,6 @@ class Tilemap:
             for line in map_file:
                 row_list = ' '.join(line.split()).split(" ")  # Obtain each item and make it a list..replace('\n', '')
                 self.map_matrix.append(row_list)
-                #print row_list
-
-        #print str(self.map_matrix)
 
         # Is this object drawing from a batch of images or one large one?
         self.image_passed = False

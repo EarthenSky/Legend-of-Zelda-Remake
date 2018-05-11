@@ -4,8 +4,6 @@ scenes (environment scenes), usually just called different scenes.'''
 import sys
 import pygame
 
-import player  # The player needs to move.
-
 # Different Scene Constants.
 PLAYER_HOUSE_UPSTAIRS = 0
 PLAYER_HOUSE_DOWNSTAIRS = 1
@@ -13,7 +11,7 @@ OUTSIDE = 2
 # TODO: add more scenes.
 
 # Constants.
-SCREEN_SIZE = [240 * 4 * 2, 160 * 4 * 2]
+SCREEN_SIZE = [240 * 4, 160 * 4]
 
 # Starts and sets up pygame.
 pygame.init()
@@ -24,12 +22,17 @@ pygame.display.set_caption("Pokemon Wave Blue")
 sys.path.insert(0, 'src/objects/')  # This line tells the importer where to look for the module.
 import tilemap
 
+import player  # The player needs to move.
+
 # Globals.
 g_game_stopped = False
 g_current_scene = OUTSIDE
 
 # Create the different scenes.
 g_outside_tilemap = tilemap.Tilemap("outside.map", 0)
+
+# Create the player object.
+g_player = player.Player( [240*4/2-8*4, 160*4/2-10*4] )
 
 # This function handles any input.  Called before update.
 def handle_input():
@@ -38,6 +41,8 @@ def handle_input():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             g_game_stopped = True
+        elif g_player.handle_input(event):
+            pass
 
 # This is for drawing stuff.  Called before update.
 def draw():
@@ -52,8 +57,8 @@ def draw():
     else:
         print "GAME IS NOT IN ANY SCENE."
 
-    # Draw the sixth item of the TREE group.
-    #asset_manager.draw_tile(DISPLAY_SURFACE, (128, 64), asset_manager.TREE, 3);
+    # Draw the player.
+    g_player.draw(DISPLAY_SURFACE)
 
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
@@ -67,7 +72,8 @@ def update(dt):
     else:
         print "GAME IS NOT IN ANY SCENE."
 
-    #print "last frame elapsed {}s".format(dt)
+    # Draw the player.
+    g_player.move_player(dt)
 
 # This function returns if the game is completed or not.  Return true if game is done.
 def is_exit():
