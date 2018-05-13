@@ -62,18 +62,22 @@ def draw():
 
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
+    # Move the player and give the movement value to the other scenes.
+    map_offset = g_player.update(dt)
+
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
         pass
     elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
         pass
     elif g_current_scene == OUTSIDE:
+        # Update the tilemap, then translate it.
         g_outside_tilemap.update(dt)
+        g_outside_tilemap.translate(map_offset)
         pass
     else:
         print "GAME IS NOT IN ANY SCENE."
 
-    # Draw the player.
-    g_player.move_player(dt)
+
 
 # This function returns if the game is completed or not.  Return true if game is done.
 def is_exit():

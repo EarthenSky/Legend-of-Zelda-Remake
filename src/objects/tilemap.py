@@ -32,6 +32,11 @@ class Tilemap:
         else:
             self.image_passed = True
 
+    # Translates the tilemap by a certain amount on each axis.
+    def translate(self, point2d):
+        self.position[0] += point2d[0]
+        self.position[1] += point2d[1]
+
     def draw(self, surface):
         if not self.image_passed:
             # Loop thorough the matrix and find / draw all the tiles.

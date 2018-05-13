@@ -26,7 +26,7 @@ male_char_spritesheet = pygame.image.load("resc/images/male_char_spritesheet.png
 # Blits the image to the surface.
 def _draw(surface, img, position, cut_rect):
     # Rounds the position to every 4 pixels.
-    #position = (round(position[0] / 4) * 4, round(position[1] / 4) * 4)
+    position = (round(position[0] / 4) * 4, round(position[1] / 4) * 4)
 
     img = img.subsurface(cut_rect)  # Crop the img.
     img = pygame.transform.scale(img, (img.get_width() * 4, img.get_height() * 4))  # 4x scale the img.
