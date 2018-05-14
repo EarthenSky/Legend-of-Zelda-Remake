@@ -32,6 +32,8 @@ class Tilemap:
         else:
             self.image_passed = True
 
+        over_tile_list = []
+
     # Gets the player's 'offset' tuple which contains a position and what to do with it.
     # The tuple can be translation or assignation.
     def get_offset(self, offset):
@@ -44,6 +46,7 @@ class Tilemap:
             self.position[1] = offset[2]
 
     def draw(self, surface):
+        over_tile_list = []
         if not self.image_passed:
             # Loop thorough the matrix and find / draw all the tiles.
             for row_index in range(len(self.map_matrix)):
@@ -51,12 +54,18 @@ class Tilemap:
                     pos_x = column_index * 64 + self.position[0]
                     pos_y = row_index * 64 + self.position[1]
 
-                    # Get the two variables from the string.
-                    group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
-
                     # Only draw the tile if it is in the screen.
                     if pos_x >= -64 and pos_x <= SCREEN_SIZE[0] + 64 and pos_y >= -64 and pos_y <= SCREEN_SIZE[1] + 64:
-                        asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
+                        # Look for two tiles. t means a second tile on top of eachother.
+                        if self.map_matrix[row_index][column_index].find('t') == -1:  # -1 means cannot find.
+                            # Get the two variables from the string.
+                            group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
+                        else:
+                            # Get the two variables from the string.
+                            group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('t', ',').split(',')
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group2, depth2);
 
         else:
             pass

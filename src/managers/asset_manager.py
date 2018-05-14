@@ -14,7 +14,7 @@ HOUSE = 7
 LAB = 8
 
 # Asset manager initialization
-outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert()
+outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert_alpha()
 
 #TODO: add the tiles to these.
 # animated_tiles = pygame.image.load("resc/images/animated_tiles.png").convert()

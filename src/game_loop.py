@@ -76,8 +76,6 @@ def update(dt):
     else:
         print "GAME IS NOT IN ANY SCENE."
 
-
-
 # This function returns if the game is completed or not.  Return true if game is done.
 def is_exit():
     return g_game_stopped
