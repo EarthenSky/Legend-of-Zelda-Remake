@@ -15,7 +15,7 @@ SCREEN_SIZE = [240 * 4, 160 * 4]
 
 # Starts and sets up pygame.
 pygame.init()
-DISPLAY_SURFACE = pygame.display.set_mode(SCREEN_SIZE)
+DISPLAY_SURFACE = pygame.display.set_mode(SCREEN_SIZE, pygame.DOUBLEBUF)
 pygame.display.set_caption("Pokemon Wave Blue")
 
 # Must be imported after pygame has been initialized.
@@ -32,7 +32,7 @@ g_current_scene = OUTSIDE
 g_outside_tilemap = tilemap.Tilemap("outside.map", 0)
 
 # Create the player object.
-g_player = player.Player( [240*4/2-8*4, 160*4/2-10*4] )
+g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )
 
 # This function handles any input.  Called before update.
 def handle_input():
@@ -63,7 +63,7 @@ def draw():
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
     # Move the player and give the movement value to the other scenes.
-    map_offset = g_player.update(dt)
+    player_offset = g_player.update(dt)
 
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
         pass
@@ -72,8 +72,7 @@ def update(dt):
     elif g_current_scene == OUTSIDE:
         # Update the tilemap, then translate it.
         g_outside_tilemap.update(dt)
-        g_outside_tilemap.translate(map_offset)
-        pass
+        g_outside_tilemap.get_offset(player_offset)
     else:
         print "GAME IS NOT IN ANY SCENE."
 

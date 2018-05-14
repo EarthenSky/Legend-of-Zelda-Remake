@@ -1,40 +1,29 @@
-'''This is the player, who moves and is animated.'''
+'''This is the player, who moves and is animated.  Movement is a little complicated.'''
 
 import sys
-
 import pygame
 
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import asset_manager
 
-SPEED = 180
+SPEED = 230
+ANIMATION_SPEED = 0.134  # 0.134s or 134ms per frame.
 
 class Player:
-
     def __init__(self, start_position):
-        # Where the player is drawn. (center of screen.)
-        self._draw_position = start_position
+        self._draw_position = start_position  # Where the player is drawn. (center of screen.)
+        self.position = list(start_position)  # The mathematical position of the player.
+        self._last_position = list(start_position) # The last position of the player
 
-        # The mathematical position of the player.
-        self.position = list(start_position)
+        self._current_animation = 0  # The current frame of the player's animation.
+        self._animation_key = [0, 2, 0, 1]  # This holds which animation to play on which frame.
 
-        # The last position of the player (create a new instance of start_position)
-        self._last_position = list(start_position)
+        self.direction = 0  # The direction the player is facing.  down, up, left, right is 0, 1, 2, 3.
 
-        print(id(self.position), id(self._last_position))
+        self._move = False  # If the player is moving to the next tile.
 
-        # The value of the current frame of the player's animation.
-        self._current_animation = 0
-
-        # The direction the player is facing.  down, up, left, right is 0, 1, 2, 3.
-        self.direction = 0
-
-        # If the player is moving to the next tile.
-        self._move = False
-
-        # If the player is running.
-        self._running = False
+        self._running = False  # If the player is running.
 
         # Keys that are down.
         self.left_key_down = False
@@ -46,101 +35,22 @@ class Player:
         self._timer_on = False
         self._timer_val = 0
 
-    def _check_new_move_dir(self, dt):
-        # Check if need to move another direction
-        if (self.left_key_down and self.left_key_down and self.left_key_down and self.left_key_down) == False:
-            self._move = False
-            return (0, 0)
-        else:
-            # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
-            if self.left_key_down == True:
-                self.direction = 2
-                self.position[0] += -SPEED * dt
-                return (SPEED * dt, 0)
-
-            elif self.right_key_down == True:
-                self.direction = 3
-                self.position[0] += SPEED * dt
-                return (-SPEED * dt, 0)
-
-
-    def _move_player(self, dt):
-            if self.direction == 0:
-                pass
-            elif self.direction == 1:
-                pass
-            elif self.direction == 2:
-                # Case: player needs to move more, until they are on the tile.
-                if self.position[0] > self._last_position[0] - 64:
-                    self.position[0] += -SPEED * dt
-                    return (SPEED * dt, 0)
-                else:
-                    # Hit tile so flush the position values.
-                    self.position[0] = self._last_position[0] - 64
-                    self._last_position[0] = self.position[0]
-
-                    return self._check_new_move_dir(dt)
-
-                    '''
-                    # Finish moving if key is up.
-                    if self.left_key_down == True:
-                        self._last_position[0] -= 64
-                        self.position[0] += -SPEED * dt
-                        return (SPEED * dt, 0)
-                    else:
-                        self._move = False
-                        self.position[0] = self._last_position[0] - 64
-                        return (0, 0)
-                    '''
-
-            elif self.direction == 3:
-                # Case: player needs to move more, until they are on the tile.
-                if self.position[0] < self._last_position[0] + 64:
-                    self.position[0] += SPEED * dt
-                    return (-SPEED * dt, 0)
-                else:
-                    # Hit tile so flush the position values.
-                    self.position[0] = self._last_position[0] + 64
-                    self._last_position[0] = self.position[0]
-
-                    return self._check_new_move_dir(dt)
-
+        # The value used for the timer for the player's animation.
+        self._animation_timer_val = 0
 
     # Moving and stuff.
     def handle_input(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                '''
-                if self._move == False:
-                    if self.direction == 2:
-                        # Start moving if the player is already pointing in the direction of the key that is pressed.
-                        self._move = True
-                        self._last_position = list(self.position)
-                    else:
-                        self.direction = 2
-                '''
                 self.left_key_down = True
                 return True
             elif event.key == pygame.K_RIGHT:
-                '''
-                if self._move == False:
-                    if self.direction == 3:
-                        # Start moving if the player is already pointing in the direction of the key that is pressed.
-                        self._move = True
-                        self._last_position = list(self.position)
-                    else:
-                        self.direction = 3
-                '''
                 self.right_key_down = True
                 return True
             elif event.key == pygame.K_UP:
-                self.direction = 1
-
                 self.up_key_down = True
                 return True
             elif event.key == pygame.K_DOWN:
-                self.direction = 0
-
                 self.down_key_down = True
                 return True
         elif event.type == pygame.KEYUP:
@@ -160,37 +70,161 @@ class Player:
             return False
 
     def draw(self, surface):
-        asset_manager.draw_player(surface, self._draw_position, self.direction, 0, True)
+        asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation], True)
+
+    def _update_animation(self, dt):
+        self._animation_timer_val += dt
+
+        # If the timer has gone on for 0.2 seconds, change to the next animation frame.
+        if self._animation_timer_val >= ANIMATION_SPEED:
+            self._animation_timer_val = 0
+
+            # Update frame number
+            self._current_animation += 1
+            if self._current_animation >= 4:
+                self._current_animation = 0
+
+    # Check if the player needs to move in another direction before stopping.
+    def _check_new_move_dir(self, dt):
+        # Check if need to move another direction
+        if (self.left_key_down or self.right_key_down or self.up_key_down or self.down_key_down) == False:
+            self._move = False
+        else:
+            # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
+            if self.left_key_down == True:
+                self.direction = 2
+                self.position[0] += -SPEED * dt
+
+            elif self.right_key_down == True:
+                self.direction = 3
+                self.position[0] += SPEED * dt
+
+            elif self.up_key_down == True:
+                self.direction = 1
+                self.position[1] += -SPEED * dt
+
+            elif self.down_key_down == True:
+                self.direction = 0
+                self.position[1] += SPEED * dt
+
+    # This function handles calculating what amount the player needs to move.
+    def _move_player(self, dt):
+            if self.direction == 0:
+                # Case: player needs to move more, until they are on the tile.
+                if self.position[1] <= self._last_position[1] + 64:
+                    self.position[1] += SPEED * dt
+                    return (0, 0, -SPEED * dt)
+                else:
+                    # Hit tile so flush the position values.
+                    self.position[1] = self._last_position[1] + 64
+                    self._last_position[1] = self.position[1]
+
+                    self._check_new_move_dir(dt)
+
+                    return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
+
+            elif self.direction == 1:
+                # Case: player needs to move more, until they are on the tile.
+                if self.position[1] >= self._last_position[1] - 64:
+                    self.position[1] += -SPEED * dt
+                    return (0, 0, SPEED * dt)
+                else:
+                    # Hit tile so flush the position values.
+                    self.position[1] = self._last_position[1] - 64
+                    self._last_position[1] = self.position[1]
+
+                    self._check_new_move_dir(dt)
+
+                    return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
+
+            elif self.direction == 2:
+                # Case: player needs to move more, until they are on the tile.
+                if self.position[0] >= self._last_position[0] - 64:
+                    self.position[0] += -SPEED * dt
+                    return (0, SPEED * dt, 0)
+                else:
+                    # Hit tile so flush the position values.
+                    self.position[0] = self._last_position[0] - 64
+                    self._last_position[0] = self.position[0]
+
+                    self._check_new_move_dir(dt)
+
+                    return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
+
+            elif self.direction == 3:
+                # Case: player needs to move more, until they are on the tile.
+                if self.position[0] <= self._last_position[0] + 64:
+                    self.position[0] += SPEED * dt
+                    return (0, -SPEED * dt, 0)
+                else:
+                    # Hit tile so flush the position values.
+                    self.position[0] = self._last_position[0] + 64
+                    self._last_position[0] = self.position[0]
+
+                    self._check_new_move_dir(dt)
+
+                    return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
     def update(self, dt):
         if self._move == False:
+            if self._current_animation == 1:
+                self._current_animation = 2
+            elif self._current_animation == 3:
+                self._current_animation = 0
+
             # If a key is pressed, turn in that direction and start a timer.
             if self.left_key_down == True:
                 # If player is already facing the direction they need to move, don't start timer.
-                if self.direction == 2:
+                if self.direction != 2:
                     self._timer_on = True
                     self._timer_val = 0
 
+                # Set move direction and start moving when timer is done.
                 self.direction = 2
                 self._move = True
 
             elif self.right_key_down == True:
-                if self.direction == 3:
+                # If player is already facing the direction they need to move, don't start timer.
+                if self.direction != 3:
                     self._timer_on = True
                     self._timer_val = 0
 
+                # Set move direction and start moving when timer is done.
                 self.direction = 3
                 self._move = True
 
-            return (0, 0)  # No movement
+            elif self.up_key_down == True:
+                # If player is already facing the direction they need to move, don't start timer.
+                if self.direction != 1:
+                    self._timer_on = True
+                    self._timer_val = 0
+
+                # Set move direction and start moving when timer is done.
+                self.direction = 1
+                self._move = True
+
+            elif self.down_key_down == True:
+                # If player is already facing the direction they need to move, don't start timer.
+                if self.direction != 0:
+                    self._timer_on = True
+                    self._timer_val = 0
+
+                # Set move direction and start moving when timer is done.
+                self.direction = 0
+                self._move = True
+
+            return (0, 0, 0)  # No movement
         else:
+            # Animate player movement.
+            self._update_animation(dt)
+
             # Increase the timer by the amount of time passed.
             if self._timer_on == True:
                 self._timer_val += dt
-                print (self._timer_val)
+                print self._timer_val
 
-                # 100 ms or 0.1s is how long a direction key has to be pressed to start moving, not just direction turn.
-                if self._timer_val >= 0.2:
+                # 120 ms or 0.12s is how long a direction key has to be pressed to start moving, not just direction turn.
+                if self._timer_val >= 0.120:
                     # Turn off timer and flush it.
                     self._timer_on = False
                     self._timer_val = 0
@@ -200,50 +234,11 @@ class Player:
                         self._move = False
                     elif self.direction == 3 and self.right_key_down == False:
                         self._move = False
+                    elif self.direction == 0 and self.down_key_down == False:
+                        self._move = False
+                    elif self.direction == 1 and self.up_key_down == False:
+                        self._move = False
 
-                return (0, 0)  # No movement
+                return (0, 0, 0)  # No movement
             else:
                 return self._move_player(dt)
-
-'''
-    # This function WILL return the offset of it's movement, to move the tilemaps.
-    def move_player(self, dt):
-        if self._move == True:
-            if self.direction == 0:
-                pass
-            elif self.direction == 1:
-                pass
-            elif self.direction == 2:
-                # Case: player needs to move more, until they are on the tile.
-                if self.position[0] > self._last_position[0] - 64:
-                    self.position[0] += -SPEED * dt
-                    return (SPEED * dt, 0)
-                else:
-                    # Finish moving if key is up.
-                    if self.left_key_down == True:
-                        self._last_position[0] -= 64
-                        self.position[0] += -SPEED * dt
-                        return (SPEED * dt, 0)
-                    else:
-                        self._move = False
-                        self.position[0] = self._last_position[0] - 64
-                        return (0, 0)
-
-            elif self.direction == 3:
-                # Case: player needs to move more, until they are on the tile.
-                if self.position[0] < self._last_position[0] + 64:
-                    self.position[0] += SPEED * dt
-                    return (-SPEED * dt, 0)
-                else:
-                    # Finish moving if key is up.
-                    if self.right_key_down == True:
-                        self._last_position[0] += 64
-                        self.position[0] += SPEED * dt
-                        return (-SPEED * dt, 0)
-                    else:
-                        self._move = False
-                        self.position[0] = self._last_position[0] + 64
-                        return (0, 0)
-        else:
-            return (0, 0)
-'''

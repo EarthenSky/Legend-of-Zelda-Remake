@@ -32,10 +32,16 @@ class Tilemap:
         else:
             self.image_passed = True
 
-    # Translates the tilemap by a certain amount on each axis.
-    def translate(self, point2d):
-        self.position[0] += point2d[0]
-        self.position[1] += point2d[1]
+    # Gets the player's 'offset' tuple which contains a position and what to do with it.
+    # The tuple can be translation or assignation.
+    def get_offset(self, offset):
+        # 0 == translate, 1 = set_pos
+        if offset[0] == 0:
+            self.position[0] += offset[1]
+            self.position[1] += offset[2]
+        else:
+            self.position[0] = offset[1]
+            self.position[1] = offset[2]
 
     def draw(self, surface):
         if not self.image_passed:
@@ -49,7 +55,7 @@ class Tilemap:
                     group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
 
                     # Only draw the tile if it is in the screen.
-                    if pos_x >= 0 and pos_x <= SCREEN_SIZE[0] and pos_y >= 0 and pos_y <= SCREEN_SIZE[1]:
+                    if pos_x >= -64 and pos_x <= SCREEN_SIZE[0] + 64 and pos_y >= -64 and pos_y <= SCREEN_SIZE[1] + 64:
                         asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
 
         else:

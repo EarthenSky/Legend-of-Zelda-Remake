@@ -21,7 +21,7 @@ outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert()
 # forest_tiles = pygame.image.load("resc/images/forest_tiles.png").convert()
 
 # Initialize the player sprite sheet.
-male_char_spritesheet = pygame.image.load("resc/images/male_char_spritesheet.png").convert()
+male_char_spritesheet = pygame.image.load("resc/images/male_char_spritesheet.png").convert_alpha()
 
 # Blits the image to the surface.
 def _draw(surface, img, position, cut_rect):
