@@ -60,6 +60,11 @@ def draw():
     # Draw the player.
     g_player.draw(DISPLAY_SURFACE)
 
+    # Stuff drawn over the player.
+    if g_current_scene == OUTSIDE:
+        g_outside_tilemap.over_draw(DISPLAY_SURFACE)
+        pass
+
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
     # Move the player and give the movement value to the other scenes.

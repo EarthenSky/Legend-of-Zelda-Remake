@@ -32,7 +32,8 @@ class Tilemap:
         else:
             self.image_passed = True
 
-        over_tile_list = []
+        # The list that holds all the draw functions for the items drawn after the player.
+        self.over_tile_queue = []
 
     # Gets the player's 'offset' tuple which contains a position and what to do with it.
     # The tuple can be translation or assignation.
@@ -46,8 +47,10 @@ class Tilemap:
             self.position[1] = offset[2]
 
     def draw(self, surface):
-        over_tile_list = []
         if not self.image_passed:
+            # Reset the over tile queue.
+            self.over_tile_queue = []
+
             # Loop thorough the matrix and find / draw all the tiles.
             for row_index in range(len(self.map_matrix)):
                 for column_index in range(len(self.map_matrix[row_index])):
@@ -62,14 +65,29 @@ class Tilemap:
                             group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
                             asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
                         else:
-                            # Get the two variables from the string.
-                            group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('t', ',').split(',')
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), group2, depth2);
+                            if self.map_matrix[row_index][column_index].find('b') == -1:  # -1 means cannot find.
+                                # Get the 4 variables from the string.
+                                group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('t', ',').split(',')
+                                asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
+
+                                # Draw the second part above the player.
+                                self.over_tile_queue.append( ((pos_x, pos_y), group2, depth2) )
+                            else:
+                                # Get the 4 variables from the string.
+                                group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('tb', ',').split(',')
+
+                                # Draw both parts under the player.
+                                asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
+                                asset_manager.draw_tile(surface, (pos_x, pos_y), group2, depth2);
 
         else:
             pass
             # TODO: just blit this image.
+
+    # Draw all the tiles that are drawn over the player.
+    def over_draw(self, surface):
+        for tile in self.over_tile_queue:
+            asset_manager.draw_tile(surface, tile[0], tile[1], tile[2]);
 
     # Uses delta time (dt).
     def update(self, dt):
