@@ -10,8 +10,9 @@ FENCE = 3
 LEDGE = 4
 DARK_GRASS = 5
 SPECIAL = 6  # (0:bright tall grass, 1:metal sign, 2:bright wood sign, 3-4:mailbox)
-HOUSE = 7
-LAB = 8
+DIRT = 7
+HOUSE = 8
+LAB = 9
 
 # Asset manager initialization
 outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert_alpha()

@@ -15,7 +15,7 @@ SCREEN_SIZE = [240 * 4, 160 * 4]
 
 # Starts and sets up pygame.
 pygame.init()
-DISPLAY_SURFACE = pygame.display.set_mode(SCREEN_SIZE, pygame.DOUBLEBUF)
+DISPLAY_SURFACE = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("Pokemon Wave Blue")
 
 # Must be imported after pygame has been initialized.
