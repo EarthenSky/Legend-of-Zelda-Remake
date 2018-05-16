@@ -35,6 +35,10 @@ class Tilemap:
         # The list that holds all the draw functions for the items drawn after the player.
         self.over_tile_queue = []
 
+        # The animation frame that the tilemap is on. (affects all the sprites at the same time.)
+        # Note: this variable goes to 8 frames cause some animations are 8 frames long.
+        self._animation_frame = 0
+
     # Gets the player's 'offset' tuple which contains a position and what to do with it.
     # The tuple can be translation or assignation.
     def get_offset(self, offset):
@@ -63,20 +67,37 @@ class Tilemap:
                         if self.map_matrix[row_index][column_index].find('t') == -1:  # -1 means cannot find.
                             # Get the two variables from the string.
                             group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);  # Draw the tile
+
+                        elif self.map_matrix[row_index][column_index].find('ao') != -1:  # Case: found an 'a'.  the o stands for 'over' as in the top image is an animation.
+                            # Get the 4 variables from the string.
+                            group, depth, group2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('ao', ',').split(',')
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);  # Draw the tile
+
+                            # Draw the second tile above the player.
+                            self.over_tile_queue.append( ((pos_x, pos_y), group2, _animation_frame) )
+
+                        elif self.map_matrix[row_index][column_index].find('au') != -1:  # Case: found an 'a'.  the u stands for 'under' as in the bottom image is an animation.
+                            # Get the 4 variables from the string.
+                            depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('au', ',').split(',')
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, _animation_frame);  # Draw the tile
+
+                            # Draw the second tile above the player.
+                            self.over_tile_queue.append( ((pos_x, pos_y), group2, depth2) )
+
                         else:
                             if self.map_matrix[row_index][column_index].find('b') == -1:  # -1 means cannot find.
                                 # Get the 4 variables from the string.
                                 group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('t', ',').split(',')
                                 asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
 
-                                # Draw the second part above the player.
+                                # Draw the second tile above the player.
                                 self.over_tile_queue.append( ((pos_x, pos_y), group2, depth2) )
                             else:
                                 # Get the 4 variables from the string.
                                 group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('tb', ',').split(',')
 
-                                # Draw both parts under the player.
+                                # Draw both tiles under the player.
                                 asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);
                                 asset_manager.draw_tile(surface, (pos_x, pos_y), group2, depth2);
 

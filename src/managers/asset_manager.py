@@ -13,6 +13,7 @@ SPECIAL = 6  # (0:bright tall grass, 1:metal sign, 2:bright wood sign, 3-4:mailb
 DIRT = 7
 HOUSE = 8
 LAB = 9
+WATER_EDGES = 10
 
 # Asset manager initialization
 outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert_alpha()
@@ -42,8 +43,10 @@ def draw_tile(surface, position, group, depth):
     depth = int(depth)
 
     # Passes the cut position for the image to the draw function.
-    if group >= 0 and group <= LAB:
+    if group >= 0 and group <= WATER_EDGES:
         _draw( surface, outside_tiles, position, (depth * 16, group * 16, 16, 16) )
+    elif group > WATER_EDGES:
+        #todo: draw the water.
     else:
         print "ERR 8: INCORRECT GROUP NAME PASSED in asset_manager.py"
 

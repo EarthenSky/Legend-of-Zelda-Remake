@@ -7,8 +7,8 @@ import pygame
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import asset_manager
 
-SPEED = 230
-ANIMATION_SPEED = 0.134  # 0.134s or 134ms per frame.
+SPEED = 235
+ANIMATION_SPEED = 0.138  # 0.138s or 138ms per frame.
 
 class Player:
     def __init__(self, start_position):
