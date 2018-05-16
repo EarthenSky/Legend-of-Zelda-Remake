@@ -32,8 +32,8 @@ def gameloop():
         delta_time = framerate_clock.tick(FPS) / 1000.0
 
         # Prints the delta_time value.  Only for debug.
-        if framerate_clock.get_fps() < 100:
-            print "DEBUG: delta_time = " + str(delta_time) + ", fps -> " + str( framerate_clock.get_fps() )
+        #if framerate_clock.get_fps() < 100:
+            #print "DEBUG: delta_time = " + str(delta_time) + ", fps -> " + str( framerate_clock.get_fps() )
 
     # Close pygame before application closes.
     pygame.quit()

@@ -72,6 +72,19 @@ class Player:
     def draw(self, surface):
         asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation], True)
 
+    def check_collision(self):
+        global g_outside_tilemap
+        
+        if g_current_scene == OUTSIDE:
+            pass
+
+        tilex, tiley = g_outside_tilemap.get_tile(round(position.x/64), round(position.y/64))
+
+        if tilex == 10:
+            # Stop movement.
+            pass
+            print "stawp"
+
     def _update_animation(self, dt):
         self._animation_timer_val += dt
 
@@ -106,6 +119,8 @@ class Player:
             elif self.down_key_down == True:
                 self.direction = 0
                 self.position[1] += SPEED * dt
+
+            self.check_collision()
 
     # This function handles calculating what amount the player needs to move.
     def _move_player(self, dt):
@@ -203,6 +218,8 @@ class Player:
                 self.direction = 1
                 self._move = True
 
+                print "next1"
+
             elif self.down_key_down == True:
                 # If player is already facing the direction they need to move, don't start timer.
                 if self.direction != 0:
@@ -212,6 +229,8 @@ class Player:
                 # Set move direction and start moving when timer is done.
                 self.direction = 0
                 self._move = True
+
+                print "next1"
 
             return (0, 0, 0)  # No movement
         else:

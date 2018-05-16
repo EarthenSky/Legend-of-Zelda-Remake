@@ -14,12 +14,14 @@ DIRT = 7
 HOUSE = 8
 LAB = 9
 WATER_EDGES = 10
+WATER_ANIMATION = 11
+FLOWER_ANIMATION = 12
 
-# Asset manager initialization
+# Asset manager initialization.
 outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert_alpha()
+animated_tiles = pygame.image.load("resc/images/animated_tiles.png").convert_alpha()
 
 #TODO: add the tiles to these.
-# animated_tiles = pygame.image.load("resc/images/animated_tiles.png").convert()
 # forest_tiles = pygame.image.load("resc/images/forest_tiles.png").convert()
 
 # Initialize the player sprite sheet.
@@ -46,7 +48,7 @@ def draw_tile(surface, position, group, depth):
     if group >= 0 and group <= WATER_EDGES:
         _draw( surface, outside_tiles, position, (depth * 16, group * 16, 16, 16) )
     elif group > WATER_EDGES:
-        #todo: draw the water.
+        _draw( surface, animated_tiles, position, (depth * 16, (group - WATER_ANIMATION) * 16, 16, 16) )
     else:
         print "ERR 8: INCORRECT GROUP NAME PASSED in asset_manager.py"
 

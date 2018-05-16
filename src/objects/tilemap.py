@@ -6,6 +6,8 @@ import sys
 # Constants.
 SCREEN_SIZE = [240 * 4, 160 * 4]
 
+ANIMATION_SPEED = 0.138*1.7  # 0.138s or 138ms per frame.
+
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import asset_manager
@@ -38,6 +40,7 @@ class Tilemap:
         # The animation frame that the tilemap is on. (affects all the sprites at the same time.)
         # Note: this variable goes to 8 frames cause some animations are 8 frames long.
         self._animation_frame = 0
+        self._animation_timer_val = 0
 
     # Gets the player's 'offset' tuple which contains a position and what to do with it.
     # The tuple can be translation or assignation.
@@ -64,26 +67,26 @@ class Tilemap:
                     # Only draw the tile if it is in the screen.
                     if pos_x >= -64 and pos_x <= SCREEN_SIZE[0] + 64 and pos_y >= -64 and pos_y <= SCREEN_SIZE[1] + 64:
                         # Look for two tiles. t means a second tile on top of eachother.
-                        if self.map_matrix[row_index][column_index].find('t') == -1:  # -1 means cannot find.
-                            # Get the two variables from the string.
-                            group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);  # Draw the tile
-
-                        elif self.map_matrix[row_index][column_index].find('ao') != -1:  # Case: found an 'a'.  the o stands for 'over' as in the top image is an animation.
+                        if self.map_matrix[row_index][column_index].find('ao') != -1:  # Case: found an 'a'.  the o stands for 'over' as in the top image is an animation.
                             # Get the 4 variables from the string.
                             group, depth, group2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('ao', ',').split(',')
                             asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);  # Draw the tile
 
                             # Draw the second tile above the player.
-                            self.over_tile_queue.append( ((pos_x, pos_y), group2, _animation_frame) )
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group2, self._animation_frame % 4);
 
                         elif self.map_matrix[row_index][column_index].find('au') != -1:  # Case: found an 'a'.  the u stands for 'under' as in the bottom image is an animation.
                             # Get the 4 variables from the string.
-                            depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('au', ',').split(',')
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, _animation_frame);  # Draw the tile
+                            group, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('au', ',').split(',')
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, self._animation_frame);  # Draw the tile
 
-                            # Draw the second tile above the player.
-                            self.over_tile_queue.append( ((pos_x, pos_y), group2, depth2) )
+                            # Draw the second tile under the player.
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group2, depth2);
+
+                        elif self.map_matrix[row_index][column_index].find('t') == -1:  # -1 means cannot find.
+                            # Get the two variables from the string.
+                            group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), group, depth);  # Draw the tile
 
                         else:
                             if self.map_matrix[row_index][column_index].find('b') == -1:  # -1 means cannot find.
@@ -110,6 +113,48 @@ class Tilemap:
         for tile in self.over_tile_queue:
             asset_manager.draw_tile(surface, tile[0], tile[1], tile[2]);
 
+    def _update_animation(self, dt):
+        self._animation_timer_val += dt
+
+        # If the timer has gone on for 0.2 seconds, change to the next animation frame.
+        if self._animation_timer_val >= ANIMATION_SPEED:
+            self._animation_timer_val = 0
+
+            # Update frame number
+            self._animation_frame += 1
+            if self._animation_frame >= 8:
+                self._animation_frame = 0
+
     # Uses delta time (dt).
     def update(self, dt):
-        pass #TODO: animate some tiles.
+        self._update_animation(dt)
+
+    def get_tile(self, x, y):
+        # Look for two tiles. t means a second tile on top of eachother.
+        if self.map_matrix[row_index][column_index].find('ao') != -1:  # Case: found an 'a'.  the o stands for 'over' as in the top image is an animation.
+            # Get the 4 variables from the string.
+            group, depth, group2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('ao', ',').split(',')
+
+            return( (group, depth) );  #return the tile.
+
+        elif self.map_matrix[row_index][column_index].find('au') != -1:  # Case: found an 'a'.  the u stands for 'under' as in the bottom image is an animation.
+            # Get the 4 variables from the string.
+            group, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('au', ',').split(',')
+
+            return( (group2, depth2) );  #return the tile.
+
+        elif self.map_matrix[row_index][column_index].find('t') == -1:  # -1 means cannot find.
+            # Get the two variables from the string.
+            group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
+            return( (group, depth) );  #return the tile.
+
+        else:
+            if self.map_matrix[row_index][column_index].find('b') == -1:  # -1 means cannot find.
+                # Get the 4 variables from the string.
+                group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('t', ',').split(',')
+                return( (group, depth) );  #return the bottomtile.
+            else:
+                # Get the 4 variables from the string.
+                group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('tb', ',').split(',')
+
+                return( (group, depth) );  #return the bottomtile.
