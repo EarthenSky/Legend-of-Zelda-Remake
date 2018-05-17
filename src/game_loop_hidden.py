@@ -6,7 +6,7 @@ import game_loop  # Import the main gameloop to call its functions.
 # This is the gameloop section of code.
 def _gameloop():
     # Constants.
-    FPS = 220
+    FPS = 120
 
     # Globals.
     delta_time = 0
@@ -32,9 +32,9 @@ def _gameloop():
         delta_time = framerate_clock.tick(FPS) / 1000.0
 
         # Prints the delta_time value.  Only for debug.
-            #if framerate_clock.get_fps() < 100:
-        pass
-        print "DEBUG: delta_time = " + str(delta_time) + ", fps -> " + str( framerate_clock.get_fps() )
+        if framerate_clock.get_fps() < 100:
+            print "DEBUG: delta_time = " + str(delta_time) + ", fps -> " + str( framerate_clock.get_fps() )
+            pass
 
     # Close pygame before application closes.
     pygame.quit()

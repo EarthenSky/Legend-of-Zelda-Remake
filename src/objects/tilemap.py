@@ -6,7 +6,7 @@ import sys
 # Constants.
 SCREEN_SIZE = [240 * 4, 160 * 4]
 
-ANIMATION_SPEED = 0.138*1.7  # 0.138s or 138ms per frame.
+ANIMATION_SPEED = 0.138*1.7  # 1.7 times more than 0.138s or 138ms per frame.
 
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
