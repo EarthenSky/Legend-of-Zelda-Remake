@@ -3,6 +3,8 @@
 import sys
 import pygame
 
+#import __builtin__  # This is a terrible solution.  Fix this. TODO: DONT DO THIS!!!!!
+
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import asset_manager
@@ -74,15 +76,19 @@ class Player:
 
     # Check for collision.
     def check_collision(self):
-        return False
-        global g_outside_tilemap
-
         if g_current_scene == OUTSIDE:
             pass
 
-        tilex, tiley = g_outside_tilemap.get_tile(round(position.x/64), round(position.y/64))
+        # I know it's backwards... just..y'know..JUSt... ok?
+        tilex, tiley = g_outside_tilemap.get_tile(int(round(self.position[1]/64)), int(round(self.position[0]/64)))
 
-        if tilex == 10:
+        # Check for the tiles that mean collision
+        if tilex == 9 or tilex == 10 or tilex == 3 or tilex == 8:
+            # Stop movement.
+            pass
+            print "stawp"
+
+        elif (tilex == 1 or tilex == 2) and (tiley > 1):
             # Stop movement.
             pass
             print "stawp"
@@ -108,22 +114,18 @@ class Player:
             if self.direction == 0:
                 # Player has stopped so flush the position values.
                 self.position[1] = self._last_position[1]
-                print "FLUSH"
 
             elif self.direction == 1:
                 # Hit tile so flush the position values.
                 self.position[1] = self._last_position[1]
-                print "FLUSH"
 
             elif self.direction == 2:
                 # Hit tile so flush the position values.
                 self.position[0] = self._last_position[0]
-                print "FLUSH"
 
             elif self.direction == 3:
                 # Hit tile so flush the position values.
                 self.position[0] = self._last_position[0]
-                print "FLUSH"
 
         else:
             # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
@@ -131,7 +133,6 @@ class Player:
                 if self.direction != 2:
                     # Turned direction so flush the position values.
                     self.position[0] = self._last_position[0]
-                    print "FLUSH"
 
                 self.direction = 2
                 self.position[0] += -SPEED * dt
@@ -140,7 +141,6 @@ class Player:
                 if self.direction != 3:
                     # Turned direction so flush the position values.
                     self.position[0] = self._last_position[0]
-                    print "FLUSH"
 
                 self.direction = 3
                 self.position[0] += SPEED * dt
@@ -149,7 +149,6 @@ class Player:
                 if self.direction != 1:
                     # Turned direction so flush the position values.
                     self.position[1] = self._last_position[1]
-                    print "FLUSH"
 
                 self.direction = 1
                 self.position[1] += -SPEED * dt
@@ -158,7 +157,6 @@ class Player:
                 if self.direction != 0:
                     # Turned direction so flush the position values.
                     self.position[1] = self._last_position[1]
-                    print "FLUSH"
 
                 self.direction = 0
                 self.position[1] += SPEED * dt
@@ -229,6 +227,8 @@ class Player:
                 self.direction = 2
                 self._move = True
 
+                self.check_collision()
+
             elif self.right_key_down == True:
                 # If player is already facing the direction they need to move, don't start timer.
                 if self.direction != 3:
@@ -238,6 +238,8 @@ class Player:
                 # Set move direction and start moving when timer is done.
                 self.direction = 3
                 self._move = True
+
+                self.check_collision()
 
             elif self.up_key_down == True:
                 # If player is already facing the direction they need to move, don't start timer.
@@ -249,7 +251,7 @@ class Player:
                 self.direction = 1
                 self._move = True
 
-                print "next1"
+                self.check_collision()
 
             elif self.down_key_down == True:
                 # If player is already facing the direction they need to move, don't start timer.
@@ -261,7 +263,7 @@ class Player:
                 self.direction = 0
                 self._move = True
 
-                print "next1"
+                self.check_collision()
 
             else:
                 return (0, 0, 0)  # No movement

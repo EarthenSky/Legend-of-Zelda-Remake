@@ -4,10 +4,12 @@ scenes (environment scenes), usually just called different scenes.'''
 import sys
 import pygame
 
+import __builtin__  # TODO: PLEASE NO!!!
+
 # Different Scene Constants.
-PLAYER_HOUSE_UPSTAIRS = 0
-PLAYER_HOUSE_DOWNSTAIRS = 1
-OUTSIDE = 2
+__builtin__.PLAYER_HOUSE_UPSTAIRS = 0
+__builtin__.PLAYER_HOUSE_DOWNSTAIRS = 1
+__builtin__.OUTSIDE = 2
 # TODO: add more scenes.
 
 # Constants.
@@ -26,10 +28,10 @@ import player  # The player needs to move.
 
 # Globals.
 g_game_stopped = False
-g_current_scene = OUTSIDE
+__builtin__.g_current_scene = OUTSIDE
 
 # Create the different scenes.
-g_outside_tilemap = tilemap.Tilemap("outside.map", 0)
+__builtin__.g_outside_tilemap = tilemap.Tilemap("outside.map", 0)
 
 # Create the player object.
 g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )

@@ -36,28 +36,28 @@ class Tilemap:
                     if tile_string.find('ao') != -1:  # Case: found an 'a'.  the o stands for 'over' as in the top image is an animation.
                         # Get the 3 variables from the string.
                         group, depth, group2 = tile_string.replace(' ', '').replace('ao', ',').split(',')
-                        out_row_list.append( (0, group, depth, group2) )  # Add the tuple to the list.
+                        out_row_list.append( (0, int(group), int(depth), int(group2)) )  # Add the tuple to the list.
 
                     elif tile_string.find('au') != -1:  # Case: found an 'a'.  the u stands for 'under' as in the bottom image is an animation.
                         # Get the 4 variables from the string.
                         group, group2, depth2 = tile_string.replace(' ', '').replace('au', ',').split(',')
-                        out_row_list.append( (1, group, group2, depth2) )  # Add the tuple to the list.
+                        out_row_list.append( (1, int(group), int(group2), int(depth2)) )  # Add the tuple to the list.
 
                     elif tile_string.find('t') == -1:  # -1 means cannot find.
                         # Get the two variables from the string.
                         group, depth = tile_string.replace(' ', '').split(',')
-                        out_row_list.append( (2, group, depth) )  # Add the tuple to the list.
+                        out_row_list.append( (2, int(group), int(depth)) )  # Add the tuple to the list.
 
                     else:
                         if tile_string.find('b') == -1:  # -1 means cannot find.
                             # Get the 4 variables from the string.
                             group, depth, group2, depth2 = tile_string.replace(' ', '').replace('t', ',').split(',')
-                            out_row_list.append( (3, group, depth, group2, depth2) )  # Add the tuple to the list.
+                            out_row_list.append( (3, int(group), int(depth), int(group2), int(depth2)) )  # Add the tuple to the list.
 
                         else:
                             # Get the 4 variables from the string.
                             group, depth, group2, depth2 = tile_string.replace(' ', '').replace('tb', ',').split(',')
-                            out_row_list.append( (4, group, depth, group2, depth2 ) )
+                            out_row_list.append( (4, int(group), int(depth), int(group2), int(depth2)) )
 
                 map_matrix.append(out_row_list)  # Add the modified list to the matrix.
 
@@ -123,17 +123,16 @@ class Tilemap:
                             # Draw a single tile.
                             asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);  # Draw the tile
 
-                        else:
-                            if self.map_matrix[row_index][column_index][0] == 3:  # Case: two tiles, one over the player.
-                                # Draw the bottom tile first.
-                                asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
+                        elif self.map_matrix[row_index][column_index][0] == 3:  # Case: two tiles, one over the player.
+                            # Draw the bottom tile first.
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
 
-                                # Draw the second tile above the player.
-                                self.over_tile_queue.append( ((pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
-                            else:                                                 # Case: two tiles, both under the player.
-                                # Draw both tiles under the player, one on top of eachother.
-                                asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
-                                asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]);
+                            # Draw the second tile above the player.
+                            self.over_tile_queue.append( ((pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
+                        else:                                                 # Case: two tiles, both under the player.
+                            # Draw both tiles under the player, one on top of eachother.
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
+                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]);
 
         else:
             pass
@@ -161,31 +160,17 @@ class Tilemap:
         self._update_animation(dt)
 
     def get_tile(self, x, y):
-        # Look for two tiles. t means a second tile on top of eachother.
-        if self.map_matrix[row_index][column_index].find('ao') != -1:  # Case: found an 'a'.  the o stands for 'over' as in the top image is an animation.
-            # Get the 4 variables from the string.
-            group, depth, group2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('ao', ',').split(',')
+        if self.map_matrix[x][y][0] == 0:  # Case: ao, animation over.
+            return( (self.map_matrix[x][y][1], self.map_matrix[x][y][2]) );  #return the tile.
 
-            return( (group, depth) );  #return the tile.
+        elif self.map_matrix[x][y][0] == 1:  # Case: au, animation under.
+            return( (self.map_matrix[x][y][2], self.map_matrix[x][y][3]) );  #return the tile.
 
-        elif self.map_matrix[row_index][column_index].find('au') != -1:  # Case: found an 'a'.  the u stands for 'under' as in the bottom image is an animation.
-            # Get the 4 variables from the string.
-            group, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('au', ',').split(',')
+        elif self.map_matrix[x][y][0] == 2:  # Case: normal tile.
+            return( (self.map_matrix[x][y][1], self.map_matrix[x][y][2]) );  #return the tile.
 
-            return( (group2, depth2) );  #return the tile.
+        elif self.map_matrix[x][y][0] == 3:  # Case: two tiles, one over the player.
+            return( (self.map_matrix[x][y][1], self.map_matrix[x][y][2]) );  #return the bottomtile.
 
-        elif self.map_matrix[row_index][column_index].find('t') == -1:  # -1 means cannot find.
-            # Get the two variables from the string.
-            group, depth = self.map_matrix[row_index][column_index].replace(' ', '').split(',')
-            return( (group, depth) );  #return the tile.
-
-        else:
-            if self.map_matrix[row_index][column_index].find('b') == -1:  # -1 means cannot find.
-                # Get the 4 variables from the string.
-                group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('t', ',').split(',')
-                return( (group, depth) );  #return the bottomtile.
-            else:
-                # Get the 4 variables from the string.
-                group, depth, group2, depth2 = self.map_matrix[row_index][column_index].replace(' ', '').replace('tb', ',').split(',')
-
-                return( (group, depth) );  #return the bottomtile.
+        else:                                 # Case: two tiles, both under the player.
+            return( (self.map_matrix[x][y][3], self.map_matrix[x][y][4]) );  #return the bottomtile.
