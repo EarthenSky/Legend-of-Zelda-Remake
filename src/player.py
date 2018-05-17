@@ -73,8 +73,9 @@ class Player:
         asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation], True)
 
     def check_collision(self):
+        return False
         global g_outside_tilemap
-        
+
         if g_current_scene == OUTSIDE:
             pass
 
