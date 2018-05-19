@@ -159,6 +159,7 @@ class Tilemap:
     def update(self, dt):
         self._update_animation(dt)
 
+    # TODO: make sure x, y are in bounds.
     def get_tile(self, x, y):
         if self.map_matrix[x][y][0] == 0:  # Case: ao, animation over.
             return( (self.map_matrix[x][y][1], self.map_matrix[x][y][2]) );  #return the tile.
