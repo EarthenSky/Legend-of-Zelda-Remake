@@ -85,27 +85,50 @@ class Player:
         # I know it's backwards... just..y'know..JUSt... ok?
         # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
         if self.direction == 2:
-            tilex, tiley = g_outside_tilemap.get_tile( int(round(self.position[1]/64)), int(round(self.position[0]/64)) - 1 )
+            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
 
         elif self.direction == 3:
-            tilex, tiley = g_outside_tilemap.get_tile( int(round(self.position[1]/64)), int(round(self.position[0]/64)) + 1 )
+            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
 
         elif self.direction == 1:
-            tilex, tiley = g_outside_tilemap.get_tile( int(round(self.position[1]/64)) - 1, int(round(self.position[0]/64)) )
+            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1)
 
         elif self.direction == 0:
-            tilex, tiley = g_outside_tilemap.get_tile( int(round(self.position[1]/64)) + 1, int(round(self.position[0]/64)) )
-
+            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1)
 
         # Check for the tiles that mean collision
-        if tilex == 9 or tilex == 10 or tilex == 3 or tilex == 8:
-            return True  # Stop movement.
+        if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8:
+            # Stop moving.
+            self._move = False
 
-        elif (tilex == 1 or tilex == 2) and (tiley > 1):
-            return True  # Stop movement.
+            # Turn off timer and flush it.
+            self._timer_on = False
+            self._timer_val = 0
+
+            return True
+
+        elif (tiley == 1 or tiley == 2) and (tilex > 1):
+            # Stop moving.
+            self._move = False
+
+            # Turn off timer and flush it.
+            self._timer_on = False
+            self._timer_val = 0
+
+            return True
+
+        elif tiley == 6 and (tilex == 1 or tilex == 2 or tilex == 3):
+            # Stop moving.
+            self._move = False
+
+            # Turn off timer and flush it.
+            self._timer_on = False
+            self._timer_val = 0
+
+            return True
 
         else:
-            return False  # Continue movement.
+            return False
 
     def _update_animation(self, dt):
         self._animation_timer_val += dt
@@ -125,58 +148,35 @@ class Player:
         if (self.left_key_down or self.right_key_down or self.up_key_down or self.down_key_down) == False:
             self._move = False
 
-            if self.direction == 0:
-                # Player has stopped so flush the position values.
-                self.position[1] = self._last_position[1]
-
-            elif self.direction == 1:
-                # Hit tile so flush the position values.
-                self.position[1] = self._last_position[1]
-
-            elif self.direction == 2:
-                # Hit tile so flush the position values.
-                self.position[0] = self._last_position[0]
-
-            elif self.direction == 3:
-                # Hit tile so flush the position values.
-                self.position[0] = self._last_position[0]
-
         else:
             # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
             if self.left_key_down == True:
-                if self.direction != 2:
-                    # Turned direction so flush the position values.
-                    self.position[0] = self._last_position[0]
-
                 self.direction = 2
-                self.position[0] += -SPEED * dt
+
+                # Only move if there is no collsion found.
+                if self.check_collision() == False:
+                    self.position[0] += -SPEED * dt
 
             elif self.right_key_down == True:
-                if self.direction != 3:
-                    # Turned direction so flush the position values.
-                    self.position[0] = self._last_position[0]
-
                 self.direction = 3
-                self.position[0] += SPEED * dt
+
+                # Only move if there is no collsion found.
+                if self.check_collision() == False:
+                    self.position[0] += SPEED * dt
 
             elif self.up_key_down == True:
-                if self.direction != 1:
-                    # Turned direction so flush the position values.
-                    self.position[1] = self._last_position[1]
-
                 self.direction = 1
-                self.position[1] += -SPEED * dt
+
+                # Only move if there is no collsion found.
+                if self.check_collision() == False:
+                    self.position[1] += -SPEED * dt
 
             elif self.down_key_down == True:
-                if self.direction != 0:
-                    # Turned direction so flush the position values.
-                    self.position[1] = self._last_position[1]
-
                 self.direction = 0
-                self.position[1] += SPEED * dt
 
-            self._check_collision = True
-            #self.check_collision()
+                # Only move if there is no collsion found.
+                if self.check_collision() == False:
+                    self.position[1] += SPEED * dt
 
     # This function handles calculating what amount the player needs to move.
     def _move_player(self, dt):
@@ -188,6 +188,8 @@ class Player:
             else:
                 # Check if the player is stopping or keeps moving.
                 self._last_position[1] = self._last_position[1] + 64
+                self.position[1] = self._last_position[1]
+
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
@@ -199,6 +201,8 @@ class Player:
             else:
                 # Check if the player is stopping or keeps moving.
                 self._last_position[1] = self._last_position[1] - 64
+                self.position[1] = self._last_position[1]
+
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
@@ -210,6 +214,7 @@ class Player:
             else:
                 # Check if the player is stopping or keeps moving.
                 self._last_position[0] = self._last_position[0] - 64
+                self.position[0] = self._last_position[0]
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
@@ -221,6 +226,8 @@ class Player:
             else:
                 # Check if the player is stopping or keeps moving.
                 self._last_position[0] = self._last_position[0] + 64
+                self.position[0] = self._last_position[0]
+
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
@@ -242,8 +249,8 @@ class Player:
                 self.direction = 2
                 self._move = True
 
-                self._check_collision = True
-                #self.check_collision()
+                # Check for any collision.
+                self.check_collision()
 
             elif self.right_key_down == True:
                 # If player is already facing the direction they need to move, don't start timer.
@@ -255,8 +262,8 @@ class Player:
                 self.direction = 3
                 self._move = True
 
-                self._check_collision = True
-                #self.check_collision()
+                # Check for any collision.
+                self.check_collision()
 
             elif self.up_key_down == True:
                 # If player is already facing the direction they need to move, don't start timer.
@@ -268,8 +275,8 @@ class Player:
                 self.direction = 1
                 self._move = True
 
-                self._check_collision = True
-                #self.check_collision()
+                # Check for any collision.
+                self.check_collision()
 
             elif self.down_key_down == True:
                 # If player is already facing the direction they need to move, don't start timer.
@@ -281,14 +288,13 @@ class Player:
                 self.direction = 0
                 self._move = True
 
-                self._check_collision = True
-                #self.check_collision()
+                # Check for any collision.
+                self.check_collision()
 
-            else:
-                return (0, 0, 0)  # No movement
+            return (0, 0, 0)  # No movement
 
-        # Check again, in case the last bool check fired and swapped the value.
-        if self._move == True:
+        # Check again, in case the last bool check fired and swapped the value.  ACTGUALLY NOPE !!!!!!!!
+        else:
             # Animate player movement.
             self._update_animation(dt)
 
@@ -325,40 +331,4 @@ class Player:
 
         #print str(self.position)
 
-        # Check if a collision was or needs to be detected.
-        if self._check_collision == True:
-            print "HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOW"
-            self._check_collision = False
-
-            if self.check_collision() == True:
-                print "YESSSS"
-
-                # Stop moving.
-                self._move = False
-
-                # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
-                if self.direction == 2:
-                    #self.position[0] -= -SPEED * dt
-                    self.position[0] = self._last_position[0]
-                    print "YEY"
-
-                elif self.direction == 3:
-                    #self.position[0] -= SPEED * dt
-                    self.position[0] = self._last_position[0]
-                    print "YEY"
-
-                elif self.direction == 1:
-                    self.position[1] = self._last_position[1]
-                    print "YEY"
-
-                elif self.direction == 0:
-                    #self.position[1] -= SPEED * dt
-                    self.position[1] = self._last_position[1]
-                    print "YEY"
-
-                return (0, 0, 0)  # A collision was detected.
-
-            else:
-                return output_offset
-        else:
-            return output_offset
+        return output_offset

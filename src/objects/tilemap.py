@@ -161,17 +161,21 @@ class Tilemap:
 
     # TODO: make sure x, y are in bounds.
     def get_tile(self, x, y):
-        if self.map_matrix[x][y][0] == 0:  # Case: ao, animation over.
-            return( (self.map_matrix[x][y][1], self.map_matrix[x][y][2]) );  #return the tile.
+        print x, y
 
-        elif self.map_matrix[x][y][0] == 1:  # Case: au, animation under.
-            return( (self.map_matrix[x][y][2], self.map_matrix[x][y][3]) );  #return the tile.
+        y += 1
 
-        elif self.map_matrix[x][y][0] == 2:  # Case: normal tile.
-            return( (self.map_matrix[x][y][1], self.map_matrix[x][y][2]) );  #return the tile.
+        if self.map_matrix[y][x][0] == 0:  # Case: ao, animation over.
+            return( (self.map_matrix[y][x][1], self.map_matrix[y][x][2]) );  #return the tile.
 
-        elif self.map_matrix[x][y][0] == 3:  # Case: two tiles, one over the player.
-            return( (self.map_matrix[x][y][1], self.map_matrix[x][y][2]) );  #return the bottomtile.
+        elif self.map_matrix[y][x][0] == 1:  # Case: au, animation under.
+            return( (self.map_matrix[y][x][2], self.map_matrix[y][x][3]) );  #return the tile.
+
+        elif self.map_matrix[y][x][0] == 2:  # Case: normal tile.
+            return( (self.map_matrix[y][x][1], self.map_matrix[y][x][2]) );  #return the tile.
+
+        elif self.map_matrix[y][x][0] == 3:  # Case: two tiles, one over the player.
+            return( (self.map_matrix[y][x][1], self.map_matrix[y][x][2]) );  #return the bottomtile.
 
         else:                                 # Case: two tiles, both under the player.
-            return( (self.map_matrix[x][y][3], self.map_matrix[x][y][4]) );  #return the bottomtile.
+            return( (self.map_matrix[y][x][3], self.map_matrix[y][x][4]) );  #return the toptile.
