@@ -91,10 +91,10 @@ class Player:
             tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
 
         elif self.direction == 1:
-            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1)
+            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
 
         elif self.direction == 0:
-            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1)
+            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
 
         # Check for the tiles that mean collision
         if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8:
@@ -328,7 +328,5 @@ class Player:
         # Check if the player should move, or moves the player.
         # output_offset holds the amount to move the scenes.
         output_offset = self.check_movement(dt)
-
-        #print str(self.position)
 
         return output_offset

@@ -24,6 +24,10 @@ pygame.display.set_caption("Pokemon Wave Blue")
 sys.path.insert(0, 'src/objects/')  # This line tells the importer where to look for the module.
 import tilemap
 
+# Must be imported after pygame has been initialized.
+sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
+import desc_manager
+
 import player  # The player needs to move.
 
 # Globals.
@@ -66,6 +70,9 @@ def draw():
     if g_current_scene == OUTSIDE:
         g_outside_tilemap.over_draw(DISPLAY_SURFACE)
         pass
+
+    # Check for any popup boxes.
+    desc_manager.check_queue(DISPLAY_SURFACE)
 
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):

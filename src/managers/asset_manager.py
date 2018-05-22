@@ -1,5 +1,9 @@
 '''This script helps manage the assets like tiles and stuff.'''
 
+# The asset manager helps render images.
+#sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
+import text_manager
+
 import pygame
 
 # Pseudo Enum constants.  Each constant refers to a different image group to draw from.
@@ -27,12 +31,18 @@ animated_tiles = pygame.image.load("resc/images/animated_tiles.png").convert_alp
 # Initialize the player sprite sheet.
 male_char_spritesheet = pygame.image.load("resc/images/male_char_spritesheet.png").convert_alpha()
 
+# Init the message bar and text elements.
+text_manager.init()
+message_bar = pygame.image.load("resc/images/message_bar.png").convert_alpha()
+
 # Blits the image to the surface.
 def _draw(surface, img, position, cut_rect):
     # Rounds the position to every 4 pixels.
     position = (round(position[0] / 4) * 4, round(position[1] / 4) * 4)
 
-    img = img.subsurface(cut_rect)  # Crop the img.
+    if cut_rect[0] != -1: # Check for an invalid cut_rect.
+        img = img.subsurface(cut_rect)  # Crop the img.
+
     img = pygame.transform.scale(img, (img.get_width() * 4, img.get_height() * 4))  # 4x scale the img.
     surface.blit(img, position)  # Draw the img.
 
@@ -57,6 +67,14 @@ def draw_player(surface, position, group, depth, is_male):
         _draw( surface, male_char_spritesheet, position, (depth * 16, group * 20, 16, 20) )
     else:
         pass
+
+def draw_message(surface, text_top, text_bottom):
+    # Draw the box part.
+    _draw( surface, message_bar, (5*4, (160-42-5)*4), (-1, -1, -1, -1) )
+
+    # Draw the messages.
+    text_manager.draw_text( surface, text_top, (18*4, (160-42+4)*4) )
+    text_manager.draw_text( surface, text_bottom, (18*4, (160-42+19)*4) )
 
 # TODO: draw the different pokemon angles.
 def draw_pokemon():
