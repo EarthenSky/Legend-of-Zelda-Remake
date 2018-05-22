@@ -58,6 +58,20 @@ class Player:
             elif event.key == pygame.K_DOWN:
                 self.down_key_down = True
                 return True
+            elif event.key == pygame.K_z:
+                if self.direction == 2:
+                    g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+
+                elif self.direction == 3:
+                    g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+                elif self.direction == 1:
+                    g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+                elif self.direction == 0:
+                    g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
+                return True
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 self.left_key_down = False

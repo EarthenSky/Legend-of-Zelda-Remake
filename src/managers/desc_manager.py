@@ -69,6 +69,3 @@ def loop_item(screen):
         if everysecond_val > 1:
             everysecond_val = 0
             print "In a MESSAGE!"
-
-add_message_to_queue("Your code is so bad your ", "child processes disowned you.")
-add_message_to_queue("You are garbage", "at programming.")

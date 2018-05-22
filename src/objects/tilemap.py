@@ -11,6 +11,7 @@ ANIMATION_SPEED = 0.138*1.6  # 1.6 times more than 0.138s or 138ms per frame.
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import asset_manager
+import desc_manager
 
 class Tilemap:
     # This function converts the tile map into a matrix of tuples.
@@ -179,3 +180,19 @@ class Tilemap:
 
         else:                                 # Case: two tiles, both under the player.
             return( (self.map_matrix[y][x][3], self.map_matrix[y][x][4]) );  #return the toptile.
+
+    def check_interaction_at_tilee(self, x, y):
+        tile = self.get_tile(x, y)
+
+        # TODO: check scene.
+
+        if x == 10 and y == 13:  # The sign's text.
+            desc_manager.add_message_to_queue("Here i en kul tip", "Press Z to exit zis text box")
+
+    def check_interaction_at_tile(self, x, y):
+        tile = self.get_tile(x, y)
+
+        # TODO: check scene.
+
+        if x == 10 and y == 13:  # The sign's text.
+            desc_manager.add_message_to_queue("You are garbage", "at programming.")
