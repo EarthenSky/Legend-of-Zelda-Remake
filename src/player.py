@@ -43,6 +43,9 @@ class Player:
         # If this variable is true, check for collision just before moving.
         self._check_collision = False
 
+        # If the player position is being set.
+        self._set_pos = False
+
     # Moving and stuff.
     def handle_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -59,17 +62,18 @@ class Player:
                 self.down_key_down = True
                 return True
             elif event.key == pygame.K_z:
-                if self.direction == 2:
-                    g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+                if g_current_scene == OUTSIDE:
+                    if self.direction == 2:
+                        g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
 
-                elif self.direction == 3:
-                    g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+                    elif self.direction == 3:
+                        g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
 
-                elif self.direction == 1:
-                    g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+                    elif self.direction == 1:
+                        g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
 
-                elif self.direction == 0:
-                    g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+                    elif self.direction == 0:
+                        g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
 
                 return True
         elif event.type == pygame.KEYUP:
@@ -91,24 +95,46 @@ class Player:
     def draw(self, surface):
         asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation], True)
 
+    # Sets the players pos and tells the player to update the tilemap.
+    def set_pos(self, position):
+        self._last_position[0] = position[0]
+        self._last_position[1] = position[1]
+        self.position[0] = position[0]
+        self.position[1] = position[1]
+
+        self._set_pos = True
+
     # Check for collision.
     def check_collision(self):
         if g_current_scene == OUTSIDE:
-            pass
+            # I know it's backwards... just..y'know..JUSt... ok?
+            # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
+            if self.direction == 2:
+                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
 
-        # I know it's backwards... just..y'know..JUSt... ok?
-        # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
-        if self.direction == 2:
-            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+            elif self.direction == 3:
+                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
 
-        elif self.direction == 3:
-            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+            elif self.direction == 1:
+                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
 
-        elif self.direction == 1:
-            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+            elif self.direction == 0:
+                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
 
-        elif self.direction == 0:
-            tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+        elif g_current_scene == LAB:
+            # I know it's backwards... just..y'know..JUSt... ok?
+            # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
+            if self.direction == 2:
+                tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+
+            elif self.direction == 3:
+                tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+            elif self.direction == 1:
+                tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+            elif self.direction == 0:
+                tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
 
         # Check for the tiles that mean collision
         if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8:
@@ -342,5 +368,9 @@ class Player:
         # Check if the player should move, or moves the player.
         # output_offset holds the amount to move the scenes.
         output_offset = self.check_movement(dt)
+
+        if self._set_pos == True:
+            # Set offset to set to player pos.
+            output_offset = (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
         return output_offset

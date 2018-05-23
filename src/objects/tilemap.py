@@ -2,6 +2,7 @@
 The player class interacts with this class.'''
 
 import sys
+import __builtin__  # TODO: PLEASE NO!!!
 
 # Constants.
 SCREEN_SIZE = [240 * 4, 160 * 4]
@@ -72,10 +73,10 @@ class Tilemap:
         self.image_passed = False
 
         # Check if image was passed.
-        if img == 0:
-            self.image_passed = False
-        else:
+        self.image_passed = False
+        if img != 0:
             self.image_passed = True
+            self._img = img
 
         # The list that holds all the draw functions for the items drawn after the player.
         self.over_tile_queue = []
@@ -134,11 +135,8 @@ class Tilemap:
                             # Draw both tiles under the player, one on top of eachother.
                             asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
                             asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]);
-
         else:
-            pass
-            # TODO: just blit this image.
-
+            asset_manager._draw(surface, self._img, self.position, (-1, -1, -1, -1))
     # Draw all the tiles that are drawn over the player.
     def over_draw(self, surface):
         for tile in self.over_tile_queue:
@@ -162,9 +160,7 @@ class Tilemap:
 
     # TODO: make sure x, y are in bounds.
     def get_tile(self, x, y):
-        print x, y
-
-        y += 1
+        y += 1  # Just... I dunno.  It works.
 
         if self.map_matrix[y][x][0] == 0:  # Case: ao, animation over.
             return( (self.map_matrix[y][x][1], self.map_matrix[y][x][2]) );  #return the tile.
@@ -184,11 +180,14 @@ class Tilemap:
     def check_interaction_at_tile(self, x, y):
         tile = self.get_tile(x, y)
 
-        # TODO: check scene.
-
-        if x == 10 and y == 13:  # The sign's text.
-            desc_manager.add_message_to_queue("This is a sign!", "You know it.")
-        elif x == 14 and y == 10:  # The sign's text.
-            desc_manager.add_message_to_queue("Trainer Tip: pokemon can be", "found in tall grass.")
-        elif x == 21 and y == 15:  # The sign's text.
-            desc_manager.add_message_to_queue("I think that this is a pokemon ", "lab ... probably")
+        if g_current_scene == OUTSIDE:
+            if x == 10 and y == 13:  # The sign's text.
+                desc_manager.add_message_to_queue("Pokemon can be found in tall", "grass.")
+                desc_manager.add_message_to_queue("TRAINER TIPS", "")
+            elif x == 14 and y == 10:  # The town sign's text.
+                desc_manager.add_message_to_queue("PALLET TOWN", "We have a lake.")
+            elif x == 21 and y == 15:  # The lab sign's text.
+                desc_manager.add_message_to_queue("OAK POKeMON RESEARCH LAB", "")
+            elif x == 21 and y == 12:  # Going into the lab.
+                __builtin__.g_current_scene = LAB
+                __builtin__.g_player.set_pos( (64 * 6, 64 * 10) )

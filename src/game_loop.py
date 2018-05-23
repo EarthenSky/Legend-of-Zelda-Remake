@@ -10,6 +10,7 @@ import __builtin__  # TODO: PLEASE NO!!!
 __builtin__.PLAYER_HOUSE_UPSTAIRS = 0
 __builtin__.PLAYER_HOUSE_DOWNSTAIRS = 1
 __builtin__.OUTSIDE = 2
+__builtin__.LAB = 3
 # TODO: add more scenes.
 
 # Constants.
@@ -36,9 +37,10 @@ __builtin__.g_current_scene = OUTSIDE
 
 # Create the different scenes.
 __builtin__.g_outside_tilemap = tilemap.Tilemap("outside.map", 0)
+__builtin__.g_lab_tilemap = tilemap.Tilemap( "lab.map", pygame.image.load("resc/images/lab.png").convert() )
 
 # Create the player object.
-g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )
+__builtin__.g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )
 
 # This function handles any input.  Called before update.
 def handle_input():
@@ -60,6 +62,9 @@ def draw():
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_outside_tilemap.draw(DISPLAY_SURFACE)
         pass
+    elif g_current_scene == LAB:
+        DISPLAY_SURFACE.fill( (0, 0, 0) )
+        g_lab_tilemap.draw(DISPLAY_SURFACE)
     else:
         print "GAME IS NOT IN ANY SCENE."
 
@@ -87,6 +92,10 @@ def update(dt):
         # Update the tilemap, then translate it.
         g_outside_tilemap.update(dt)
         g_outside_tilemap.get_offset(player_offset)
+    elif g_current_scene == LAB:
+        # Update the tilemap, then translate it.
+        g_lab_tilemap.update(dt)
+        g_lab_tilemap.get_offset(player_offset)
     else:
         print "GAME IS NOT IN ANY SCENE."
 
