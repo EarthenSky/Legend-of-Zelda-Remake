@@ -181,18 +181,14 @@ class Tilemap:
         else:                                 # Case: two tiles, both under the player.
             return( (self.map_matrix[y][x][3], self.map_matrix[y][x][4]) );  #return the toptile.
 
-    def check_interaction_at_tilee(self, x, y):
-        tile = self.get_tile(x, y)
-
-        # TODO: check scene.
-
-        if x == 10 and y == 13:  # The sign's text.
-            desc_manager.add_message_to_queue("Here i en kul tip", "Press Z to exit zis text box")
-
     def check_interaction_at_tile(self, x, y):
         tile = self.get_tile(x, y)
 
         # TODO: check scene.
 
         if x == 10 and y == 13:  # The sign's text.
-            desc_manager.add_message_to_queue("You are garbage", "at programming.")
+            desc_manager.add_message_to_queue("This is a sign!", "You know it.")
+        elif x == 14 and y == 10:  # The sign's text.
+            desc_manager.add_message_to_queue("Trainer Tip: pokemon can be", "found in tall grass.")
+        elif x == 21 and y == 15:  # The sign's text.
+            desc_manager.add_message_to_queue("I think that this is a pokemon ", "lab ... probably")

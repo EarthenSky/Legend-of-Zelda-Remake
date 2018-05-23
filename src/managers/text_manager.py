@@ -2,13 +2,13 @@
 
 import pygame
 
-LARGEST_CHAR_VALUE = 54  # The value to count up to when loading images.  Aka the size of the img list.
+LARGEST_CHAR_VALUE = 56  # The value to count up to when loading images.  Aka the size of the img list.
 
 # This is a list of all the image files for each character.
 img_list = []
 
 ### Order of image files in the list:
-### space, uppercase_letters, lowercase_letters, period, comma, numbers, extras.
+### space, uppercase_letters, lowercase_letters, period, comma, colon, exclamation mark, numbers, extras.
 
 # This function loads all the images and puts them into img_list.
 def init():
@@ -34,6 +34,10 @@ def _convert_string(in_str):
             out_str += chr(53)
         elif char_ord == ord(","):  # Case: char is a comma.
             out_str += chr(54)
+        elif char_ord == ord(":"):  # Case: char is a colon.
+            out_str += chr(55)
+        elif char_ord == ord("!"):  # Case: char is a exclamation mark.
+            out_str += chr(56)
 
     # Output the converted string.
     return out_str
