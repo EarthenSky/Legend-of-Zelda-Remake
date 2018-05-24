@@ -61,7 +61,6 @@ def draw():
     elif g_current_scene == OUTSIDE:
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_outside_tilemap.draw(DISPLAY_SURFACE)
-        pass
     elif g_current_scene == LAB:
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_lab_tilemap.draw(DISPLAY_SURFACE)
@@ -74,6 +73,8 @@ def draw():
     # Stuff drawn over the player.
     if g_current_scene == OUTSIDE:
         g_outside_tilemap.over_draw(DISPLAY_SURFACE)
+    elif g_current_scene == LAB:
+        #g_lab_tilemap.over_draw(DISPLAY_SURFACE)
         pass
 
     # Check for any popup boxes.

@@ -180,7 +180,10 @@ class Tilemap:
     def check_interaction_at_tile(self, x, y):
         tile = self.get_tile(x, y)
 
-        if g_current_scene == OUTSIDE:
+        print (__builtin__.g_current_scene)
+
+        if __builtin__.g_current_scene == OUTSIDE:
+            print ("out")
             if x == 10 and y == 13:  # The sign's text.
                 desc_manager.add_message_to_queue("Pokemon can be found in tall", "grass.")
                 desc_manager.add_message_to_queue("TRAINER TIPS", "")
@@ -191,3 +194,16 @@ class Tilemap:
             elif x == 21 and y == 12:  # Going into the lab.
                 __builtin__.g_current_scene = LAB
                 __builtin__.g_player.set_pos( (64 * 6, 64 * 10) )
+
+        elif __builtin__.g_current_scene == LAB:
+            print ("IN")
+            print (x, y)
+
+            if x == 8 and y == 1:  # Prof's Certification
+                desc_manager.add_message_to_queue("It looks like someone wrote.", "on it with crayons.")
+                desc_manager.add_message_to_queue("This is one of Professor", "Oak's certificates.")
+            if x == 7 and y == 1:  # Prof's Certification
+                desc_manager.add_message_to_queue("Another pice of paper ont he wall", "grass.")
+            if x == 9 and y == 0:  # Prof's Certification
+                desc_manager.add_message_to_queue("You get a new pokemon!", "")
+                desc_manager.add_message_to_queue("You spot a pokemon out the ", "window.  Score!")
