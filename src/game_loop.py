@@ -74,7 +74,7 @@ def draw():
     if g_current_scene == OUTSIDE:
         g_outside_tilemap.over_draw(DISPLAY_SURFACE)
     elif g_current_scene == LAB:
-        #g_lab_tilemap.over_draw(DISPLAY_SURFACE)
+        g_lab_tilemap.over_draw(DISPLAY_SURFACE)
         pass
 
     # Check for any popup boxes.

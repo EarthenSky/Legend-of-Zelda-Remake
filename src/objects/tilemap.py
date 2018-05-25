@@ -135,12 +135,30 @@ class Tilemap:
                             # Draw both tiles under the player, one on top of eachother.
                             asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
                             asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]);
-        else:
+        else:  # Checks the over tile queue.
+            # Reset the over tile queue.
+            self.over_tile_queue = []
+
+            # Loop thorough the matrix and find / draw all the tiles.
+            for row_index in range(len(self.map_matrix)):
+                for column_index in range(len(self.map_matrix[row_index])):
+                    pos_x = column_index * 64 + self.position[0]
+                    pos_y = row_index * 64 + self.position[1]
+
+                    # Only draw the tile if it is inside the screen.
+                    if pos_x >= -64 and pos_x <= SCREEN_SIZE[0] + 64 and pos_y >= -64 and pos_y <= SCREEN_SIZE[1] + 64:
+                        if self.map_matrix[row_index][column_index][0] == 3:  # Case: two tiles, one over the player.
+                            # Draw the second tile above the player.
+                            self.over_tile_queue.append( ((pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
+
             asset_manager._draw(surface, self._img, self.position, (-1, -1, -1, -1))
     # Draw all the tiles that are drawn over the player.
     def over_draw(self, surface):
         for tile in self.over_tile_queue:
-            asset_manager.draw_tile(surface, tile[0], tile[1], tile[2]);
+            if __builtin__.g_current_scene == LAB:
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 12), tile[1], tile[2]);
+            else:
+                asset_manager.draw_tile(surface, tile[0], tile[1], tile[2]);
 
     def _update_animation(self, dt):
         self._animation_timer_val += dt
@@ -183,7 +201,6 @@ class Tilemap:
         print (__builtin__.g_current_scene)
 
         if __builtin__.g_current_scene == OUTSIDE:
-            print ("out")
             if x == 10 and y == 13:  # The sign's text.
                 desc_manager.add_message_to_queue("Pokemon can be found in tall", "grass.")
                 desc_manager.add_message_to_queue("TRAINER TIPS", "")
@@ -193,10 +210,9 @@ class Tilemap:
                 desc_manager.add_message_to_queue("OAK POKeMON RESEARCH LAB", "")
             elif x == 21 and y == 12:  # Going into the lab.
                 __builtin__.g_current_scene = LAB
-                __builtin__.g_player.set_pos( (64 * 6, 64 * 10) )
+                __builtin__.g_player.set_pos( (64 * 7, 64 * 12) )
 
         elif __builtin__.g_current_scene == LAB:
-            print ("IN")
             print (x, y)
 
             if x == 8 and y == 1:  # Prof's Certification
