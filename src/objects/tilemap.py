@@ -156,7 +156,7 @@ class Tilemap:
     def over_draw(self, surface):
         for tile in self.over_tile_queue:
             if __builtin__.g_current_scene == LAB:
-                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 12), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 12 + 4), tile[1], tile[2]);
             else:
                 asset_manager.draw_tile(surface, tile[0], tile[1], tile[2]);
 
