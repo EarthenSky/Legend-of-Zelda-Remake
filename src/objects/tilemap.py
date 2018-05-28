@@ -152,10 +152,13 @@ class Tilemap:
                             self.over_tile_queue.append( ((pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
 
             asset_manager._draw(surface, self._img, self.position, (-1, -1, -1, -1))
+
     # Draw all the tiles that are drawn over the player.
     def over_draw(self, surface):
         for tile in self.over_tile_queue:
             if __builtin__.g_current_scene == LAB:
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 12 + 4), tile[1], tile[2]);
+            elif __builtin__.g_player_house_down_tilemap == PLAYER_HOUSE_DOWNSTAIRS:
                 asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 12 + 4), tile[1], tile[2]);
             else:
                 asset_manager.draw_tile(surface, tile[0], tile[1], tile[2]);
@@ -198,8 +201,7 @@ class Tilemap:
     def check_interaction_at_tile(self, x, y):
         tile = self.get_tile(x, y)
 
-        print (__builtin__.g_current_scene)
-
+        print (x, y)
         if __builtin__.g_current_scene == OUTSIDE:
             if x == 10 and y == 13:  # The sign's text.
                 desc_manager.add_message_to_queue("Pokemon can be found in tall", "grass.")
@@ -210,16 +212,33 @@ class Tilemap:
                 desc_manager.add_message_to_queue("OAK POKeMON RESEARCH LAB", "")
             elif x == 21 and y == 12:  # Going into the lab.
                 __builtin__.g_current_scene = LAB
-                __builtin__.g_player.set_pos( (64 * 7, 64 * 12) )
+                __builtin__.g_player.set_pos( (64 * 7, 64 * 13) )
+            elif x == 11 and y == 6:  # Other house
+                desc_manager.add_message_to_queue("The door is locked.  You guess", "it will never be opened.")
+            elif x == 9 and y == 6:  # Other house
+                desc_manager.add_message_to_queue("RIVAL's house", "")
+            elif x == 18 and y == 6:  # Other house
+                desc_manager.add_message_to_queue("PLAYER's house", "")
+            elif x == 20 and y == 6:  # Going into the player's house.
+                __builtin__.g_current_scene = PLAYER_HOUSE_DOWNSTAIRS
+                __builtin__.g_player.set_pos( (64 * 3, 64 * 3) )
 
         elif __builtin__.g_current_scene == LAB:
-            print (x, y)
-
             if x == 8 and y == 1:  # Prof's Certification
                 desc_manager.add_message_to_queue("It looks like someone wrote.", "on it with crayons.")
                 desc_manager.add_message_to_queue("This is one of Professor", "Oak's certificates.")
-            if x == 7 and y == 1:  # Prof's Certification
-                desc_manager.add_message_to_queue("Another pice of paper ont he wall", "grass.")
-            if x == 9 and y == 0:  # Prof's Certification
+            elif x == 7 and y == 1:  # Prof's Certification
+                desc_manager.add_message_to_queue("This certificate looks", "like it's real.")
+            elif x == 9 and y == 0:  # Window
                 desc_manager.add_message_to_queue("You get a new pokemon!", "")
                 desc_manager.add_message_to_queue("You spot a pokemon out the ", "window.  Score!")
+            elif x == 4 and y == 1:  # COMPUTER
+                desc_manager.add_message_to_queue("The computer doesn't turn on.", "You wonder why...")
+            elif x == 3 and y == 1:  # COMPUTER
+                desc_manager.add_message_to_queue("The screen doesn't turn on.", "You wonder why...")
+            elif x == 7 and y == 13:  # Going out of the lab
+                __builtin__.g_current_scene = OUTSIDE
+                __builtin__.g_player.set_pos( (64 * 21, 64 * 13 - 16) )
+
+        elif __builtin__.g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
+            pass

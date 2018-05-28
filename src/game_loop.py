@@ -38,6 +38,7 @@ __builtin__.g_current_scene = OUTSIDE
 # Create the different scenes.
 __builtin__.g_outside_tilemap = tilemap.Tilemap("outside.map", 0)
 __builtin__.g_lab_tilemap = tilemap.Tilemap( "lab.map", pygame.image.load("resc/images/lab.png").convert() )
+__builtin__.g_player_house_down_tilemap = tilemap.Tilemap( "player_house_down.map", pygame.image.load("resc/images/player_house_down.png").convert() )
 
 # Create the player object.
 __builtin__.g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )
@@ -57,7 +58,8 @@ def draw():
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
         pass
     elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
-        pass
+        DISPLAY_SURFACE.fill( (0, 0, 0) )
+        g_player_house_down_tilemap.draw(DISPLAY_SURFACE)
     elif g_current_scene == OUTSIDE:
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_outside_tilemap.draw(DISPLAY_SURFACE)
@@ -71,11 +73,14 @@ def draw():
     g_player.draw(DISPLAY_SURFACE)
 
     # Stuff drawn over the player.
-    if g_current_scene == OUTSIDE:
+    if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
+        pass
+    elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
+        g_player_house_down_tilemap.over_draw(DISPLAY_SURFACE)
+    elif g_current_scene == OUTSIDE:
         g_outside_tilemap.over_draw(DISPLAY_SURFACE)
     elif g_current_scene == LAB:
         g_lab_tilemap.over_draw(DISPLAY_SURFACE)
-        pass
 
     # Check for any popup boxes.
     desc_manager.check_queue(DISPLAY_SURFACE)
@@ -88,7 +93,8 @@ def update(dt):
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
         pass
     elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
-        pass
+        g_player_house_down_tilemap.update(dt)
+        g_player_house_down_tilemap.get_offset(player_offset)
     elif g_current_scene == OUTSIDE:
         # Update the tilemap, then translate it.
         g_outside_tilemap.update(dt)

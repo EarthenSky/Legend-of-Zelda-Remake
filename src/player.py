@@ -87,6 +87,19 @@ class Player:
 
                     elif self.direction == 0:
                         g_lab_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
+                elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
+                    if self.direction == 2:
+                        g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+
+                    elif self.direction == 3:
+                        g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+                    elif self.direction == 1:
+                        g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+                    elif self.direction == 0:
+                        g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
                 return True
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
@@ -119,7 +132,6 @@ class Player:
     # Check for collision.
     def check_collision(self):
         if g_current_scene == OUTSIDE:
-            # I know it's backwards... just..y'know..JUSt... ok?
             # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
             if self.direction == 2:
                 tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
@@ -134,7 +146,6 @@ class Player:
                 tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
 
         elif g_current_scene == LAB:
-            # I know it's backwards... just..y'know..JUSt... ok?
             # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
             if self.direction == 2:
                 tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
@@ -147,6 +158,19 @@ class Player:
 
             elif self.direction == 0:
                 tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
+        elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
+            if self.direction == 2:
+                tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+
+            elif self.direction == 3:
+                tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+            elif self.direction == 1:
+                tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+            elif self.direction == 0:
+                tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
 
         # Check for the tiles that mean collision
         if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8:
