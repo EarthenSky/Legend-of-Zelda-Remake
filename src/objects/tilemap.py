@@ -63,8 +63,10 @@ class Tilemap:
 
                 map_matrix.append(out_row_list)  # Add the modified list to the matrix.
 
-    def __init__(self, map_file_name, img=0):
+    def __init__(self, map_file_name, draw_relative_position, img=0):
         self.position = [0, 0]  # The world position of the map.
+
+        self.draw_relative_position = draw_relative_position  # The draw relative position.
 
         self.map_matrix = []  # Init the matrix.
         self._create_map(map_file_name, self.map_matrix)  # Fill the matrix.
@@ -113,28 +115,29 @@ class Tilemap:
                         # Choose hjow to draw this tile.
                         if self.map_matrix[row_index][column_index][0] == 0:  # Case: ao, animation over.
                             # Draw the two tiles, the animation is the top tile.
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);  # Draw the tile
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][3], self._animation_frame % 4);
+                            asset_manager.draw_tile(surface, (pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);  # Draw the tile
+                            asset_manager.draw_tile(surface, (pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][3], self._animation_frame % 4);
 
                         elif self.map_matrix[row_index][column_index][0] == 1:  # Case: au, animation under.
                             # Draw the two tiles, the animation is the bottom tile.
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self._animation_frame);  # Draw the tile
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][2], self.map_matrix[row_index][column_index][3]);
+                            asset_manager.draw_tile(surface, (pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][1], self._animation_frame);  # Draw the tile
+                            asset_manager.draw_tile(surface, (pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][2], self.map_matrix[row_index][column_index][3]);
 
                         elif self.map_matrix[row_index][column_index][0] == 2:  # Case: normal tile.
                             # Draw a single tile.
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);  # Draw the tile
+                            asset_manager.draw_tile(surface, (pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);  # Draw the tile
 
                         elif self.map_matrix[row_index][column_index][0] == 3:  # Case: two tiles, one over the player.
                             # Draw the bottom tile first.
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
+                            asset_manager.draw_tile(surface, (pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
 
                             # Draw the second tile above the player.
-                            self.over_tile_queue.append( ((pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
+                            self.over_tile_queue.append( ((pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
                         else:                                                 # Case: two tiles, both under the player.
                             # Draw both tiles under the player, one on top of eachother.
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
-                            asset_manager.draw_tile(surface, (pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]);
+                            asset_manager.draw_tile(surface, (pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][1], self.map_matrix[row_index][column_index][2]);
+                            asset_manager.draw_tile(surface, (pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]);  # This is almost DEPRECATED
+
         else:  # Checks the over tile queue.
             # Reset the over tile queue.
             self.over_tile_queue = []
@@ -149,21 +152,21 @@ class Tilemap:
                     if pos_x >= -64 and pos_x <= SCREEN_SIZE[0] + 64 and pos_y >= -64 and pos_y <= SCREEN_SIZE[1] + 64:
                         if self.map_matrix[row_index][column_index][0] == 3:  # Case: two tiles, one over the player.
                             # Draw the second tile above the player.
-                            self.over_tile_queue.append( ((pos_x, pos_y), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
+                            self.over_tile_queue.append( ((pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
 
-            asset_manager._draw(surface, self._img, self.position, (-1, -1, -1, -1))
+            asset_manager._draw(surface, self._img, (self.position[0] + self.draw_relative_position[0], self.position[1] + self.draw_relative_position[1]), (-1, -1, -1, -1))
 
     # Draw all the tiles that are drawn over the player.
     def over_draw(self, surface):
         for tile in self.over_tile_queue:
             if __builtin__.g_current_scene == LAB:
-                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1] + 16), tile[1], tile[2]);
             elif __builtin__.g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
-                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1] + 16), tile[1], tile[2]);
             elif __builtin__.g_current_scene == PLAYER_HOUSE_UPSTAIRS:
-                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1] + 16), tile[1], tile[2]);
             else:
-                asset_manager.draw_tile(surface, tile[0], tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1]), tile[1], tile[2]);
 
     def _update_animation(self, dt):
         self._animation_timer_val += dt

@@ -155,19 +155,32 @@ class Player:
     # Check for collision.
     def check_collision(self):
         if g_current_scene == OUTSIDE:
-            # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
-            if self.direction == 2:
-                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+            if self.position[1] < 0:
+                # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
+                if self.direction == 2:
+                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
 
-            elif self.direction == 3:
-                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+                elif self.direction == 3:
+                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
 
-            elif self.direction == 1:
-                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+                elif self.direction == 1:
+                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
 
-            elif self.direction == 0:
-                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+                elif self.direction == 0:
+                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+            else:
+                # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
+                if self.direction == 2:
+                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
 
+                elif self.direction == 3:
+                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+                elif self.direction == 1:
+                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+                elif self.direction == 0:
+                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
         elif g_current_scene == LAB:
             # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
             if self.direction == 2:

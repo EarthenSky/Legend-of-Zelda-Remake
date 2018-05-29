@@ -32,8 +32,7 @@ def check_queue(screen):
 def check_skip_box():
     for event in pygame.event.get():  # TODO: THIS BUG WITH THE PLAYER?
         # Do the player events separately incase the z button is pressed.
-        #if g_player.handle_input(event):
-            #pass
+
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_z:
@@ -43,6 +42,9 @@ def check_skip_box():
             pygame.quit()
             print "DEBUG: Application Complete."
             sys.exit(0)
+            
+        elif g_player.handle_input(event):
+            pass
 
     return False
 

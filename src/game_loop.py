@@ -36,10 +36,11 @@ __builtin__.g_game_stopped = False
 __builtin__.g_current_scene = OUTSIDE
 
 # Create & load the different scenes.
-__builtin__.g_outside_tilemap = tilemap.Tilemap("outside.map", 0)
-__builtin__.g_lab_tilemap = tilemap.Tilemap( "lab.map", pygame.image.load("resc/images/lab.png").convert() )
-__builtin__.g_player_house_down_tilemap = tilemap.Tilemap( "player_house_down.map", pygame.image.load("resc/images/player_house_down.png").convert() )
-__builtin__.g_player_house_up_tilemap = tilemap.Tilemap( "player_house_up.map", pygame.image.load("resc/images/player_house_up.png").convert() )
+__builtin__.g_outside_tilemap = tilemap.Tilemap("outside.map", [0, 0], 0)
+__builtin__.g_lab_tilemap = tilemap.Tilemap( "lab.map", [0, 0], pygame.image.load("resc/images/lab.png").convert() )
+__builtin__.g_player_house_down_tilemap = tilemap.Tilemap( "player_house_down.map", [0, 0], pygame.image.load("resc/images/player_house_down.png").convert() )
+__builtin__.g_player_house_up_tilemap = tilemap.Tilemap( "player_house_up.map", [0, 0], pygame.image.load("resc/images/player_house_up.png").convert() )
+__builtin__.g_route_tilemap = tilemap.Tilemap( "route.map", [-16, -640], 0)  # pygame.image.load("resc/images/route.png").convert()
 
 # Create the player object.
 __builtin__.g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )
@@ -65,6 +66,7 @@ def draw():
     elif g_current_scene == OUTSIDE:
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_outside_tilemap.draw(DISPLAY_SURFACE)
+        g_route_tilemap.draw(DISPLAY_SURFACE)
     elif g_current_scene == LAB:
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_lab_tilemap.draw(DISPLAY_SURFACE)
@@ -81,6 +83,7 @@ def draw():
         g_player_house_down_tilemap.over_draw(DISPLAY_SURFACE)
     elif g_current_scene == OUTSIDE:
         g_outside_tilemap.over_draw(DISPLAY_SURFACE)
+        g_route_tilemap.over_draw(DISPLAY_SURFACE)
     elif g_current_scene == LAB:
         g_lab_tilemap.over_draw(DISPLAY_SURFACE)
 
@@ -102,6 +105,8 @@ def update(dt):
         # Update the tilemap, then translate it.
         g_outside_tilemap.update(dt)
         g_outside_tilemap.get_offset(player_offset)
+        g_route_tilemap.update(dt)
+        g_route_tilemap.get_offset(player_offset)
     elif g_current_scene == LAB:
         # Update the tilemap, then translate it.
         g_lab_tilemap.update(dt)
