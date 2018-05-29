@@ -157,9 +157,11 @@ class Tilemap:
     def over_draw(self, surface):
         for tile in self.over_tile_queue:
             if __builtin__.g_current_scene == LAB:
-                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 12 + 4), tile[1], tile[2]);
-            elif __builtin__.g_player_house_down_tilemap == PLAYER_HOUSE_DOWNSTAIRS:
-                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 12 + 4), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
+            elif __builtin__.g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
+            elif __builtin__.g_current_scene == PLAYER_HOUSE_UPSTAIRS:
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
             else:
                 asset_manager.draw_tile(surface, tile[0], tile[1], tile[2]);
 
@@ -221,7 +223,7 @@ class Tilemap:
                 desc_manager.add_message_to_queue("PLAYER's house", "")
             elif x == 20 and y == 6:  # Going into the player's house.
                 __builtin__.g_current_scene = PLAYER_HOUSE_DOWNSTAIRS
-                __builtin__.g_player.set_pos( (64 * 3, 64 * 3) )
+                __builtin__.g_player.set_pos( (64 * 4, 64 * 9) )
 
         elif __builtin__.g_current_scene == LAB:
             if x == 8 and y == 1:  # Prof's Certification
@@ -241,4 +243,42 @@ class Tilemap:
                 __builtin__.g_player.set_pos( (64 * 21, 64 * 13 - 16) )
 
         elif __builtin__.g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
-            pass
+            if x == 6 and y == 1:  # TV
+                desc_manager.add_message_to_queue("...I better go, too.", "")
+                desc_manager.add_message_to_queue("railroad tracks.", "")
+                desc_manager.add_message_to_queue("There is a movie on TV.", "Two boys are walking on-")
+            elif x == 4 and y == 1:  # CABINET
+                desc_manager.add_message_to_queue("Dishes and plates are neatly", "lined up.")
+            elif x == 3 and y == 1:  # CABINET
+                desc_manager.add_message_to_queue("Dishes and plates are neatly", "lined up.")
+            elif x == 2 and y == 1:  # FOODAREA
+                desc_manager.add_message_to_queue("It smells delicious!", "Someone has been cooking here.")
+            elif x == 1 and y == 1:  # FOODAREA
+                desc_manager.add_message_to_queue("It smells delicious!", "Someone has been cooking here.")
+            elif x == 11 and y == 2:  # Stairs
+                __builtin__.g_current_scene = PLAYER_HOUSE_UPSTAIRS
+                __builtin__.g_player.set_pos( (64 * 9, 64 * 2) )
+            elif x == 4 and y == 9:  # Going out of the house
+                __builtin__.g_current_scene = OUTSIDE
+                __builtin__.g_player.set_pos( (64 * 20, 64 * 7 - 16) )
+
+        elif __builtin__.g_current_scene == PLAYER_HOUSE_UPSTAIRS:
+            if x == 3 and y == 1:  # dresser
+                desc_manager.add_message_to_queue("It's a nicely made dresser.", "It will hold a lot of stuff.")
+            elif x == 4 and y == 1:  # bookshelf
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 5 and y == 1:  # bookshelf
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 2 and y == 1:  # desk
+                desc_manager.add_message_to_queue("It's a wooden desk...", "")
+            elif x == 1 and y == 1:  # computer
+                desc_manager.add_message_to_queue("TODO: play windows xp shutoff", "sound.")
+                desc_manager.add_message_to_queue("This computer is running", "windows vista.  Yikes!")
+            elif x == 9 and y == 2:  # Stairs
+                __builtin__.g_current_scene = PLAYER_HOUSE_DOWNSTAIRS
+                __builtin__.g_player.set_pos( (64 * 11, 64 * 2) )
+            elif x == 11 and y == 1:  # sign thing
+                desc_manager.add_message_to_queue("people.", "             T m T")
+                desc_manager.add_message_to_queue("This game was made with", "lots of stress by three-")
+            elif x == 6 and y == 5:  # computer
+                desc_manager.add_message_to_queue("You play with the nes.", "Okay!  It's time to go!")

@@ -100,6 +100,23 @@ class Player:
 
                     elif self.direction == 0:
                         g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
+                elif g_current_scene == PLAYER_HOUSE_UPSTAIRS:
+                    if self.direction == 2:
+                        g_player_house_up_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+
+                    elif self.direction == 3:
+                        g_player_house_up_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+                    elif self.direction == 1:
+                        g_player_house_up_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+                    elif self.direction == 0:
+                        g_player_house_up_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
+                return True
+            elif event.key == pygame.K_x:  # (b button)
+                self._running = True
                 return True
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
@@ -114,11 +131,17 @@ class Player:
             elif event.key == pygame.K_DOWN:
                 self.down_key_down = False
                 return True
+            elif event.key == pygame.K_x:  # (b button)
+                self._running = False
+                return True
         else:
             return False
 
     def draw(self, surface):
-        asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation], True)
+        if self._running == False:
+            asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation], True)
+        else:
+            asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation] + 3, True)
 
     # Sets the players pos and tells the player to update the tilemap.
     def set_pos(self, position):
@@ -172,6 +195,19 @@ class Player:
             elif self.direction == 0:
                 tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
 
+        elif g_current_scene == PLAYER_HOUSE_UPSTAIRS:
+            if self.direction == 2:
+                tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+
+            elif self.direction == 3:
+                tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+            elif self.direction == 1:
+                tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+            elif self.direction == 0:
+                tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
         # Check for the tiles that mean collision
         if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8:
             # Stop moving.
@@ -207,7 +243,11 @@ class Player:
             return False
 
     def _update_animation(self, dt):
-        self._animation_timer_val += dt
+        # If the player is running, update the timer by twice the amount. (2x speed animations)
+        if self._running == False:
+            self._animation_timer_val += dt
+        else:
+            self._animation_timer_val += dt*2
 
         # If the timer has gone on for 0.2 seconds, change to the next animation frame.
         if self._animation_timer_val >= ANIMATION_SPEED:
@@ -223,7 +263,6 @@ class Player:
         # Check if need to move another direction  # Case: the player has stopped moving because all keys are up
         if (self.left_key_down or self.right_key_down or self.up_key_down or self.down_key_down) == False:
             self._move = False
-
         else:
             # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
             if self.left_key_down == True:
@@ -231,36 +270,52 @@ class Player:
 
                 # Only move if there is no collsion found.
                 if self.check_collision() == False:
-                    self.position[0] += -SPEED * dt
+                    if self._running == False:
+                        self.position[0] += -SPEED * dt
+                    else:
+                        self.position[0] += -SPEED * dt * 2
 
             elif self.right_key_down == True:
                 self.direction = 3
 
                 # Only move if there is no collsion found.
                 if self.check_collision() == False:
-                    self.position[0] += SPEED * dt
+                    if self._running == False:
+                        self.position[0] += SPEED * dt
+                    else:
+                        self.position[0] += SPEED * dt * 2
 
             elif self.up_key_down == True:
                 self.direction = 1
 
                 # Only move if there is no collsion found.
                 if self.check_collision() == False:
-                    self.position[1] += -SPEED * dt
+                    if self._running == False:
+                        self.position[1] += -SPEED * dt
+                    else:
+                        self.position[1] += -SPEED * dt * 2
 
             elif self.down_key_down == True:
                 self.direction = 0
 
                 # Only move if there is no collsion found.
                 if self.check_collision() == False:
-                    self.position[1] += SPEED * dt
+                    if self._running == False:
+                        self.position[1] += SPEED * dt
+                    else:
+                        self.position[1] += SPEED * dt * 2
 
     # This function handles calculating what amount the player needs to move.
     def _move_player(self, dt):
         if self.direction == 0:
             # Case: player needs to move more, until they are on / past the tile.
             if self.position[1] <= self._last_position[1] + 64:
-                self.position[1] += SPEED * dt
-                return (0, 0, -SPEED * dt)
+                if self._running == False:
+                    self.position[1] += SPEED * dt
+                    return (0, 0, -SPEED * dt)
+                else:
+                    self.position[1] += SPEED * dt * 2
+                    return (0, 0, -SPEED * dt * 2)
             else:
                 # Check if the player is stopping or keeps moving.
                 self._last_position[1] = self._last_position[1] + 64
@@ -272,8 +327,12 @@ class Player:
         elif self.direction == 1:
             # Case: player needs to move more, until they are on / past the tile.
             if self.position[1] >= self._last_position[1] - 64:
-                self.position[1] += -SPEED * dt
-                return (0, 0, SPEED * dt)
+                if self._running == False:
+                    self.position[1] += -SPEED * dt
+                    return (0, 0, SPEED * dt)
+                else:
+                    self.position[1] += -SPEED * dt * 2
+                    return (0, 0, SPEED * dt * 2)
             else:
                 # Check if the player is stopping or keeps moving.
                 self._last_position[1] = self._last_position[1] - 64
@@ -285,20 +344,29 @@ class Player:
         elif self.direction == 2:
             # Case: player needs to move more, until they are on / past the tile.
             if self.position[0] >= self._last_position[0] - 64:
-                self.position[0] += -SPEED * dt
-                return (0, SPEED * dt, 0)
+                if self._running == False:
+                    self.position[0] += -SPEED * dt
+                    return (0, SPEED * dt, 0)
+                else:
+                    self.position[0] += -SPEED * dt * 2
+                    return (0, SPEED * dt * 2, 0)
             else:
                 # Check if the player is stopping or keeps moving.
                 self._last_position[0] = self._last_position[0] - 64
                 self.position[0] = self._last_position[0]
+
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
         elif self.direction == 3:
             # Case: player needs to move more, until they are on / past the tile.
             if self.position[0] <= self._last_position[0] + 64:
-                self.position[0] += SPEED * dt
-                return (0, -SPEED * dt, 0)
+                if self._running == False:
+                    self.position[0] += SPEED * dt
+                    return (0, -SPEED * dt, 0)
+                else:
+                    self.position[0] += SPEED * dt * 2
+                    return (0, -SPEED * dt * 2, 0)
             else:
                 # Check if the player is stopping or keeps moving.
                 self._last_position[0] = self._last_position[0] + 64

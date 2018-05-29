@@ -8,6 +8,8 @@ import asset_manager
 
 import pygame
 
+import __builtin__  # PLEASE NOOO!!!!!
+
 # This is the queue for any messages that need to be sent to the player.
 text_queue = []
 
@@ -28,10 +30,19 @@ def check_queue(screen):
 
 # This function check if the z key (A button) is pressed.
 def check_skip_box():
-    for event in pygame.event.get():
+    for event in pygame.event.get():  # TODO: THIS BUG WITH THE PLAYER?
+        # Do the player events separately incase the z button is pressed.
+        #if g_player.handle_input(event):
+            #pass
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_z:
                 return True
+        elif event.type == pygame.QUIT:
+            # Close pygame before application closes.
+            pygame.quit()
+            print "DEBUG: Application Complete."
+            sys.exit(0)
 
     return False
 

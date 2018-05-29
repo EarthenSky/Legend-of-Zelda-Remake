@@ -32,13 +32,14 @@ import desc_manager
 import player  # The player needs to move.
 
 # Globals.
-g_game_stopped = False
+__builtin__.g_game_stopped = False
 __builtin__.g_current_scene = OUTSIDE
 
-# Create the different scenes.
+# Create & load the different scenes.
 __builtin__.g_outside_tilemap = tilemap.Tilemap("outside.map", 0)
 __builtin__.g_lab_tilemap = tilemap.Tilemap( "lab.map", pygame.image.load("resc/images/lab.png").convert() )
 __builtin__.g_player_house_down_tilemap = tilemap.Tilemap( "player_house_down.map", pygame.image.load("resc/images/player_house_down.png").convert() )
+__builtin__.g_player_house_up_tilemap = tilemap.Tilemap( "player_house_up.map", pygame.image.load("resc/images/player_house_up.png").convert() )
 
 # Create the player object.
 __builtin__.g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )
@@ -56,7 +57,8 @@ def handle_input():
 # This is for drawing stuff.  Called before update.
 def draw():
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
-        pass
+        DISPLAY_SURFACE.fill( (0, 0, 0) )
+        g_player_house_up_tilemap.draw(DISPLAY_SURFACE)
     elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_player_house_down_tilemap.draw(DISPLAY_SURFACE)
@@ -74,7 +76,7 @@ def draw():
 
     # Stuff drawn over the player.
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
-        pass
+        g_player_house_up_tilemap.over_draw(DISPLAY_SURFACE)
     elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
         g_player_house_down_tilemap.over_draw(DISPLAY_SURFACE)
     elif g_current_scene == OUTSIDE:
@@ -91,7 +93,8 @@ def update(dt):
     player_offset = g_player.update(dt)
 
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
-        pass
+        g_player_house_up_tilemap.update(dt)
+        g_player_house_up_tilemap.get_offset(player_offset)
     elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
         g_player_house_down_tilemap.update(dt)
         g_player_house_down_tilemap.get_offset(player_offset)
