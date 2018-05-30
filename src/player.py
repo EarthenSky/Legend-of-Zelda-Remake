@@ -43,8 +43,9 @@ class Player:
         # If this variable is true, check for collision just before moving.
         self._check_collision = False
 
-        # If the player position is being set.
-        self._set_pos = False
+        self._set_pos = False  # If the player position is being set.
+
+        self._is_on_grass = True  # Is the player on a grass tile.
 
     # Moving and stuff.
     def handle_input(self, event):
@@ -139,9 +140,9 @@ class Player:
 
     def draw(self, surface):
         if self._running == False:
-            asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation], True)
+            asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation], True, self._is_on_grass)
         else:
-            asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation] + 3, True)
+            asset_manager.draw_player(surface, self._draw_position, self.direction, self._animation_key[self._current_animation] + 3, True, self._is_on_grass)
 
     # Sets the players pos and tells the player to update the tilemap.
     def set_pos(self, position):
@@ -155,7 +156,7 @@ class Player:
     # Check for collision.
     def check_collision(self):
         if g_current_scene == OUTSIDE:
-            if self.position[1] < 0:
+            if self.position[1] <= 0:
                 # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
                 if self.direction == 2:
                     tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
@@ -220,6 +221,8 @@ class Player:
 
             elif self.direction == 0:
                 tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
+        print tiley, tilex
 
         # Check for the tiles that mean collision
         if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8:
@@ -389,6 +392,21 @@ class Player:
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
     def check_movement(self, dt):
+        # Check if on grass.
+        if self._move == False and self._is_on_grass == False:
+            if g_current_scene == OUTSIDE:
+                if self.position[1] <= 0:
+                    # Check current tile.
+                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
+                else:
+                    # Check current tile.
+                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
+
+                if tiley == 6 and tilex == 0:
+                    self._is_on_grass = True
+        elif self._move == True and self._is_on_grass == True:
+            self._is_on_grass = False
+
         if self._move == False:
             if self._current_animation == 1:
                 self._current_animation = 2

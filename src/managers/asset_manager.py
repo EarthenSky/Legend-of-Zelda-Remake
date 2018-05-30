@@ -62,9 +62,12 @@ def draw_tile(surface, position, group, depth):
     else:
         print "ERR 8: INCORRECT GROUP NAME PASSED in asset_manager.py"
 
-def draw_player(surface, position, group, depth, is_male):
+def draw_player(surface, position, group, depth, is_male, is_grass):
     if is_male:
-        _draw( surface, male_char_spritesheet, position, (depth * 16, group * 20, 16, 20) )
+        if is_grass == True:
+            _draw( surface, male_char_spritesheet, position, (depth * 16, group * 20, 16, 14) )
+        else:
+            _draw( surface, male_char_spritesheet, position, (depth * 16, group * 20, 16, 20) )
     else:
         pass
 
