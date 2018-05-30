@@ -111,7 +111,7 @@ class Tilemap:
                     pos_y = row_index * 64 + self.position[1]
 
                     # Only draw the tile if it is inside the screen.
-                    if pos_x >= -64 and pos_x <= SCREEN_SIZE[0] + 64 and pos_y >= -64 and pos_y <= SCREEN_SIZE[1] + 64:
+                    if pos_x + self.draw_relative_position[0] >= -64 and pos_x + self.draw_relative_position[0] <= SCREEN_SIZE[0] + 64 and pos_y + self.draw_relative_position[1] >= -64 and pos_y + self.draw_relative_position[1] <= SCREEN_SIZE[1] + 64:
                         # Choose hjow to draw this tile.
                         if self.map_matrix[row_index][column_index][0] == 0:  # Case: ao, animation over.
                             # Draw the two tiles, the animation is the top tile.
@@ -149,7 +149,7 @@ class Tilemap:
                     pos_y = row_index * 64 + self.position[1]
 
                     # Only draw the tile if it is inside the screen.
-                    if pos_x >= -64 and pos_x <= SCREEN_SIZE[0] + 64 and pos_y >= -64 and pos_y <= SCREEN_SIZE[1] + 64:
+                    if pos_x + self.draw_relative_position[0] >= -64 and pos_x + self.draw_relative_position[0] <= SCREEN_SIZE[0] + 64 and pos_y + self.draw_relative_position[1] >= -64 and pos_y + self.draw_relative_position[1] <= SCREEN_SIZE[1] + 64:
                         if self.map_matrix[row_index][column_index][0] == 3:  # Case: two tiles, one over the player.
                             # Draw the second tile above the player.
                             self.over_tile_queue.append( ((pos_x + self.draw_relative_position[0], pos_y + self.draw_relative_position[1]), self.map_matrix[row_index][column_index][3], self.map_matrix[row_index][column_index][4]) )
@@ -166,7 +166,7 @@ class Tilemap:
             elif __builtin__.g_current_scene == PLAYER_HOUSE_UPSTAIRS:
                 asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1] + 16), tile[1], tile[2]);
             else:
-                asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1]), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1]), tile[1], tile[2]);
 
     def _update_animation(self, dt):
         self._animation_timer_val += dt
