@@ -289,9 +289,7 @@ class Player:
                 tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
 
             if tiley == 6 and tilex == 0:
-                self._is_on_grass = True
-
-                print "on grass!"
+                print "trigger grass animation"
 
                 # Trigger an animation.
                 __builtin__.g_route_tilemap.trigger_animation( int(round(self.position[0]/64)), int(round(self.position[1]/64)), 13 )
@@ -423,6 +421,22 @@ class Player:
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
     def check_movement(self, dt):
+        # Check if on grass.
+        if self._move == False and self._is_on_grass == False:
+            if g_current_scene == OUTSIDE:
+                if self.position[1] <= 0:
+                    # Check current tile.
+                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
+                else:
+                    #Check current tile.
+                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
+
+                if tiley == 6 and tilex == 0:
+                    self._is_on_grass = True
+        elif self._move == True and self._is_on_grass == True:
+            self._is_on_grass = False
+
+
         if self._move == False:
             if self._current_animation == 1:
                 self._current_animation = 2
