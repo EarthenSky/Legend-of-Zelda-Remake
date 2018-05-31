@@ -88,6 +88,12 @@ class Tilemap:
         self._animation_frame = 0
         self._animation_timer_val = 0
 
+        self._triggered_animations = []  # the format for animations is (x, y, animation_type, animation_frame, last_frame)
+
+    # For type, 2 is grass...
+    def trigger_animation(self, x, y, animation_type):
+        self._triggered_animations.append( [x, y, animation_type, 0, 4] )
+
     # Gets the player's 'offset' tuple which contains a position and what to do with it.
     # The tuple can be translation or assignation.
     def get_offset(self, offset):
@@ -160,13 +166,32 @@ class Tilemap:
     def over_draw(self, surface):
         for tile in self.over_tile_queue:
             if __builtin__.g_current_scene == LAB:
-                asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1] + 16), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
             elif __builtin__.g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
-                asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1] + 16), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
             elif __builtin__.g_current_scene == PLAYER_HOUSE_UPSTAIRS:
-                asset_manager.draw_tile(surface, (tile[0][0] + self.draw_relative_position[0], tile[0][1] + self.draw_relative_position[1] + 16), tile[1], tile[2]);
+                asset_manager.draw_tile(surface, (tile[0][0], tile[0][1] + 16), tile[1], tile[2]);
             else:
                 asset_manager.draw_tile(surface, (tile[0][0], tile[0][1]), tile[1], tile[2]);
+
+        garbage_list = []
+
+        # Check if animation is done.
+        for index in range(len(self._triggered_animations)):
+            if self._triggered_animations[index][3] >= self._triggered_animations[index][4]:
+                garbage_list.append(index)
+
+        # Remove items that are done.
+        for index in garbage_list:
+            self._triggered_animations.pop(index)  # Remove the item at index.  ( Garbage )
+
+        # Draw items.
+        for index in range(len(self._triggered_animations)):
+            pos_x = self._triggered_animations[index][0] * 64 + self.position[0]
+            pos_y = (self._triggered_animations[index][1]+1) * 64 + self.position[1]
+
+            # Draw the animation.
+            asset_manager.draw_tile(surface, (pos_x, pos_y), self._triggered_animations[index][2], self._triggered_animations[index][3]);
 
     def _update_animation(self, dt):
         self._animation_timer_val += dt
@@ -179,6 +204,10 @@ class Tilemap:
             self._animation_frame += 1
             if self._animation_frame >= 8:
                 self._animation_frame = 0
+
+            # Update _triggered_animations.
+            for index in range(len(self._triggered_animations)):
+                self._triggered_animations[index][3] += 1  # Increment the animation frame
 
     # Uses delta time (dt).
     def update(self, dt):

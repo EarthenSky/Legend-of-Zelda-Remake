@@ -9,6 +9,9 @@ import pygame
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import asset_manager
 
+import __builtin__  # TODO: NooOooOOoOOOooOOOo000000OOOOOOO!!!
+
+
 SPEED = 235
 ANIMATION_SPEED = 0.138  # 0.138s or 138ms per frame.
 
@@ -45,7 +48,9 @@ class Player:
 
         self._set_pos = False  # If the player position is being set.
 
-        self._is_on_grass = True  # Is the player on a grass tile.
+        self._is_on_grass = False  # Is the player on a grass tile.
+        self._start_grass_animation = False
+        self._current_grass_animation = 0
 
     # Moving and stuff.
     def handle_input(self, event):
@@ -274,6 +279,24 @@ class Player:
             if self._current_animation >= 4:
                 self._current_animation = 0
 
+    def _check_on_grass(self):
+        if g_current_scene == OUTSIDE:
+            if self.position[1] <= 0:  # TODO: fix collision bug here?
+                # Check current tile.
+                tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
+            else:
+                # Check current tile.
+                tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
+
+            if tiley == 6 and tilex == 0:
+                self._is_on_grass = True
+
+                print "on grass!"
+
+                # Trigger an animation.
+                __builtin__.g_route_tilemap.trigger_animation( int(round(self.position[0]/64)), int(round(self.position[1]/64)), 13 )
+
+
     # Check if the player needs to move in another direction before stopping.
     def _check_new_move_dir(self, dt):
         # Check if need to move another direction  # Case: the player has stopped moving because all keys are up
@@ -333,6 +356,8 @@ class Player:
                     self.position[1] += SPEED * dt * 2
                     return (0, 0, -SPEED * dt * 2)
             else:
+                self._check_on_grass()
+
                 # Check if the player is stopping or keeps moving.
                 self._last_position[1] = self._last_position[1] + 64
                 self.position[1] = self._last_position[1]
@@ -350,6 +375,8 @@ class Player:
                     self.position[1] += -SPEED * dt * 2
                     return (0, 0, SPEED * dt * 2)
             else:
+                self._check_on_grass()
+
                 # Check if the player is stopping or keeps moving.
                 self._last_position[1] = self._last_position[1] - 64
                 self.position[1] = self._last_position[1]
@@ -367,6 +394,8 @@ class Player:
                     self.position[0] += -SPEED * dt * 2
                     return (0, SPEED * dt * 2, 0)
             else:
+                self._check_on_grass()
+
                 # Check if the player is stopping or keeps moving.
                 self._last_position[0] = self._last_position[0] - 64
                 self.position[0] = self._last_position[0]
@@ -384,6 +413,8 @@ class Player:
                     self.position[0] += SPEED * dt * 2
                     return (0, -SPEED * dt * 2, 0)
             else:
+                self._check_on_grass()
+
                 # Check if the player is stopping or keeps moving.
                 self._last_position[0] = self._last_position[0] + 64
                 self.position[0] = self._last_position[0]
@@ -392,21 +423,6 @@ class Player:
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
     def check_movement(self, dt):
-        # Check if on grass.
-        if self._move == False and self._is_on_grass == False:
-            if g_current_scene == OUTSIDE:
-                if self.position[1] <= 0:
-                    # Check current tile.
-                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
-                else:
-                    # Check current tile.
-                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) )
-
-                if tiley == 6 and tilex == 0:
-                    self._is_on_grass = True
-        elif self._move == True and self._is_on_grass == True:
-            self._is_on_grass = False
-
         if self._move == False:
             if self._current_animation == 1:
                 self._current_animation = 2
