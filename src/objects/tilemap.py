@@ -177,13 +177,13 @@ class Tilemap:
         garbage_list = []
 
         # Check if animation is done.
-        for index in range(len(self._triggered_animations)):
-            if self._triggered_animations[index][3] >= self._triggered_animations[index][4]:
-                garbage_list.append(index)
+        for animation in self._triggered_animations:
+            if animation[3] >= animation[4]:
+                garbage_list.append(animation)
 
         # Remove items that are done.
-        for index in garbage_list:
-            self._triggered_animations.pop(index)  # Remove the item at index.  ( Garbage )
+        for animation in garbage_list:
+            self._triggered_animations.remove(animation)  # Remove the item at index.  ( Garbage )
 
         # Draw items.
         for index in range(len(self._triggered_animations)):

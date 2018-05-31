@@ -161,7 +161,7 @@ class Player:
     # Check for collision.
     def check_collision(self):
         if g_current_scene == OUTSIDE:
-            if self.position[1] <= 0:
+            if self.position[1] <= -64:
                 # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
                 if self.direction == 2:
                     tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
@@ -294,7 +294,6 @@ class Player:
                 # Trigger an animation.
                 __builtin__.g_route_tilemap.trigger_animation( int(round(self.position[0]/64)), int(round(self.position[1]/64)), 13 )
 
-
     # Check if the player needs to move in another direction before stopping.
     def _check_new_move_dir(self, dt):
         # Check if need to move another direction  # Case: the player has stopped moving because all keys are up
@@ -354,11 +353,11 @@ class Player:
                     self.position[1] += SPEED * dt * 2
                     return (0, 0, -SPEED * dt * 2)
             else:
-                self._check_on_grass()
-
                 # Check if the player is stopping or keeps moving.
                 self._last_position[1] = self._last_position[1] + 64
                 self.position[1] = self._last_position[1]
+
+                self._check_on_grass()
 
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
@@ -373,11 +372,12 @@ class Player:
                     self.position[1] += -SPEED * dt * 2
                     return (0, 0, SPEED * dt * 2)
             else:
-                self._check_on_grass()
 
                 # Check if the player is stopping or keeps moving.
                 self._last_position[1] = self._last_position[1] - 64
                 self.position[1] = self._last_position[1]
+
+                self._check_on_grass()
 
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
@@ -392,11 +392,11 @@ class Player:
                     self.position[0] += -SPEED * dt * 2
                     return (0, SPEED * dt * 2, 0)
             else:
-                self._check_on_grass()
-
                 # Check if the player is stopping or keeps moving.
                 self._last_position[0] = self._last_position[0] - 64
                 self.position[0] = self._last_position[0]
+
+                self._check_on_grass()
 
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
@@ -411,11 +411,11 @@ class Player:
                     self.position[0] += SPEED * dt * 2
                     return (0, -SPEED * dt * 2, 0)
             else:
-                self._check_on_grass()
-
                 # Check if the player is stopping or keeps moving.
                 self._last_position[0] = self._last_position[0] + 64
                 self.position[0] = self._last_position[0]
+
+                self._check_on_grass()
 
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
