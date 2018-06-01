@@ -52,6 +52,20 @@ class Player:
         self._start_grass_animation = False
         self._current_grass_animation = 0
 
+    # Check for interacting with tiles on a specific tilemap.
+    def _check_interaction(self, tilemap):
+        if self.direction == 2:
+            tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+
+        elif self.direction == 3:
+            tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+        elif self.direction == 1:
+            tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+        elif self.direction == 0:
+            tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
     # Moving and stuff.
     def handle_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -69,56 +83,16 @@ class Player:
                 return True
             elif event.key == pygame.K_z:
                 if g_current_scene == OUTSIDE:
-                    if self.direction == 2:
-                        g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
-
-                    elif self.direction == 3:
-                        g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-                    elif self.direction == 1:
-                        g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-                    elif self.direction == 0:
-                        g_outside_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+                    self._check_interaction(g_outside_tilemap)
 
                 elif g_current_scene == LAB:
-                    if self.direction == 2:
-                        g_lab_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
-
-                    elif self.direction == 3:
-                        g_lab_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-                    elif self.direction == 1:
-                        g_lab_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-                    elif self.direction == 0:
-                        g_lab_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+                    self._check_interaction(g_lab_tilemap)
 
                 elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
-                    if self.direction == 2:
-                        g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
-
-                    elif self.direction == 3:
-                        g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-                    elif self.direction == 1:
-                        g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-                    elif self.direction == 0:
-                        g_player_house_down_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+                    self._check_interaction(g_player_house_down_tilemap)
 
                 elif g_current_scene == PLAYER_HOUSE_UPSTAIRS:
-                    if self.direction == 2:
-                        g_player_house_up_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
-
-                    elif self.direction == 3:
-                        g_player_house_up_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-                    elif self.direction == 1:
-                        g_player_house_up_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-                    elif self.direction == 0:
-                        g_player_house_up_tilemap.check_interaction_at_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+                    self._check_interaction(g_player_house_up_tilemap)
 
                 return True
             elif event.key == pygame.K_x:  # (b button)
@@ -158,76 +132,37 @@ class Player:
 
         self._set_pos = True
 
+    # Check for interacting with tiles on a specific tilemap.
+    def _check_collision_tile(self, tilemap):
+        # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
+        if self.direction == 2:
+            return tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+
+        elif self.direction == 3:
+            return tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
+
+        elif self.direction == 1:
+            return tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
+
+        elif self.direction == 0:
+            return tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+
     # Check for collision.
     def check_collision(self):
         if g_current_scene == OUTSIDE:
             if self.position[1] <= -64:
-                # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
-                if self.direction == 2:
-                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
-
-                elif self.direction == 3:
-                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-                elif self.direction == 1:
-                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-                elif self.direction == 0:
-                    tiley, tilex = g_route_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+                tiley, tilex = self._check_collision_tile(g_route_tilemap)
             else:
-                # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
-                if self.direction == 2:
-                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
+                tiley, tilex = self._check_collision_tile(g_outside_tilemap)
 
-                elif self.direction == 3:
-                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-                elif self.direction == 1:
-                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-                elif self.direction == 0:
-                    tiley, tilex = g_outside_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
         elif g_current_scene == LAB:
-            # If a key is pressed, turn in that direction, don't start a timer.  Start moving.
-            if self.direction == 2:
-                tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
-
-            elif self.direction == 3:
-                tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-            elif self.direction == 1:
-                tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-            elif self.direction == 0:
-                tiley, tilex = g_lab_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+            tiley, tilex = self._check_collision_tile(g_lab_tilemap)
 
         elif g_current_scene == PLAYER_HOUSE_DOWNSTAIRS:
-            if self.direction == 2:
-                tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
-
-            elif self.direction == 3:
-                tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-            elif self.direction == 1:
-                tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-            elif self.direction == 0:
-                tiley, tilex = g_player_house_down_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
+            tiley, tilex = self._check_collision_tile(g_player_house_down_tilemap)
 
         elif g_current_scene == PLAYER_HOUSE_UPSTAIRS:
-            if self.direction == 2:
-                tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)) - 1, int(round(self.position[1]/64)) )
-
-            elif self.direction == 3:
-                tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)) + 1, int(round(self.position[1]/64)) )
-
-            elif self.direction == 1:
-                tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) - 1 )
-
-            elif self.direction == 0:
-                tiley, tilex = g_player_house_up_tilemap.get_tile( int(round(self.position[0]/64)), int(round(self.position[1]/64)) + 1 )
-
-        print tiley, tilex
+            tiley, tilex = self._check_collision_tile(g_player_house_up_tilemap)
 
         # Check for the tiles that mean collision
         if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8:
