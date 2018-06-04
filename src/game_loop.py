@@ -40,7 +40,7 @@ __builtin__.g_outside_tilemap = tilemap.Tilemap("outside.map", [0, 0], 0)
 __builtin__.g_lab_tilemap = tilemap.Tilemap( "lab.map", [0, 0], pygame.image.load("resc/images/lab.png").convert() )
 __builtin__.g_player_house_down_tilemap = tilemap.Tilemap( "player_house_down.map", [0, 0], pygame.image.load("resc/images/player_house_down.png").convert() )
 __builtin__.g_player_house_up_tilemap = tilemap.Tilemap( "player_house_up.map", [0, 0], pygame.image.load("resc/images/player_house_up.png").convert() )
-__builtin__.g_route_tilemap = tilemap.Tilemap( "route.map", [0, -640 * 4], 0)  # pygame.image.load("resc/images/route.png").convert()
+__builtin__.g_route_tilemap = tilemap.Tilemap( "route.map", [0, -64 * 64], 0)
 
 # Create the player object.
 __builtin__.g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )

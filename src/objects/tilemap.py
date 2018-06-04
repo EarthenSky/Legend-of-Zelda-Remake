@@ -75,7 +75,6 @@ class Tilemap:
         self.image_passed = False
 
         # Check if image was passed.
-        self.image_passed = False
         if img != 0:
             self.image_passed = True
             self._img = img
@@ -228,12 +227,11 @@ class Tilemap:
 
         elif self.map_matrix[y][x][0] == 3:  # Case: two tiles, one over the player.
             return( (self.map_matrix[y][x][1], self.map_matrix[y][x][2]) );  #return the bottomtile.
-
         else:                                 # Case: two tiles, both under the player.
             return( (self.map_matrix[y][x][3], self.map_matrix[y][x][4]) );  #return the toptile.
 
     def check_interaction_at_tile(self, x, y):
-        tile = self.get_tile(x, y)
+        #tile = self.get_tile(x, y)
 
         print (x, y)
         if __builtin__.g_current_scene == OUTSIDE:
