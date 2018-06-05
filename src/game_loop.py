@@ -31,6 +31,8 @@ import desc_manager
 
 import player  # The player needs to move.
 
+import menu
+
 # Globals.
 __builtin__.g_game_stopped = False
 __builtin__.g_current_scene = OUTSIDE
@@ -45,6 +47,9 @@ __builtin__.g_route_tilemap = tilemap.Tilemap( "route.map", [0, -64 * 64], 0)
 # Create the player object.
 __builtin__.g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )
 
+# Create the menu class.
+g_menu = menu.Menu(DISPLAY_SURFACE)
+
 # This function handles any input.  Called before update.
 def handle_input():
     global g_game_stopped
@@ -54,6 +59,9 @@ def handle_input():
             g_game_stopped = True
         elif g_player.handle_input(event):
             pass
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                g_menu.enable_menu()
 
 # This is for drawing stuff.  Called before update.
 def draw():
