@@ -165,7 +165,7 @@ class Player:
             tiley, tilex = self._check_collision_tile(g_player_house_up_tilemap)
 
         # Check for the tiles that mean collision
-        if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8:
+        if tiley == 9 or tiley == 10 or tiley == 3 or tiley == 8 or tiley == 14:
             # Stop moving.
             self._move = False
 

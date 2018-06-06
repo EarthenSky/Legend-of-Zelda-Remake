@@ -20,6 +20,7 @@ LAB = 9
 WATER_EDGES = 10
 WATER_ANIMATION = 11
 FLOWER_ANIMATION = 12
+GYM = 14
 
 # Asset manager initialization.
 outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert_alpha()
@@ -55,7 +56,9 @@ def draw_tile(surface, position, group, depth):
     depth = int(depth)
 
     # Passes the cut position for the image to the draw function.
-    if group >= 0 and group <= WATER_EDGES:
+    if group == GYM:
+        _draw( surface, outside_tiles, position, (depth * 16, 11 * 16, 16, 16) )
+    elif group >= 0 and group <= WATER_EDGES:
         _draw( surface, outside_tiles, position, (depth * 16, group * 16, 16, 16) )
     elif group > WATER_EDGES:
         _draw( surface, animated_tiles, position, (depth * 16, (group - WATER_ANIMATION) * 16, 16, 16) )
