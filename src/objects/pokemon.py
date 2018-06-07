@@ -4,32 +4,37 @@ pokemon_manager class.'''
 
 import __builtin__
 
-# Only do this once.
+# Only do this once.  # right?
 if __name__ == "__main__":
     # An 'enum' that holds the names of all the pokemon.
     __builtin__.POKEMON = {}
-    __builtin__.POKEMON["BULBASAUR"]    =   0
-    __builtin__.POKEMON["IVYSAUR"]      =   1
-    __builtin__.POKEMON["CHARMANDER"]   =   2
-    __builtin__.POKEMON["CHARMELEON"]   =   3
-    __builtin__.POKEMON["SQUIRTLE"]     =   4
-    __builtin__.POKEMON["WARTORTLE"]    =   5
-    __builtin__.POKEMON["PIDGEY"]       =   6
-    __builtin__.POKEMON["PIDGEOTTO"]    =   7
-    __builtin__.POKEMON["GEODUDE"]      =   8
-    __builtin__.POKEMON["GRAVELER"]     =   9
-    __builtin__.POKEMON["SANDSHREW"]    =   10
-    __builtin__.POKEMON["CATERPIE"]     =   11
-    __builtin__.POKEMON["METAPOD"]      =   12
-    __builtin__.POKEMON["EKANS"]        =   13
+    __builtin__.POKEMON["BULBASAUR"]    =   (0, 0)
+    __builtin__.POKEMON["IVYSAUR"]      =   (0, 1)
+    __builtin__.POKEMON["CHARMANDER"]   =   (1, 0)
+    __builtin__.POKEMON["CHARMELEON"]   =   (1, 1)
+    __builtin__.POKEMON["SQUIRTLE"]     =   (2, 0)
+    __builtin__.POKEMON["WARTORTLE"]    =   (2, 1)
+    __builtin__.POKEMON["PIDGEY"]       =   (0, 3)
+    __builtin__.POKEMON["PIDGEOTTO"]    =   (0, 4)
+    __builtin__.POKEMON["GEODUDE"]      =   (4, 14)
+    __builtin__.POKEMON["GRAVELER"]     =   (5, 0)
+    __builtin__.POKEMON["SANDSHREW"]    =   (3, 5)
+    __builtin__.POKEMON["CATERPIE"]     =   (3, 0)
+    __builtin__.POKEMON["METAPOD"]      =   (3, 1)
+    __builtin__.POKEMON["EKANS"]        =   (2, 4)
+    __builtin__.POKEMON["RATATA"]       =   (1, 3)
+    __builtin__.POKEMON["RATICATE"]     =   (1, 4)
 
 class pokemon:
     def __init__ (self, pokemon_val, level):
         self.pokemon_val = pokemon_val
-        self._img = -1 # asset_manager.getpokemon(pokemon_val)
+        self._img = -1  #asset_manager.getpokemon(pokemon_val)
 
         # Initialized stats.
         self._level = level
+
+        self._attack_mod = 0
+        self._defence_mod = 0
 
         # Uninitialized stats.  In this case, -1 signifies null.
         self._max_health = -1
@@ -64,6 +69,19 @@ class pokemon:
     # Returns all the moves in a dict.
     def get_moves(self):
         pass
+
+    # Add val to the attack mod.
+    def inc_attack_mod(self, val):
+        self._attack_mod += val
+
+    # Add val to the defence mod.
+    def inc_defence_mod(self, val):
+        self._defence_mod += val
+
+    # Reset the attack and defence stat modifiers.
+    def reset_stat_mods(self):
+        self._attack_mod = 0
+        self._defence_mod = 0
 
     def level_up(self):
         pass

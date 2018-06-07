@@ -6,21 +6,25 @@ import text_manager
 
 import pygame
 
-# Pseudo Enum constants.  Each constant refers to a different image group to draw from.
-LIGHT_GRASS = 0
-TREE = 1
-CROWDED_TREE = 2
-FENCE = 3
-LEDGE = 4
-DARK_GRASS = 5
-SPECIAL = 6  # (0:bright tall grass, 1:metal sign, 2:bright wood sign, 3-4:mailbox)
-DIRT = 7
-HOUSE = 8
-LAB = 9
-WATER_EDGES = 10
-WATER_ANIMATION = 11
-FLOWER_ANIMATION = 12
-GYM = 14
+import __builtin__  ## THIS IS A NONO
+
+# Only do this once.  # right?
+if __name__ == "__main__":
+    # Pseudo Enum constants.  Each constant refers to a different image group to draw from.
+    LIGHT_GRASS = 0
+    TREE = 1
+    CROWDED_TREE = 2
+    FENCE = 3
+    LEDGE = 4
+    DARK_GRASS = 5
+    SPECIAL = 6  # (0:bright tall grass, 1:metal sign, 2:bright wood sign, 3-4:mailbox)
+    DIRT = 7
+    HOUSE = 8
+    LAB = 9
+    WATER_EDGES = 10
+    WATER_ANIMATION = 11
+    FLOWER_ANIMATION = 12
+    GYM = 14
 
 # Asset manager initialization.
 outside_tiles = pygame.image.load("resc/images/outside_tiles.png").convert_alpha()
@@ -82,6 +86,22 @@ def draw_message(surface, text_top, text_bottom):
     text_manager.draw_text( surface, text_top, (18*4, (160-42+4)*4) )
     text_manager.draw_text( surface, text_bottom, (18*4, (160-42+19)*4) )
 
-# TODO: draw the different pokemon angles.
-def draw_pokemon():
-    pass
+# This holds all the pokemon
+pokemon_sprite_sheet = pygame.image.load("resc/images/pokemon_sprite_sheet.png").convert_alpha()
+
+# Only does this code once.  # right?
+if __name__ == "__main__":
+    # An 'enum' that holds the types of
+    __builtin__.POKEMON_TYPE = {}
+    __builtin__.POKEMON_TYPE["FRONT"]  = 0
+    __builtin__.POKEMON_TYPE["BACK"]   = 1
+    __builtin__.POKEMON_TYPE["SMALL0"] = 2
+    __builtin__.POKEMON_TYPE["SMALL1"] = 3
+
+# TODO: draw the different pokemon angles.  # pokemon is a tuple (x, y)
+def draw_pokemon(surface, pokemon, type, position):
+    if type == __builtin__.POKEMON_TYPE["FRONT"]:
+
+    elif type == __builtin__.POKEMON_TYPE["BACK"]:
+
+    _draw(surface, pokemon_sprite_sheet, position, (161 * pokemon[0], 65 * pokemon[1], w, h))

@@ -27,6 +27,7 @@ FPS = 120
 
 pygame.init()
 clock = pygame.time.Clock()
+pygame.mixer.quit()
 movie = pygame.movie.Movie("resc/Videos/PokemonWaveBlueIntro.mpg") 	# <-- Filepath to the video
 SCREEN = pygame.display.set_mode(movie.get_size(), pygame.FULLSCREEN) # <-- , pygame.FULLSCREEN makes the window go fullscreen, otherwise the video player on pygame starts bugging out
 movie_screen = pygame.Surface(movie.get_size()).convert() 			#<-- gets the dimensions of the video file
