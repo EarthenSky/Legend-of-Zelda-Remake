@@ -33,6 +33,9 @@ import player  # The player needs to move.
 
 import menu
 
+sys.path.insert(0, 'src/objects/')  # This line tells the importer where to look for the module.
+import pokemon
+
 # Globals.
 __builtin__.g_game_stopped = False
 __builtin__.g_current_scene = OUTSIDE
@@ -63,6 +66,10 @@ def handle_input():
             if event.key == pygame.K_RETURN:
                 g_menu.enable_menu()
 
+# Must be imported after pygame has been initialized.
+sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
+import asset_manager
+
 # This is for drawing stuff.  Called before update.
 def draw():
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
@@ -80,6 +87,9 @@ def draw():
         g_lab_tilemap.draw(DISPLAY_SURFACE)
     else:
         print "GAME IS NOT IN ANY SCENE."
+
+    asset_manager.draw_pokemon( DISPLAY_SURFACE, (7, 10), POKEMON_TYPE["FRONT"], [100, 100] )
+    asset_manager.draw_pokemon( DISPLAY_SURFACE, (2, 6), POKEMON_TYPE["BACK"], [100, 300] )
 
     # Draw the player.
     g_player.draw(DISPLAY_SURFACE)
