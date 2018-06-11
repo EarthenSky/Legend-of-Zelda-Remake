@@ -28,6 +28,7 @@ import tilemap
 # Must be imported after pygame has been initialized.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import desc_manager
+import battle_manger
 
 import player  # The player needs to move.
 
@@ -110,6 +111,8 @@ def draw():
 
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
+    battle_manger.start_grass_battle(DISPLAY_SURFACE)
+
     # Move the player and give the movement value to the other scenes.
     player_offset = g_player.update(dt)
 

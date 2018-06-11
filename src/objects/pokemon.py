@@ -1,4 +1,5 @@
 import __builtin__
+import random
 
 # An 'enum' that holds the names of all the pokemon.
 __builtin__.POKEMON = {}
@@ -48,12 +49,12 @@ class pokemon:
 
     # This function inits the stats of a pokemon randomly.
     def init_stats(self):
-        self._max_health = 5 + random.randint(int(level/4), int(level * 3/4))
+        self._max_health = 5 + random.randint(int(self._level/4), int(self._level * 3/4))
         self._current_health = self._max_health
 
-        self._attack = random.randint(int(level/4), int(level * 3/4))
-        self._defence = random.randint(int(level/4), int(level * 3/4))
-        self._speed = random.randint(int(level/4), int(level * 3/4))
+        self._attack = random.randint(int(self._level/4), int(self._level * 3/4))
+        self._defence = random.randint(int(self._level/4), int(self._level * 3/4))
+        self._speed = random.randint(int(self._level/4), int(self._level * 3/4))
 
     # Returns hp and max_hp in a dict.
     def get_health(self):
@@ -110,13 +111,6 @@ __builtin__.STAT_BOOST["OP_EVASION_DOWN"]   =    5
 
 ''' This class holds the information for each move in the game.  (this is more like a data structure [struct] than a class.) '''
 class move:
-    # if stat_boost == -1, no stat boost.
-    # 0 = my_def_up
-    # 1 = their_def_down
-    # 2 = my_attack_up
-    # 3 = their_attack_down
-    # type: ex. grass, fire, etc.
-
     def __init__(self, name, damage, stat_boost, type, pp):
         self.name = name
         self._init_move(name)
@@ -191,3 +185,73 @@ class move:
             self.type = TYPE["GRASS"]
             self.pp = 25
             self.accuracy = 100
+
+        elif name == "sand attack":
+            self.damage = 0
+            self.stat_boost = STAT_BOOST["OP_ACC_DOWN"]
+            self.type = TYPE["GROUND"]
+            self.pp = 15
+            self.accuracy = 100
+
+        elif name == "fire blast":
+            self.damage = 90
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["FIRE"]
+            self.pp = 10
+            self.accuracy = 85
+
+        elif name == "drill peck":
+            self.damage = 80
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["FLYING"]
+            self.pp = 15
+            self.accuracy = 95
+
+        elif name == "bubble beam":
+            self.damage = 70
+            self.stat_boost = STAT_BOOST["OP_DEF_DOWN"]
+            self.type = TYPE["WATER"]
+            self.pp = 10
+            self.accuracy = 90
+
+        elif name == "razor leaf":
+            self.damage = 120
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["GRASS"]
+            self.pp = 5
+            self.accuracy = 95
+
+        elif name == "rock throw":
+            self.damage = 60
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["ROCK"]
+            self.pp = 15
+            self.accuracy = 100
+
+        elif name == "sludge bomb":
+            self.damage = 90
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["POISON"]
+            self.pp = 20
+            self.accuracy = 100
+
+        elif name == "rage":
+            self.damage = 100
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["NORMAL"]
+            self.pp = 30
+            self.accuracy = 50
+
+        elif name == "pin missile":
+            self.damage = 100
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["BUG"]
+            self.pp = 20
+            self.accuracy = 80
+
+        elif name == "slash":
+            self.damage = 70
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["NORMAL"]
+            self.pp = 15
+            self.accuracy = 95

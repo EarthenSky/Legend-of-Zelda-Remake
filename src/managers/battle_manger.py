@@ -1,7 +1,20 @@
 import sys
+import pygame
 
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import pokemon_manager
+import asset_manager
+
+# Init images here.
+background = pygame.image.load("resc/images/battle_background.png").convert()
+
+player_info = pygame.image.load("resc/images/good_info_panel.png").convert_alpha()
+enemy_info = pygame.image.load("resc/images/enemy_info_panel.png").convert_alpha()
+
+attack_box = pygame.image.load("resc/images/attacks_box.png").convert()
+options_box = pygame.image.load("resc/images/options.png").convert()
+
+battle_message_box = pygame.image.load("resc/images/battle_message_box.png").convert()
 
 # This function starts a battle.
 def start_grass_battle(screen):
@@ -27,11 +40,10 @@ def do_attacks(active_pokemon_move_index, other_pokemon_move_index):
     pass
 
 def draw(screen):
-    pass
+    asset_manager._draw(screen, background, (0, 0), (-1, -1, -1, -1))
     # Draw the background
 
 current_battle_stage = 0
-
 def update(dt):
     if current_battle_stage == 0:
         pass
@@ -49,6 +61,9 @@ def battle_loop(screen):
     keep_looping = True
     while keep_looping:
         draw(screen)
+
+        pygame.display.update()  # Updates the display with any changes.
+
         update(delta_time)
 
         # Pause pygame and calculate delta time.
@@ -59,4 +74,4 @@ def battle_loop(screen):
         # Tells person they are in a message
         if everysecond_val > 1:
             everysecond_val = 0
-            print "In a BATTLE!
+            print "In a BATTLE!"

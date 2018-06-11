@@ -1,7 +1,9 @@
 '''This class manages all the collected pokemon and which ones are in the pc or in
 the player's party.  This class also has a function that is used to create a pokemon.'''
 
-import __builtins__
+import __builtin__
+
+import sys
 
 sys.path.insert(0, 'src/objects/')  # This line tells the importer where to look for the module.
 import pokemon
@@ -19,10 +21,11 @@ def delete_pokemon():
 def get_next_pokemon():
     return pokemon_list[0]
 
-
 # This functions grates a random pokemon on found in the grass.
 def create_random_enemy():
     random_number = 4
     random_level = 5
 
     return pokemon.pokemon(random_number, random_level)
+
+pokemon_list.append( create_random_enemy() )
