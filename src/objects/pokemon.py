@@ -26,7 +26,17 @@ pokemon_manager class.'''
 class pokemon:
     def __init__ (self, pokemon_val, level):
         self.pokemon_val = pokemon_val
-        self._img = -1  #asset_manager.getpokemon(pokemon_val)
+
+        print ("important", pokemon_val)
+
+        # iterates POKEMON and finds the current name.
+        for name, value in POKEMON.items():
+            print value
+            if value == pokemon_val:
+                print ("works", name)
+                self.name = name  # Saves the name of the pokemon.
+
+        #self._img = -1  #asset_manager.getpokemon(pokemon_val)
 
         # Initialized stats.
         self._level = level
@@ -43,9 +53,7 @@ class pokemon:
         self._speed = -1
 
         self.init_stats()  # Init the stats
-
-        self.moves = [4]  # 4 length
-        print "LOOK AT MEEEEEEEEEEEEE!!!!!!!! (ARRAY TEST, LEN SHOULD BE 4)", self.moves, "len:", len(self.moves)
+        self._moves_list = []  # list of all the moves.
 
     # This function inits the stats of a pokemon randomly.
     def init_stats(self):
@@ -66,7 +74,7 @@ class pokemon:
 
     # Returns all the moves in a dict.
     def get_moves(self):
-        pass
+        return self._moves_list
 
     # Add val to the attack mod.
     def inc_attack_mod(self, val):
@@ -82,10 +90,72 @@ class pokemon:
         self._defence_mod = 0
 
     def level_up(self):
-        pass
+        self._moves_list = []  # Reset the moves list.
+
+        if self.pokemon_val == POKEMON["BULBASAUR"]:
+            self._moves_list.append( move("tackle") )
+            self._moves_list.append( move("growl") )
+
+            if self._level >= 8:
+                self._moves_list.append( move("vine whip") )
+
+        elif self.pokemon_val == POKEMON["IVYSAUR"]:
+            self._moves_list.append( move("tackle") )
+            self._moves_list.append( move("growl") )
+            self._moves_list.append( move("vine whip") )
+            self._moves_list.append( move("razor leaf") )
+
+        elif self.pokemon_val == POKEMON["CHARMANDER"]:
+            self._moves_list.append( move("scratch") )
+            self._moves_list.append( move("tail whip") )
+
+            if self._level >= 8:
+                self._moves_list.append( move("ember") )
+
+        elif self.pokemon_val == POKEMON["CHARMELEON"]:
+            self._moves_list.append( move("scratch") )
+            self._moves_list.append( move("tail whip") )
+            self._moves_list.append( move("ember") )
+            self._moves_list.append( move("fire blast") )
+
+        elif self.pokemon_val == POKEMON["SQUIRTLE"]:
+            pass
+        elif self.pokemon_val == POKEMON["WARTORTLE"]:
+            pass
+        elif self.pokemon_val == POKEMON["PIDGEY"]:
+            pass
+        elif self.pokemon_val == POKEMON["PIDGEOTTO"]:
+            pass
+        elif self.pokemon_val == POKEMON["GEODUDE"]:
+            pass
+        elif self.pokemon_val == POKEMON["GRAVELER"]:
+            pass
+        elif self.pokemon_val == POKEMON["SANDSHREW"]:
+            pass
+        elif self.pokemon_val == POKEMON["CATERPIE"]:
+            self._moves_list.append( move("tackle") )
+
+            if self._level >= 4:
+                self._moves_list.append( move("string shot") )
+
+                if self._level >= 7:
+                    self._moves_list.append( move("sand attack") )
+
+        elif self.pokemon_val == POKEMON["METAPOD"]:
+            self._moves_list.append( move("tackle") )
+            self._moves_list.append( move("string shot") )
+            self._moves_list.append( move("sand attack") )
+            self._moves_list.append( move("pin missile") )
+
+        elif self.pokemon_val == POKEMON["EKANS"]:
+            pass
+        elif self.pokemon_val == POKEMON["RATATA"]:
+            pass
+        elif self.pokemon_val == POKEMON["RATICATE"]:
+            pass
 
     def evolve(self):
-        pass
+        pass  #TODO: make stats go up by a lot.
 
 __builtin__.TYPE = {}
 __builtin__.TYPE["GRASS"]  =    0
@@ -111,7 +181,7 @@ __builtin__.STAT_BOOST["OP_EVASION_DOWN"]   =    5
 
 ''' This class holds the information for each move in the game.  (this is more like a data structure [struct] than a class.) '''
 class move:
-    def __init__(self, name, damage, stat_boost, type, pp):
+    def __init__(self, name):
         self.name = name
         self._init_move(name)
 
@@ -123,9 +193,23 @@ class move:
             self.pp = 35
             self.accuracy = 100
 
+        if name == "scratch":
+            self.damage = 40
+            self.stat_boost = STAT_BOOST["NONE"]
+            self.type = TYPE["NORMAL"]
+            self.pp = 35
+            self.accuracy = 100
+
         elif name == "tail whip":
             self.damage = 0
             self.stat_boost = STAT_BOOST["OP_DEF_DOWN"]
+            self.type = TYPE["NORMAL"]
+            self.pp = 30
+            self.accuracy = 100
+
+        elif name == "growl":
+            self.damage = 0
+            self.stat_boost = STAT_BOOST["OP_ATK_DOWN"]
             self.type = TYPE["NORMAL"]
             self.pp = 30
             self.accuracy = 100

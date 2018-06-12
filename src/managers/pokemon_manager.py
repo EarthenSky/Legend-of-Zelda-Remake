@@ -23,9 +23,12 @@ def get_next_pokemon():
 
 # This functions grates a random pokemon on found in the grass.
 def create_random_enemy():
-    random_number = 4
+    random_pokemon_number = __builtin__.POKEMON["CATERPIE"]
     random_level = 5
 
-    return pokemon.pokemon(random_number, random_level)
+    pkm = pokemon.pokemon(random_pokemon_number, random_level)
+    pkm.level_up()  # Remember to levelup the pokemon so it has its moves.
+
+    return pkm
 
 pokemon_list.append( create_random_enemy() )
