@@ -89,8 +89,8 @@ def draw():
     else:
         print "GAME IS NOT IN ANY SCENE."
 
-    asset_manager.draw_pokemon( DISPLAY_SURFACE, (7, 10), POKEMON_TYPE["FRONT"], [100, 100] )
-    asset_manager.draw_pokemon( DISPLAY_SURFACE, (2, 6), POKEMON_TYPE["BACK"], [100, 300] )
+    #asset_manager.draw_pokemon( DISPLAY_SURFACE, (7, 10), POKEMON_TYPE["FRONT"], [100, 100] )
+    #asset_manager.draw_pokemon( DISPLAY_SURFACE, (2, 6), POKEMON_TYPE["BACK"], [100, 300] )
 
     # Draw the player.
     g_player.draw(DISPLAY_SURFACE)
@@ -111,7 +111,7 @@ def draw():
 
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
-    #battle_manger.start_grass_battle(DISPLAY_SURFACE)
+    battle_manger.start_grass_battle(DISPLAY_SURFACE)
 
     # Move the player and give the movement value to the other scenes.
     player_offset = g_player.update(dt)

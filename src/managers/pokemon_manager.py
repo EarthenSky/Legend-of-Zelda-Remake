@@ -23,7 +23,7 @@ def get_next_pokemon():
 
 # This functions grates a random pokemon on found in the grass.
 def create_random_enemy():
-    random_pokemon_number = __builtin__.POKEMON["CATERPIE"]
+    random_pokemon_number = __builtin__.POKEMON["BULBASAUR"]
     random_level = 5
 
     pkm = pokemon.pokemon(random_pokemon_number, random_level)

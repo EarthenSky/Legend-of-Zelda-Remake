@@ -27,13 +27,10 @@ class pokemon:
     def __init__ (self, pokemon_val, level):
         self.pokemon_val = pokemon_val
 
-        print ("important", pokemon_val)
-
-        # iterates POKEMON and finds the current name.
+        # iterates the POKEMON dict and finds the current name.
         for name, value in POKEMON.items():
             print value
             if value == pokemon_val:
-                print ("works", name)
                 self.name = name  # Saves the name of the pokemon.
 
         #self._img = -1  #asset_manager.getpokemon(pokemon_val)
@@ -72,6 +69,9 @@ class pokemon:
     def get_stats(self):
         return { ["attack"] : self._attack, ["defence"] : self._defence, ["speed"] : self._speed }
 
+    def get_level(self):
+        return str(self._level)
+
     # Returns all the moves in a dict.
     def get_moves(self):
         return self._moves_list
@@ -90,6 +90,8 @@ class pokemon:
         self._defence_mod = 0
 
     def level_up(self):
+        # Make random stats go up.
+
         self._moves_list = []  # Reset the moves list.
 
         if self.pokemon_val == POKEMON["BULBASAUR"]:
@@ -119,19 +121,49 @@ class pokemon:
             self._moves_list.append( move("fire blast") )
 
         elif self.pokemon_val == POKEMON["SQUIRTLE"]:
-            pass
+            self._moves_list.append( move("scratch") )
+            self._moves_list.append( move("tail whip") )
+
+            if self._level >= 8:
+                self._moves_list.append( move("water gun") )
+
         elif self.pokemon_val == POKEMON["WARTORTLE"]:
-            pass
+            self._moves_list.append( move("scratch") )
+            self._moves_list.append( move("harden") )
+            self._moves_list.append( move("water gun") )
+            self._moves_list.append( move("bubble beam") )
+
         elif self.pokemon_val == POKEMON["PIDGEY"]:
-            pass
+            self._moves_list.append( move("gust") )
+            self._moves_list.append( move("peck") )
+
+            if self._level >= 8:
+                self._moves_list.append( move("slash") )
+
         elif self.pokemon_val == POKEMON["PIDGEOTTO"]:
-            pass
+            self._moves_list.append( move("gust") )
+            self._moves_list.append( move("peck") )
+            self._moves_list.append( move("slash") )
+            self._moves_list.append( move("drill peck") )
+
         elif self.pokemon_val == POKEMON["GEODUDE"]:
-            pass
+            self._moves_list.append( move("tackle") )
+            self._moves_list.append( move("harden") )
+
+            if self._level >= 8:
+                self._moves_list.append( move("rock throw") )
+
         elif self.pokemon_val == POKEMON["GRAVELER"]:
-            pass
+            self._moves_list.append( move("tackle") )
+            self._moves_list.append( move("harden") )
+            self._moves_list.append( move("rock throw") )
+            self._moves_list.append( move("rage") )
+
         elif self.pokemon_val == POKEMON["SANDSHREW"]:
-            pass
+            self._moves_list.append( move("slash") )
+            self._moves_list.append( move("sand attack") )
+            self._moves_list.append( move("stomp") )
+
         elif self.pokemon_val == POKEMON["CATERPIE"]:
             self._moves_list.append( move("tackle") )
 
@@ -139,20 +171,33 @@ class pokemon:
                 self._moves_list.append( move("string shot") )
 
                 if self._level >= 7:
-                    self._moves_list.append( move("sand attack") )
+                    self._moves_list.append( move("pin missile") )
 
         elif self.pokemon_val == POKEMON["METAPOD"]:
             self._moves_list.append( move("tackle") )
             self._moves_list.append( move("string shot") )
-            self._moves_list.append( move("sand attack") )
             self._moves_list.append( move("pin missile") )
+            self._moves_list.append( move("harden") )
 
         elif self.pokemon_val == POKEMON["EKANS"]:
-            pass
+            self._moves_list.append( move("sludge bomb") )
+            self._moves_list.append( move("sand attack") )
+
+            if self._level >= 5:
+                self._moves_list.append( move("growl") )
+
+                if self._level >= 12:
+                    self._moves_list.append( move("rage") )
+
         elif self.pokemon_val == POKEMON["RATATA"]:
-            pass
+            self._moves_list.append( move("tackle") )
+            self._moves_list.append( move("growl") )
+
         elif self.pokemon_val == POKEMON["RATICATE"]:
-            pass
+            self._moves_list.append( move("tackle") )
+            self._moves_list.append( move("growl") )
+            self._moves_list.append( move("slash") )
+            self._moves_list.append( move("rage") )
 
     def evolve(self):
         pass  #TODO: make stats go up by a lot.
@@ -217,7 +262,7 @@ class move:
         elif name == "stomp":
             self.damage = 65
             self.stat_boost = STAT_BOOST["NONE"]
-            self.type = TYPE["NORMAL"]
+            self.type = TYPE["GROUND"]
             self.pp = 20
             self.accuracy = 100
 
@@ -320,18 +365,18 @@ class move:
             self.accuracy = 100
 
         elif name == "rage":
-            self.damage = 100
+            self.damage = 210
             self.stat_boost = STAT_BOOST["NONE"]
             self.type = TYPE["NORMAL"]
-            self.pp = 30
-            self.accuracy = 50
+            self.pp = 35
+            self.accuracy = 25
 
         elif name == "pin missile":
-            self.damage = 100
+            self.damage = 110
             self.stat_boost = STAT_BOOST["NONE"]
             self.type = TYPE["BUG"]
-            self.pp = 20
-            self.accuracy = 80
+            self.pp = 25
+            self.accuracy = 70
 
         elif name == "slash":
             self.damage = 70
