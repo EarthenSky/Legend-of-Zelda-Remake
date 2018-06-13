@@ -111,7 +111,7 @@ def draw():
 
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
-    battle_manger.start_grass_battle(DISPLAY_SURFACE)
+    #battle_manger.start_grass_battle(DISPLAY_SURFACE)
 
     # Move the player and give the movement value to the other scenes.
     player_offset = g_player.update(dt)

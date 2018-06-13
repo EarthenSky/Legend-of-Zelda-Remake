@@ -2,7 +2,7 @@
 
 import pygame
 
-LARGEST_CHAR_VALUE = 56  # The value to count up to when loading images.  Aka the size of the img list.
+LARGEST_CHAR_VALUE = 66  # The value to count up to when loading images.  Aka the size of the img list.
 
 # This is a list of all the image files for each character.
 img_list = []
@@ -38,6 +38,8 @@ def _convert_string(in_str):
             out_str += chr(55)
         elif char_ord == ord("!"):  # Case: char is a exclamation mark.
             out_str += chr(56)
+        elif char_ord >= 48 and char_ord <= 57:
+            out_str += chr(char_ord + 9)
 
     # Output the converted string.
     return out_str

@@ -42,8 +42,8 @@ class Menu:
         self.items_in_bag = []
 
         # Adds pokeballs and potions to your bag
-        self.items_in_bag.append("POTION          x")
-        self.items_in_bag.append("POKe BALL       x")
+        self.items_in_bag.append("POTION        x " + str(self.m_bag.get_potions()))
+        self.items_in_bag.append("POKe BALL     x " + str(self.m_bag.get_pokeballs()))
         #print self.items_in_bag[0]
 
         # Amount of potions and pokeballs in your bag
@@ -156,9 +156,9 @@ class Menu:
                             # Checks if your cursor is next to potions pokeballs
                             # or exit with the use of magic numbers
                             if self.bag_cursor_y == 48:
-                                print "you have " + self.m_bag.get_potions() + " potions"
+                                print "you have " + str(self.m_bag.get_potions()) + " potions"
                             if self.bag_cursor_y == 48 + 60:
-                                print "you have " + self.m_bag.get_pokeballs() + " pokeballs"
+                                print "you have " + str(self.m_bag.get_pokeballs()) + " pokeballs"
                             if self.bag_cursor_y == 48+120:
                                 self.exit_menu()
 
@@ -184,6 +184,14 @@ class Menu:
 
             # Pause pygame and calculate delta time.
             delta_time = framerate_clock.tick(60) / 1000.0
+
+
+    def update(self):
+        #updates amount of potions and pokeballs in bag
+        self.items_in_bag[0] = ("POTION        x " + str(self.m_bag.get_potions()))
+        self.items_in_bag[1] = ("POKe BALL     x " + str(self.m_bag.get_pokeballs()))
+
+        print "POTION        x " + str(self.m_bag.get_potions())
 
     # This function checks if the thing is quit.
     def _check_skip_box(self, event):
