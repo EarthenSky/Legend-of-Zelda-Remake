@@ -24,7 +24,7 @@ def get_next_pokemon():
 # This functions grates a random pokemon on found in the grass.
 def create_random_enemy():
     random_pokemon_number = __builtin__.POKEMON["BULBASAUR"]
-    random_level = random.randint(4, 10)
+    random_level = random.randint(4, 11)
 
     pkm = pokemon.pokemon(random_pokemon_number, random_level)  # Create a new instance of the pokemon class.
     pkm.check_new_move()  # Remember to set the pokemon's initial moves.

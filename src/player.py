@@ -3,14 +3,11 @@
 import sys
 import pygame
 
-#import __builtin__  # This is a terrible solution.  Fix this. TODO: DONT DO THIS!!!!!
-
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import asset_manager
 
 import __builtin__  # TODO: NooOooOOoOOOooOOOo000000OOOOOOO!!!
-
 
 SPEED = 235
 ANIMATION_SPEED = 0.138  # 0.138s or 138ms per frame.

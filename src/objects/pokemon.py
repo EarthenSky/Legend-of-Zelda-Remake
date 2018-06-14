@@ -29,7 +29,6 @@ class pokemon:
 
         # iterates the POKEMON dict and finds the current name.
         for name, value in POKEMON.items():
-            print value
             if value == pokemon_val:
                 self.name = name  # Saves the name of the pokemon.
 
@@ -42,8 +41,8 @@ class pokemon:
         self._defence_mod = 0
 
         # Uninitialized stats.  In this case, -1 signifies null.
-        self._max_health = -1
-        self._current_health = -1
+        self.max_health = -1
+        self.current_health = -1
 
         self._attack = -1
         self._defence = -1
@@ -55,16 +54,16 @@ class pokemon:
 
     # This function inits the stats of a pokemon randomly.
     def init_stats(self):
-        self._max_health = 5 + random.randint(int(self._level/4), int(self._level * 3/4))
-        self._current_health = self._max_health
+        self.max_health = 5 + random.randint(int(self._level/4), int(self._level * 3/4))
+        self.current_health = self.max_health
 
         self._attack = random.randint(int(self._level/4), int(self._level * 3/4))
         self._defence = random.randint(int(self._level/4), int(self._level * 3/4))
         self._speed = random.randint(int(self._level/4), int(self._level * 3/4))
 
     # Returns hp and max_hp in a dict.
-    def get_health(self):
-        return { ["hp"] : self._current_health, ["max_hp"] : self._max_health }
+    #def get_health(self):
+        #return { ["hp"] : self._current_health, ["max_hp"] : self._max_health }
 
     # Returns the other stats in a dict.
     def get_stats(self):
@@ -204,8 +203,8 @@ class pokemon:
             stat_increment = random.randint(1, 2)
 
             if stat == 0:
-                self._max_health += stat_increment
-                self._current_health += stat_increment
+                self.max_health += stat_increment
+                self.current_health += stat_increment
 
             elif stat == 1:
                 self._attack += stat_increment
@@ -253,7 +252,9 @@ class move:
         self.max_pp = self.pp  # Set the unchanging "max_pp" value
 
     def get_type(self):
-        return str( TYPE.keys()[self.type] )
+        for name, value in TYPE.items():
+            if value == self.type:
+                return str(name)  # Returns the pokemon's type as a string.
 
     def _init_move(self, name):
         if name == "tackle":

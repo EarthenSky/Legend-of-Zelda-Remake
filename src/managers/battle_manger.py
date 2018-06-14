@@ -47,6 +47,7 @@ def do_attacks(active_pokemon_move_index, other_pokemon_move_index):
     pass
 
 def draw(screen):
+    global g_selected_move
     # Draw the background
     asset_manager._draw(screen, background, (0, 0), (-1, -1, -1, -1))
 
@@ -57,12 +58,14 @@ def draw(screen):
         # The info box for the enemy's info and the eney pokemon's name
         asset_manager._draw(screen, enemy_info, (10*4, 10*4), (-1, -1, -1, -1))
         text_manager.draw_text_small(screen, g_other_pokemon.name, (18*4, 15*4))  # name
-        text_manager.draw_text_small(screen, g_other_pokemon.get_level(), (97*4, 15*4))  # level
+        text_manager.draw_text_small(screen, g_other_pokemon.get_level(), (92*4, 15*4))  # level
+        text_manager.draw_text_small(screen, str(g_other_pokemon.current_health), (54*4, 25*4))  # level
 
         # The background for the player's info attack moves.
         asset_manager._draw(screen, player_info, (122*4, 75*4), (-1, -1, -1, -1))
         text_manager.draw_text_small(screen, g_active_pokemon.name, (139*4, 80*4))  # name
-        text_manager.draw_text_small(screen, g_active_pokemon.get_level(), (218*4, 80*4))  # level
+        text_manager.draw_text_small(screen, g_active_pokemon.get_level(), (213*4, 80*4))  # level
+        text_manager.draw_text_small(screen, "{}-{}".format(g_active_pokemon.current_health, g_active_pokemon.max_health), (177*4, 90*4))  # level
 
         asset_manager.draw_pokemon( screen, g_active_pokemon.pokemon_val, POKEMON_TYPE["BACK"], [34*4, 65*4] )  # The good pokemon.
         asset_manager.draw_pokemon( screen, g_other_pokemon.pokemon_val, POKEMON_TYPE["FRONT"], [145*4, 22*4] )  # The bad pokemon.
@@ -95,42 +98,71 @@ def draw(screen):
 
         # Draw selected move info if the move is an actual attack.
         if move_count >= g_selected_move:
-            text_manager.draw_text_small(screen, str(move_list[g_selected_move].pp), (202*4, 124*4))  # pp
-            text_manager.draw_text_small(screen, str(move_list[g_selected_move].max_pp), (221*4, 124*4))  # max_pp
-            text_manager.draw_text_small(screen, str(move_list[g_selected_move].get_type()), (194*4, 142*4))  # type
+            text_manager.draw_text_small(screen, str(move_list[g_selected_move-1].pp), (202*4, 124*4))  # pp
+            text_manager.draw_text_small(screen, str(move_list[g_selected_move-1].max_pp), (221*4, 124*4))  # max_pp
+            text_manager.draw_text_small(screen, str(move_list[g_selected_move-1].get_type()), (194*4, 142*4))  # type
 
         # Draw move cursor.
-        if move_count >= 1:
-            screen.blit(cursor, (8*4, 124*4))
-        elif move_count >= 2:
+        if g_selected_move >= 4:
+            screen.blit(cursor, (82*4, 140*4))
+        elif g_selected_move >= 3:
+            screen.blit(cursor, (82*4, 124*4))
+        elif g_selected_move >= 2:
             screen.blit(cursor, (8*4, 140*4))
-        elif move_count >= 3:
-            pass
-        elif move_count >= 4:
-            pass
+        elif g_selected_move >= 1:
+            screen.blit(cursor, (8*4, 124*4))
 
     elif current_battle_stage == 1:
         asset_manager._draw(screen, battle_message_box, (0, 448), (-1, -1, -1, -1))  # The battle_message_box is drawn at the bottom.
     elif current_battle_stage == 2:
         pass
 
-current_battle_stage = 0
+CHOOSE_ATTACK_STAGE = 0
+MESSAGE_STAGE = 1
+
+current_battle_stage = CHOOSE_ATTACK_STAGE
 def update(dt):
-    if current_battle_stage == 0:
+    if current_battle_stage == CHOOSE_ATTACK_STAGE:
         pass
-    elif current_battle_stage == 1:
+    elif current_battle_stage == MESSAGE_STAGE:
         pass
     elif current_battle_stage == 2:
         pass
 
 # This function checks for any input.  (called after update)
 def check_input():
+    global g_selected_move
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             # Close pygame before application closes.
             pygame.quit()
             print "DEBUG: Application Complete."
             sys.exit(0)
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                if g_selected_move == 2:
+                    g_selected_move = 1
+                elif g_selected_move == 4:
+                    g_selected_move = 3
+            if event.key == pygame.K_DOWN:
+                if g_selected_move == 1:
+                    g_selected_move = 2
+                elif g_selected_move == 3:
+                    g_selected_move = 4
+            if event.key == pygame.K_LEFT:
+                if g_selected_move == 3:
+                    g_selected_move = 1
+                elif g_selected_move == 4:
+                    g_selected_move = 2
+            if event.key == pygame.K_RIGHT:
+                if g_selected_move == 1:
+                    g_selected_move = 3
+                elif g_selected_move == 2:
+                    g_selected_move = 4
+            if event.key == pygame.K_z:
+                pass  #TODO: use move.
 
 def battle_loop(screen):
     # Create the object that handles framerate regulation and delta_time.
