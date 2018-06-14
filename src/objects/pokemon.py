@@ -21,7 +21,7 @@ __builtin__.POKEMON["RATATA"]       =   (1, 3)
 __builtin__.POKEMON["RATICATE"]     =   (1, 4)
 
 '''This is the pokemon class that holds info about a specific pokemon, be it wild
-or a pokemon in your own party. The pokemon class is often implemented in the
+or a pokemon in your own party. The pokemon class will be implemented in the
 pokemon_manager class.'''
 class pokemon:
     def __init__ (self, pokemon_val, level):
@@ -49,8 +49,9 @@ class pokemon:
         self._defence = -1
         self._speed = -1
 
-        self.init_stats()  # Init the stats
-        self._moves_list = []  # list of all the moves.
+        self.init_stats()  # Init the base stats.
+
+        self._moves_list = []  # This is a list of all the moves.
 
     # This function inits the stats of a pokemon randomly.
     def init_stats(self):
@@ -89,11 +90,7 @@ class pokemon:
         self._attack_mod = 0
         self._defence_mod = 0
 
-    def level_up(self):
-        # Make random stats go up.
-
-        self._moves_list = []  # Reset the moves list.
-
+    def check_new_move(self):
         if self.pokemon_val == POKEMON["BULBASAUR"]:
             self._moves_list.append( move("tackle") )
             self._moves_list.append( move("growl") )
@@ -199,6 +196,30 @@ class pokemon:
             self._moves_list.append( move("slash") )
             self._moves_list.append( move("rage") )
 
+    def level_up(self):
+        # Make random stats go up.
+        gained_stat_points = random.randint(1, 4)  # both numbers are inclusive
+        for index in range(gained_stat_points):
+            stat = random.randint(0, 3)  # both numbers are inclusive
+            stat_increment = random.randint(1, 2)
+
+            if stat == 0:
+                self._max_health += stat_increment
+                self._current_health += stat_increment
+
+            elif stat == 1:
+                self._attack += stat_increment
+
+            elif stat == 2:
+                self._attack += stat_increment
+
+            elif stat == 3:
+                self._speed += stat_increment
+
+        self._moves_list = []  # Reset the moves list.
+
+        self.check_new_move()  # Check if leveling up learns any new moves.
+
     def evolve(self):
         pass  #TODO: make stats go up by a lot.
 
@@ -221,14 +242,18 @@ __builtin__.STAT_BOOST["PLAYER_ATK_UP"]     =    2
 __builtin__.STAT_BOOST["OP_ATK_DOWN"]       =    3
 __builtin__.STAT_BOOST["PLAYER_ACC_UP"]     =    4
 __builtin__.STAT_BOOST["OP_ACC_DOWN"]       =    5
-__builtin__.STAT_BOOST["PLAYER_EVASION_UP"] =    4
-__builtin__.STAT_BOOST["OP_EVASION_DOWN"]   =    5
+__builtin__.STAT_BOOST["PLAYER_EVASION_UP"] =    6
+__builtin__.STAT_BOOST["OP_EVASION_DOWN"]   =    7
 
 ''' This class holds the information for each move in the game.  (this is more like a data structure [struct] than a class.) '''
 class move:
     def __init__(self, name):
         self.name = name
         self._init_move(name)
+        self.max_pp = self.pp  # Set the unchanging "max_pp" value
+
+    def get_type(self):
+        return str( TYPE.keys()[self.type] )
 
     def _init_move(self, name):
         if name == "tackle":

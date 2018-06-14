@@ -16,6 +16,8 @@ attack_box = pygame.image.load("resc/images/attacks_box.png").convert()
 
 battle_message_box = pygame.image.load("resc/images/battle_message_box.png").convert()
 
+cursor = pygame.image.load("resc\images\menu_screens\m_cursor.png")
+
 # This function starts a battle.
 def start_grass_battle(screen):
     set_active_pokemon( pokemon_manager.get_next_pokemon() )
@@ -30,7 +32,7 @@ def start_grass_battle(screen):
 g_active_pokemon = -1
 g_other_pokemon = -1
 
-g_selected_move = 0  # Moves go from 0-3
+g_selected_move = 1  # Move goes from 1-4
 
 def set_active_pokemon(pokemon):
     global g_active_pokemon
@@ -54,26 +56,58 @@ def draw(screen):
         #text_manager.draw_text(screen, "What will", (12*4, 448 + 12*4))
         # The info box for the enemy's info and the eney pokemon's name
         asset_manager._draw(screen, enemy_info, (10*4, 10*4), (-1, -1, -1, -1))
-        text_manager.draw_text_small(screen, g_other_pokemon.name, (19*4, 15*4))  # name
+        text_manager.draw_text_small(screen, g_other_pokemon.name, (18*4, 15*4))  # name
         text_manager.draw_text_small(screen, g_other_pokemon.get_level(), (97*4, 15*4))  # level
 
         # The background for the player's info attack moves.
         asset_manager._draw(screen, player_info, (122*4, 75*4), (-1, -1, -1, -1))
-        text_manager.draw_text_small(screen, g_active_pokemon.name, (140*4, 80*4))  # name
+        text_manager.draw_text_small(screen, g_active_pokemon.name, (139*4, 80*4))  # name
         text_manager.draw_text_small(screen, g_active_pokemon.get_level(), (218*4, 80*4))  # level
 
-        # The good pokemon
-        asset_manager.draw_pokemon( screen, g_active_pokemon.pokemon_val, POKEMON_TYPE["BACK"], [34*4, 65*4] )
-
-        # The bad pokemon
-        asset_manager.draw_pokemon( screen, g_other_pokemon.pokemon_val, POKEMON_TYPE["FRONT"], [145*4, 22*4] )
+        asset_manager.draw_pokemon( screen, g_active_pokemon.pokemon_val, POKEMON_TYPE["BACK"], [34*4, 65*4] )  # The good pokemon.
+        asset_manager.draw_pokemon( screen, g_other_pokemon.pokemon_val, POKEMON_TYPE["FRONT"], [145*4, 22*4] )  # The bad pokemon.
 
         # Draw the attack moves info box.
         asset_manager._draw(screen, attack_box, (0, 448), (-1, -1, -1, -1))  # The background for the attack moves.
 
-        for move in g_active_pokemon.get_moves():
+        # Get the variables that have to do with move list.
+        move_list = g_active_pokemon.get_moves()
+        move_count = len( move_list )
+
+        # Draw the atack names by getting each name from the active pokemon's list of moves.  (btw, there is no way to have zero moves.)
+        if move_count >= 1:
+            text_manager.draw_text_small(screen, move_list[0].name, (16*4, 124*4))  # attack name
+
+        if move_count >= 2:
+            text_manager.draw_text_small(screen, move_list[1].name, (16*4, 140*4))  # attack name
+        else:
+            text_manager.draw_text_small(screen, "-", (16*4, 140*4))  # attack name
+
+        if move_count >= 3:
+            text_manager.draw_text_small(screen, move_list[2].name, (90*4, 124*4))  # attack name
+        else:
+            text_manager.draw_text_small(screen, "-", (90*4, 124*4))  # attack name
+
+        if move_count >= 4:
+            text_manager.draw_text_small(screen, move_list[3].name, (90*4, 140*4))  # attack name
+        else:
+            text_manager.draw_text_small(screen, "-", (90*4, 140*4))  # attack name
+
+        # Draw selected move info if the move is an actual attack.
+        if move_count >= g_selected_move:
+            text_manager.draw_text_small(screen, str(move_list[g_selected_move].pp), (202*4, 124*4))  # pp
+            text_manager.draw_text_small(screen, str(move_list[g_selected_move].max_pp), (221*4, 124*4))  # max_pp
+            text_manager.draw_text_small(screen, str(move_list[g_selected_move].get_type()), (194*4, 142*4))  # type
+
+        # Draw move cursor.
+        if move_count >= 1:
+            screen.blit(cursor, (8*4, 124*4))
+        elif move_count >= 2:
+            screen.blit(cursor, (8*4, 140*4))
+        elif move_count >= 3:
             pass
-            # TODO: draw all the moves on to the screen.  Draw selected move info.
+        elif move_count >= 4:
+            pass
 
     elif current_battle_stage == 1:
         asset_manager._draw(screen, battle_message_box, (0, 448), (-1, -1, -1, -1))  # The battle_message_box is drawn at the bottom.
