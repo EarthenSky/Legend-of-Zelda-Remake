@@ -53,14 +53,14 @@ def draw(screen):
         # Draw the text
         #text_manager.draw_text(screen, "What will", (12*4, 448 + 12*4))
         # The info box for the enemy's info and the eney pokemon's name
-        asset_manager._draw(screen, enemy_info, (0, 0), (-1, -1, -1, -1))
-        text_manager.draw_text(screen, g_other_pokemon.name, (6*4, 4*4))  # name
-        text_manager.draw_text(screen, g_other_pokemon.get_level(), (87*4, 4*4))  # level
+        asset_manager._draw(screen, enemy_info, (10*4, 10*4), (-1, -1, -1, -1))
+        text_manager.draw_text_small(screen, g_other_pokemon.name, (19*4, 15*4))  # name
+        text_manager.draw_text_small(screen, g_other_pokemon.get_level(), (97*4, 15*4))  # level
 
         # The background for the player's info attack moves.
-        asset_manager._draw(screen, player_info, (132*4, 75*4), (-1, -1, -1, -1))
-        text_manager.draw_text(screen, g_active_pokemon.name, (147*4, 79*4))  # name
-        text_manager.draw_text(screen, g_active_pokemon.get_level(), (228*4, 79*4))  # level
+        asset_manager._draw(screen, player_info, (122*4, 75*4), (-1, -1, -1, -1))
+        text_manager.draw_text_small(screen, g_active_pokemon.name, (140*4, 80*4))  # name
+        text_manager.draw_text_small(screen, g_active_pokemon.get_level(), (218*4, 80*4))  # level
 
         # The good pokemon
         asset_manager.draw_pokemon( screen, g_active_pokemon.pokemon_val, POKEMON_TYPE["BACK"], [34*4, 65*4] )
@@ -71,7 +71,7 @@ def draw(screen):
         # Draw the attack moves info box.
         asset_manager._draw(screen, attack_box, (0, 448), (-1, -1, -1, -1))  # The background for the attack moves.
 
-        for move in g_active_pokemon.get_moves:
+        for move in g_active_pokemon.get_moves():
             pass
             # TODO: draw all the moves on to the screen.  Draw selected move info.
 
