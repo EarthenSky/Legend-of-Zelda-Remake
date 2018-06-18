@@ -261,6 +261,34 @@ class Tilemap:
                 desc_manager.add_message_to_queue("This is one of Professor", "Oak's certificates.")
             elif x == 7 and y == 1:  # Prof's Certification
                 desc_manager.add_message_to_queue("This certificate looks", "like it's real.")
+            elif x == 10 and y == 1:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 11 and y == 1:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 12 and y == 1:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 13 and y == 1:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 5 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 4 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 3 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 2 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 1 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 9 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 10 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 11 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 12 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
+            elif x == 13 and y == 8:  # BOOKCASE
+                desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
             elif x == 9 and y == 0:  # Window
                 desc_manager.add_message_to_queue("You get a new pokemon!", "")
                 desc_manager.add_message_to_queue("You spot a pokemon out the ", "window.  Score!")
@@ -268,6 +296,30 @@ class Tilemap:
                 desc_manager.add_message_to_queue("The computer doesn't turn on.", "You wonder why...")
             elif x == 3 and y == 1:  # COMPUTER
                 desc_manager.add_message_to_queue("The screen doesn't turn on.", "You wonder why...")
+            elif x == 1 and y == 12:  # DOPE_PLANT_THAT_RAPS
+				desc_manager.add_message_to_queue("...", "")
+				desc_manager.add_message_to_queue("YO HOMES TO BEL-AIR!", "")
+				desc_manager.add_message_to_queue("was rare, but I", "thought nah forget it")
+			 	desc_manager.add_message_to_queue("If anything I could", "say that this cab")
+				desc_manager.add_message_to_queue("it had dice in the", "mirror!")
+			 	desc_manager.add_message_to_queue("near the license plate", "said FRESH and")
+				desc_manager.add_message_to_queue("I whisteled for a cab", "and when it came")
+				desc_manager.add_message_to_queue("auntie and uncle in", "Bel-air")
+				desc_manager.add_message_to_queue("she said you're", "movin' in with your")
+				desc_manager.add_message_to_queue("little fight and my", "mom got scared")
+				desc_manager.add_message_to_queue("my neighbourhood,", "I got in one")
+				desc_manager.add_message_to_queue("to no good, started", "making trouble in")
+				desc_manager.add_message_to_queue("when a couple of guys", "they were up")
+				desc_manager.add_message_to_queue("some b-ball outside", "of the school")
+				desc_manager.add_message_to_queue("relaxin' all cool", "and all shooting")
+				desc_manager.add_message_to_queue("Most of my days.", "Chillin' out maxin'")
+				desc_manager.add_message_to_queue("on the playground was", "where I spent")
+				desc_manager.add_message_to_queue("In west Philidelphia", "born and raised")
+				desc_manager.add_message_to_queue("the prince of a small", "town called Bel-air.")
+				desc_manager.add_message_to_queue("right there. I'll tell", "you how i became")
+				desc_manager.add_message_to_queue("and I'd like to take", "a minute just sit")
+				desc_manager.add_message_to_queue("my life got flipped-", "turned upside down")
+				desc_manager.add_message_to_queue("Now this is a story", "all about how")
             elif x == 7 and y == 13:  # Going out of the lab
                 __builtin__.g_current_scene = OUTSIDE
                 __builtin__.g_player.set_pos( (64 * 21, 64 * 13 - 16) )
@@ -283,8 +335,8 @@ class Tilemap:
                 desc_manager.add_message_to_queue("Dishes and plates are neatly", "lined up.")
             elif x == 2 and y == 1:  # FOODAREA
                 desc_manager.add_message_to_queue("It smells delicious!", "Someone has been cooking here.")
-            elif x == 1 and y == 1:  # FOODAREA
-                desc_manager.add_message_to_queue("It smells delicious!", "Someone has been cooking here.")
+            elif x == 1 and y == 1:  # SINK
+                desc_manager.add_message_to_queue("Don't feel like doing", "the dishes right now.")
             elif x == 11 and y == 2:  # Stairs
                 __builtin__.g_current_scene = PLAYER_HOUSE_UPSTAIRS
                 __builtin__.g_player.set_pos( (64 * 9, 64 * 2) )
@@ -302,13 +354,12 @@ class Tilemap:
             elif x == 2 and y == 1:  # desk
                 desc_manager.add_message_to_queue("It's a wooden desk...", "")
             elif x == 1 and y == 1:  # computer
-                desc_manager.add_message_to_queue("TODO: play windows xp shutoff", "sound.")
                 desc_manager.add_message_to_queue("This computer is running", "windows vista.  Yikes!")
             elif x == 9 and y == 2:  # Stairs
                 __builtin__.g_current_scene = PLAYER_HOUSE_DOWNSTAIRS
                 __builtin__.g_player.set_pos( (64 * 11, 64 * 2) )
             elif x == 11 and y == 1:  # sign thing
-                desc_manager.add_message_to_queue("people.", "             T m T")
+                desc_manager.add_message_to_queue("people.", "             T - T")
                 desc_manager.add_message_to_queue("This game was made with", "lots of stress by three-")
             elif x == 6 and y == 5:  # computer
                 desc_manager.add_message_to_queue("You play with the nes.", "Okay!  It's time to go!")

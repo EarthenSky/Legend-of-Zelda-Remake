@@ -65,7 +65,7 @@ def draw(screen):
         asset_manager._draw(screen, player_info, (122*4, 75*4), (-1, -1, -1, -1))
         text_manager.draw_text_small(screen, g_active_pokemon.name, (139*4, 80*4))  # name
         text_manager.draw_text_small(screen, g_active_pokemon.get_level(), (213*4, 80*4))  # level
-        text_manager.draw_text_small(screen, "{}-{}".format(g_active_pokemon.current_health, g_active_pokemon.max_health), (177*4, 90*4))  # level
+        text_manager.draw_text_small(screen, "{}/{}".format(g_active_pokemon.current_health, g_active_pokemon.max_health), (177*4, 90*4))  # level
 
         asset_manager.draw_pokemon( screen, g_active_pokemon.pokemon_val, POKEMON_TYPE["BACK"], [34*4, 65*4] )  # The good pokemon.
         asset_manager.draw_pokemon( screen, g_other_pokemon.pokemon_val, POKEMON_TYPE["FRONT"], [145*4, 22*4] )  # The bad pokemon.
