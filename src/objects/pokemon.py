@@ -20,6 +20,17 @@ __builtin__.POKEMON["EKANS"]        =   (2, 4)
 __builtin__.POKEMON["RATATA"]       =   (1, 3)
 __builtin__.POKEMON["RATICATE"]     =   (1, 4)
 
+__builtin__.TYPE = {}
+__builtin__.TYPE["GRASS"]  =    0
+__builtin__.TYPE["FIRE"]   =    1
+__builtin__.TYPE["WATER"]  =    2
+__builtin__.TYPE["FLYING"] =    3
+__builtin__.TYPE["ROCK"]   =    4
+__builtin__.TYPE["GROUND"] =    5
+__builtin__.TYPE["BUG"]    =    6
+__builtin__.TYPE["POISON"] =    7
+__builtin__.TYPE["NORMAL"] =    8
+
 '''This is the pokemon class that holds info about a specific pokemon, be it wild
 or a pokemon in your own party. The pokemon class will be implemented in the
 pokemon_manager class.'''
@@ -37,16 +48,17 @@ class pokemon:
         # Initialized stats.
         self._level = level
 
-        self._attack_mod = 0
-        self._defence_mod = 0
+        self.attack_mod = 0
+        self.defence_mod = 0
+        self.exp = 0
 
         # Uninitialized stats.  In this case, -1 signifies null.
         self.max_health = -1
         self.current_health = -1
-
-        self._attack = -1
-        self._defence = -1
-        self._speed = -1
+        self.attack = -1
+        self.defence = -1
+        self.speed = -1
+        self.type = -1
 
         self.init_stats()  # Init the base stats.
 
@@ -54,20 +66,45 @@ class pokemon:
 
     # This function inits the stats of a pokemon randomly.
     def init_stats(self):
-        self.max_health = 5 + random.randint(int(self._level/4), int(self._level * 3/4))
+        self.max_health = 6 + (random.randint(int(self._level/4), int(self._level * 3/4)) * 3)
         self.current_health = self.max_health
 
         self._attack = random.randint(int(self._level/4), int(self._level * 3/4))
         self._defence = random.randint(int(self._level/4), int(self._level * 3/4))
         self._speed = random.randint(int(self._level/4), int(self._level * 3/4))
 
-    # Returns hp and max_hp in a dict.
-    #def get_health(self):
-        #return { ["hp"] : self._current_health, ["max_hp"] : self._max_health }
-
-    # Returns the other stats in a dict.
-    def get_stats(self):
-        return { ["attack"] : self._attack, ["defence"] : self._defence, ["speed"] : self._speed }
+        if self.pokemon_val == POKEMON["BULBASAUR"]:
+            self.type == TYPE["GRASS"]
+        elif self.pokemon_val == POKEMON["IVYSAUR"]:
+            self.type == TYPE["GRASS"]
+        elif self.pokemon_val == POKEMON["CHARMANDER"]:
+            self.type == TYPE["FIRE"]
+        elif self.pokemon_val == POKEMON["CHARMELEON"]:
+            self.type == TYPE["FIRE"]
+        elif self.pokemon_val == POKEMON["SQUIRTLE"]:
+            self.type == TYPE["WATER"]
+        elif self.pokemon_val == POKEMON["WARTORTLE"]:
+            self.type == TYPE["WATER"]
+        elif self.pokemon_val == POKEMON["PIDGEY"]:
+            self.type == TYPE["FLYING"]
+        elif self.pokemon_val == POKEMON["PIDGEOTTO"]:
+            self.type == TYPE["FLYING"]
+        elif self.pokemon_val == POKEMON["GEODUDE"]:
+            self.type == TYPE["ROCK"]
+        elif self.pokemon_val == POKEMON["GRAVELER"]:
+            self.type == TYPE["ROCK"]
+        elif self.pokemon_val == POKEMON["SANDSHREW"]:
+            self.type == TYPE["GROUND"]
+        elif self.pokemon_val == POKEMON["CATERPIE"]:
+            self.type == TYPE["BUG"]
+        elif self.pokemon_val == POKEMON["METAPOD"]:
+            self.type == TYPE["BUG"]
+        elif self.pokemon_val == POKEMON["EKANS"]:
+            self.type == TYPE["POISON"]
+        elif self.pokemon_val == POKEMON["RATATA"]:
+            self.type == TYPE["NORMAL"]
+        elif self.pokemon_val == POKEMON["RATICATE"]:
+            self.type == TYPE["NORMAL"]
 
     def get_level(self):
         return str(self._level)
@@ -75,19 +112,6 @@ class pokemon:
     # Returns all the moves in a dict.
     def get_moves(self):
         return self._moves_list
-
-    # Add val to the attack mod.
-    def inc_attack_mod(self, val):
-        self._attack_mod += val
-
-    # Add val to the defence mod.
-    def inc_defence_mod(self, val):
-        self._defence_mod += val
-
-    # Reset the attack and defence stat modifiers.
-    def reset_stat_mods(self):
-        self._attack_mod = 0
-        self._defence_mod = 0
 
     def check_new_move(self):
         if self.pokemon_val == POKEMON["BULBASAUR"]:
@@ -203,8 +227,8 @@ class pokemon:
             stat_increment = random.randint(1, 2)
 
             if stat == 0:
-                self.max_health += stat_increment
-                self.current_health += stat_increment
+                self.max_health += stat_increment * 3
+                self.current_health += stat_increment * 3
 
             elif stat == 1:
                 self._attack += stat_increment
@@ -221,17 +245,6 @@ class pokemon:
 
     def evolve(self):
         pass  #TODO: make stats go up by a lot.
-
-__builtin__.TYPE = {}
-__builtin__.TYPE["GRASS"]  =    0
-__builtin__.TYPE["FIRE"]   =    1
-__builtin__.TYPE["WATER"]  =    2
-__builtin__.TYPE["FLYING"] =    3
-__builtin__.TYPE["ROCK"]   =    4
-__builtin__.TYPE["GROUND"] =    5
-__builtin__.TYPE["BUG"]    =    6
-__builtin__.TYPE["POISON"] =    7
-__builtin__.TYPE["NORMAL"] =    8
 
 __builtin__.STAT_BOOST = {}
 __builtin__.STAT_BOOST["NONE"]              =   -1
