@@ -1,6 +1,7 @@
 import sys
 import pygame
 import math
+import random
 import __builtin__
 
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
@@ -45,146 +46,311 @@ def set_other_pokemon(pokemon):
     global g_other_pokemon
     g_other_pokemon = pokemon
 
+# Do Player attack.
+def _player_attack(active_pokemon_move, other_pokemon_move):
+    # Do Player attack.
+    if active_pokemon_move.pp != 0:
+        attack_dif = g_other_pokemon.defence - g_active_pokemon.attack
+
+        print (g_active_pokemon.defence, g_other_pokemon.attack)
+        print "player's attack_dif: " + str(attack_dif)
+
+        damage = int(active_pokemon_move.damage * (1 - (0.03 * attack_dif)) / 3)
+
+        if active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type == TYPE["GRASS"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type == TYPE["BUG"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type == TYPE["GROUND"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type == TYPE["POISON"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+        elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type == TYPE["BUG"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type == TYPE["FIRE"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type == TYPE["FLYING"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type == TYPE["GRASS"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type == TYPE["GROUND"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type == TYPE["POISON"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type == TYPE["ROCK"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type == TYPE["WATER"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+
+        elif active_pokemon_move.type == TYPE["WATER"] and g_other_pokemon.type == TYPE["FIRE"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["WATER"] and g_other_pokemon.type == TYPE["GRASS"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["WATER"] and g_other_pokemon.type == TYPE["GROUND"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["WATER"] and g_other_pokemon.type == TYPE["ROCK"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+
+        elif active_pokemon_move.type == TYPE["ROCK"] and g_other_pokemon.type == TYPE["BUG"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["ROCK"] and g_other_pokemon.type == TYPE["FIRE"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["ROCK"] and g_other_pokemon.type == TYPE["FLYING"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["ROCK"] and g_other_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+        elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type == TYPE["FIRE"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type == TYPE["FLYING"]:
+            damage *= 0
+            desc_manager.add_message_to_queue("Your ground move deals 0 damage", "against the opponent flying pokemon!")
+        elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type == TYPE["GRASS"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type == TYPE["POISON"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type == TYPE["ROCK"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+
+        elif active_pokemon_move.type == TYPE["FIRE"] and g_other_pokemon.type == TYPE["BUG"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["FIRE"] and g_other_pokemon.type == TYPE["GRASS"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["FIRE"] and g_other_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif active_pokemon_move.type == TYPE["FIRE"] and g_other_pokemon.type == TYPE["WATER"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+        elif active_pokemon_move.type == TYPE["NORMAL"] and g_other_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+        elif active_pokemon_move.type == TYPE["FLYING"] and g_other_pokemon.type == TYPE["BUG"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["FLYING"] and g_other_pokemon.type == TYPE["GRASS"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif active_pokemon_move.type == TYPE["FLYING"] and g_other_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+    else:  # If no pp, do 5 damage.
+        damage = 5
+
+    g_other_pokemon.current_health -= damage  # Decrement the enemy's hp.
+
+    print "player deals " + str(damage) + " damage"
+
+    # Check if the opponent is dead.
+    if g_other_pokemon.current_health <= 0:
+        g_other_pokemon.current_health = 0
+        desc_manager.add_message_to_queue(g_other_pokemon.name + " has fainted.", "...")
+
+    desc_manager.add_message_to_queue("Your POKeMON uses " + active_pokemon_move.name, "...")
+
+    if g_other_pokemon.current_health <= 0:
+        return 1  # This means stop the battle.
+
+    return 0
+
+def _enemy_attack(active_pokemon_move, other_pokemon_move):
+    # Do Enemy attack.
+    if other_pokemon_move.pp != 0:
+        print (g_active_pokemon.defence, g_other_pokemon.attack)
+        attack_dif = g_active_pokemon.defence - g_other_pokemon.attack
+        print "enemy's attack_dif: " + str(attack_dif)
+        damage = int(other_pokemon_move.damage * (1 - (0.05 * attack_dif)))
+
+        if other_pokemon_move.type == TYPE["POISON"] and g_active_pokemon.type == TYPE["GRASS"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["POISON"] and g_active_pokemon.type == TYPE["BUG"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["POISON"] and g_active_pokemon.type == TYPE["GROUND"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["POISON"] and g_active_pokemon.type == TYPE["POISON"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["POISON"] and g_active_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+        elif other_pokemon_move.type == TYPE["GRASS"] and g_active_pokemon.type == TYPE["BUG"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["GRASS"] and g_active_pokemon.type == TYPE["FIRE"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["GRASS"] and g_active_pokemon.type == TYPE["FLYING"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["GRASS"] and g_active_pokemon.type == TYPE["GRASS"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["GRASS"] and g_active_pokemon.type == TYPE["GROUND"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["GRASS"] and g_active_pokemon.type == TYPE["POISON"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["GRASS"] and g_active_pokemon.type == TYPE["ROCK"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["GRASS"] and g_active_pokemon.type == TYPE["WATER"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+
+        elif other_pokemon_move.type == TYPE["WATER"] and g_active_pokemon.type == TYPE["FIRE"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["WATER"] and g_active_pokemon.type == TYPE["GRASS"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["WATER"] and g_active_pokemon.type == TYPE["GROUND"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["WATER"] and g_active_pokemon.type == TYPE["ROCK"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+
+        elif other_pokemon_move.type == TYPE["ROCK"] and g_active_pokemon.type == TYPE["BUG"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["ROCK"] and g_active_pokemon.type == TYPE["FIRE"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["ROCK"] and g_active_pokemon.type == TYPE["FLYING"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["ROCK"] and g_active_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+        elif other_pokemon_move.type == TYPE["GROUND"] and g_active_pokemon.type == TYPE["FIRE"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["GROUND"] and g_active_pokemon.type == TYPE["FLYING"]:
+            damage *= 0
+            desc_manager.add_message_to_queue("Your ground move deals 0 damage", "against the opponent flying pokemon!")
+        elif other_pokemon_move.type == TYPE["GROUND"] and g_active_pokemon.type == TYPE["GRASS"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["GROUND"] and g_active_pokemon.type == TYPE["POISON"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["GROUND"] and g_active_pokemon.type == TYPE["ROCK"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+
+        elif other_pokemon_move.type == TYPE["FIRE"] and g_active_pokemon.type == TYPE["BUG"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["FIRE"] and g_active_pokemon.type == TYPE["GRASS"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["FIRE"] and g_active_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+        elif other_pokemon_move.type == TYPE["FIRE"] and g_active_pokemon.type == TYPE["WATER"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+        elif other_pokemon_move.type == TYPE["NORMAL"] and g_active_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+        elif other_pokemon_move.type == TYPE["FLYING"] and g_active_pokemon.type == TYPE["BUG"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["FLYING"] and g_active_pokemon.type == TYPE["GRASS"]:
+            damage *= 2
+            desc_manager.add_message_to_queue("It's super effective!", "...")
+        elif other_pokemon_move.type == TYPE["FLYING"] and g_active_pokemon.type == TYPE["ROCK"]:
+            damage *= 0.5
+            desc_manager.add_message_to_queue("It's not very effective", "...")
+
+    else:  # If no pp, do 5 dps.
+        damage = 5
+
+    print "enemy deals " + str(damage) + " damage"
+
+    g_active_pokemon.current_health -= damage  # Decrement the player's hp.
+
+    # Check if the player's pokemon is dead.
+    if g_active_pokemon.current_health <= 0:
+        g_active_pokemon.current_health = 0
+        desc_manager.add_message_to_queue(g_active_pokemon.name + " has fainted.", "...")
+
+    desc_manager.add_message_to_queue("Enemy POKeMON uses " + other_pokemon_move.name, "...")
+
+    if g_active_pokemon.current_health <= 0:
+        return 2  # This means to swap pokemon.  If no pokemon left, death message, then close screen.  (darksouls sound effect)
+
+    return 0
+
 # Deal damage and stuff here.
-def trade_attacks():
-    active_pokemon_move = g_active_pokemon.get_moves[g_selected_move]
-    other_pokemon_move = g_other_pokemon.get_moves[random.randint(1, len(g_other_pokemon.get_moves))]  # Pick a random move for the enemy.
-    
+def trade_attacks(screen):
+    active_pokemon_move = g_active_pokemon.get_moves()[g_selected_move-1]
+
+    # Pick a random move for the enemy.
+    enemy_random_move = random.randint(1, len( g_other_pokemon.get_moves() ))
+    other_pokemon_move = g_other_pokemon.get_moves()[enemy_random_move-1]
+
     # Pokemon with highest speed attacks first.
     if g_active_pokemon.speed > g_other_pokemon.speed:
-        # Do Player attack.
-        if active_pokemon_move.pp == 0:
-            attack_dif = other_pokemon_move.defence - active_pokemon_move.attack
-            damage = int(active_pokemon_move.damage * (1 - (0.02 * attack_dif)))
-            desc_manager.add_message_to_queue("Your pokemon uses " + active_pokemon_move.name, "...")
-
-            if active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type = TYPE["GRASS"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type = TYPE["BUG"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type = TYPE["GROUND"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type = TYPE["POISON"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["POISON"] and g_other_pokemon.type = TYPE["ROCK"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-
-            elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type = TYPE["BUG"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type = TYPE["FIRE"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type = TYPE["FLYING"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type = TYPE["GRASS"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type = TYPE["GROUND"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type = TYPE["POISON"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type = TYPE["ROCK"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["GRASS"] and g_other_pokemon.type = TYPE["WATER"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-
-            elif active_pokemon_move.type == TYPE["WATER"] and g_other_pokemon.type = TYPE["FIRE"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["WATER"] and g_other_pokemon.type = TYPE["GRASS"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["WATER"] and g_other_pokemon.type = TYPE["GROUND"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["WATER"] and g_other_pokemon.type = TYPE["ROCK"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-
-            elif active_pokemon_move.type == TYPE["ROCK"] and g_other_pokemon.type = TYPE["BUG"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["ROCK"] and g_other_pokemon.type = TYPE["FIRE"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["ROCK"] and g_other_pokemon.type = TYPE["FLYING"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["ROCK"] and g_other_pokemon.type = TYPE["ROCK"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-
-            elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type = TYPE["FIRE"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type = TYPE["FLYING"]:
-                damage *= 0
-                desc_manager.add_message_to_queue("Your ground move deals 0 damage", "against the opponent flying pokemon!")
-            elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type = TYPE["GRASS"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type = TYPE["POISON"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["GROUND"] and g_other_pokemon.type = TYPE["ROCK"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-
-            elif active_pokemon_move.type == TYPE["FIRE"] and g_other_pokemon.type = TYPE["BUG"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["FIRE"] and g_other_pokemon.type = TYPE["GRASS"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["FIRE"] and g_other_pokemon.type = TYPE["ROCK"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-            elif active_pokemon_move.type == TYPE["FIRE"] and g_other_pokemon.type = TYPE["WATER"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-
-            elif active_pokemon_move.type == TYPE["NORMAL"] and g_other_pokemon.type = TYPE["ROCK"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-
-            elif active_pokemon_move.type == TYPE["FLYING"] and g_other_pokemon.type = TYPE["BUG"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["FLYING"] and g_other_pokemon.type = TYPE["GRASS"]:
-                damage *= 2
-                desc_manager.add_message_to_queue("It's super effective!", "...")
-            elif active_pokemon_move.type == TYPE["FLYING"] and g_other_pokemon.type = TYPE["ROCK"]:
-                damage *= 0.5
-                desc_manager.add_message_to_queue("It's not very effective", "...")
-
-        else:  # If no pp, do 5 damage.
-            damage = 5
-
-        g_other_pokemon.current_health -= damage  # Decrement the enemy's hp.
-        if g_other_pokemon.current_health <= 0:
-            g_other_pokemon.current_health = 0
-            desc_manager.add_message_to_queue(g_other_pokemon.name + " has fainted.", "...")
+        # Do Player attack first.
+        if _player_attack(active_pokemon_move, other_pokemon_move) == 1:
             return 1  # This means stop the battle.
 
-        # Do Enemy attack.
-        if active_pokemon_move.pp == 0:
-            damage = 1
-        else:  # If no pp, do 5 dps.
-            damage = 5
+        # Do Enemy attack second.
+        if _enemy_attack(active_pokemon_move, other_pokemon_move) == 2:
+            return 2  # This means stop the battle.
 
     else:
-        # DO ENEMY THEN PLAYER
+        # Do Enemy attack first.
+        if _enemy_attack(active_pokemon_move, other_pokemon_move) == 2:
+            return 2  # This means stop the battle.
+
+        # Do Player attack second.
+        if _player_attack(active_pokemon_move, other_pokemon_move) == 1:
+            return 1  # This means stop the battle.
+
+    desc_manager.check_queue(screen)
 
     # Change next move pp.
 
@@ -261,19 +427,17 @@ def draw(screen):
         pass
 
 CHOOSE_ATTACK_STAGE = 0
-ATTACK_STAGE = 1
+BAG = 1
 
 current_battle_stage = CHOOSE_ATTACK_STAGE
 def update(dt):
     if current_battle_stage == CHOOSE_ATTACK_STAGE:
         pass
-    elif current_battle_stage == ATTACK_STAGE:
-        pass
-    elif current_battle_stage == 2:
+    elif current_battle_stage == BAG:
         pass
 
 # This function checks for any input.  (called after update)
-def check_input():
+def check_input(screen):
     global g_selected_move
 
     for event in pygame.event.get():
@@ -304,8 +468,19 @@ def check_input():
                     g_selected_move = 3
                 elif g_selected_move == 2:
                     g_selected_move = 4
-            if event.key == pygame.K_z and current_battle_stage == CHOOSE_ATTACK_STAGE and g_selected_move <= len(g_active_pokemon.get_moves):
-                trade_attacks()  # Tell the pokemon to trade moves. (only do this if the player is selecting a valid move.)
+            if event.key == pygame.K_z and current_battle_stage == CHOOSE_ATTACK_STAGE and g_selected_move <= len(g_active_pokemon.get_moves()):
+                result = trade_attacks(screen)  # Tell the pokemon to trade moves. (only do this if the player is selecting a valid move.)
+
+                if result == 1:
+                    pass  # End battle.
+                    desc_manager.add_message_to_queue("Other pokemon dies", "...")
+                elif result == 2:
+                    pass  # Swap pokemon to next pokemon.
+                    desc_manager.add_message_to_queue("Our pokemon die", "...")
+                else:
+                    desc_manager.add_message_to_queue("Start the next turn", "...")
+
+                desc_manager.check_queue(screen)
 
 def battle_loop(screen):
     # Create the object that handles framerate regulation and delta_time.
@@ -321,7 +496,7 @@ def battle_loop(screen):
 
         update(delta_time)
 
-        check_input()
+        check_input(screen)
 
         # Pause pygame and calculate delta time.
         delta_time = framerate_clock.tick(60) / 1000.0

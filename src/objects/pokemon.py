@@ -66,45 +66,45 @@ class pokemon:
 
     # This function inits the stats of a pokemon randomly.
     def init_stats(self):
-        self.max_health = 6 + (random.randint(int(self._level/4), int(self._level * 3/4)) * 3)
+        self.max_health = 7 + (random.randint(int(self._level/4), int(self._level * 3/4))) * 10
         self.current_health = self.max_health
 
-        self._attack = random.randint(int(self._level/4), int(self._level * 3/4))
-        self._defence = random.randint(int(self._level/4), int(self._level * 3/4))
-        self._speed = random.randint(int(self._level/4), int(self._level * 3/4))
+        self.attack = random.randint(int(self._level/4), int(self._level * 3/4))
+        self.defence = random.randint(int(self._level/4), int(self._level * 3/4))
+        self.speed = random.randint(int(self._level/4), int(self._level * 3/4))
 
         if self.pokemon_val == POKEMON["BULBASAUR"]:
-            self.type == TYPE["GRASS"]
+            self.type = TYPE["GRASS"]
         elif self.pokemon_val == POKEMON["IVYSAUR"]:
-            self.type == TYPE["GRASS"]
+            self.type = TYPE["GRASS"]
         elif self.pokemon_val == POKEMON["CHARMANDER"]:
-            self.type == TYPE["FIRE"]
+            self.type = TYPE["FIRE"]
         elif self.pokemon_val == POKEMON["CHARMELEON"]:
-            self.type == TYPE["FIRE"]
+            self.type = TYPE["FIRE"]
         elif self.pokemon_val == POKEMON["SQUIRTLE"]:
-            self.type == TYPE["WATER"]
+            self.type = TYPE["WATER"]
         elif self.pokemon_val == POKEMON["WARTORTLE"]:
-            self.type == TYPE["WATER"]
+            self.type = TYPE["WATER"]
         elif self.pokemon_val == POKEMON["PIDGEY"]:
-            self.type == TYPE["FLYING"]
+            self.type = TYPE["FLYING"]
         elif self.pokemon_val == POKEMON["PIDGEOTTO"]:
-            self.type == TYPE["FLYING"]
+            self.type = TYPE["FLYING"]
         elif self.pokemon_val == POKEMON["GEODUDE"]:
-            self.type == TYPE["ROCK"]
+            self.type = TYPE["ROCK"]
         elif self.pokemon_val == POKEMON["GRAVELER"]:
-            self.type == TYPE["ROCK"]
+            self.type = TYPE["ROCK"]
         elif self.pokemon_val == POKEMON["SANDSHREW"]:
-            self.type == TYPE["GROUND"]
+            self.type = TYPE["GROUND"]
         elif self.pokemon_val == POKEMON["CATERPIE"]:
-            self.type == TYPE["BUG"]
+            self.type = TYPE["BUG"]
         elif self.pokemon_val == POKEMON["METAPOD"]:
-            self.type == TYPE["BUG"]
+            self.type = TYPE["BUG"]
         elif self.pokemon_val == POKEMON["EKANS"]:
-            self.type == TYPE["POISON"]
+            self.type = TYPE["POISON"]
         elif self.pokemon_val == POKEMON["RATATA"]:
-            self.type == TYPE["NORMAL"]
+            self.type = TYPE["NORMAL"]
         elif self.pokemon_val == POKEMON["RATICATE"]:
-            self.type == TYPE["NORMAL"]
+            self.type = TYPE["NORMAL"]
 
     def get_level(self):
         return str(self._level)
@@ -227,8 +227,8 @@ class pokemon:
             stat_increment = random.randint(1, 2)
 
             if stat == 0:
-                self.max_health += stat_increment * 3
-                self.current_health += stat_increment * 3
+                self.max_health += stat_increment * 10
+                self.current_health += stat_increment * 10
 
             elif stat == 1:
                 self._attack += stat_increment
