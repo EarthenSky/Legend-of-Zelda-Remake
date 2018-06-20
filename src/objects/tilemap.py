@@ -13,6 +13,7 @@ ANIMATION_SPEED = 0.138*1.6  # 1.6 times more than 0.138s or 138ms per frame.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import asset_manager
 import desc_manager
+import pokemon_manager
 
 class Tilemap:
     # This function converts the tile map into a matrix of tuples.
@@ -290,7 +291,12 @@ class Tilemap:
             elif x == 13 and y == 8:  # BOOKCASE
                 desc_manager.add_message_to_queue("It's crammed full of POKeMON", "books.")
             elif x == 9 and y == 0:  # Window
-                desc_manager.add_message_to_queue("You get a new pokemon!", "")
+                if len(pokemon_manager.pokemon_list) < 6:
+                    pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
+                    desc_manager.add_message_to_queue("You get a new pokemon!", "")
+                else:
+                    desc_manager.add_message_to_queue("You already have 6 pokemon", "D:")
+
                 desc_manager.add_message_to_queue("You spot a pokemon out the ", "window.  Score!")
             elif x == 4 and y == 1:  # COMPUTER
                 desc_manager.add_message_to_queue("The computer doesn't turn on.", "You wonder why...")

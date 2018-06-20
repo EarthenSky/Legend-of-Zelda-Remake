@@ -30,5 +30,3 @@ def create_random_enemy():
     pkm.check_new_move()  # Remember to set the pokemon's initial moves.
 
     return pkm
-
-pokemon_list.append( create_random_enemy() )

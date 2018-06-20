@@ -29,10 +29,15 @@ import tilemap
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
 import desc_manager
 import battle_manger
+import pokemon_manager
 
 import player  # The player needs to move.
 
 import menu
+
+import story
+
+import npc
 
 sys.path.insert(0, 'src/objects/')  # This line tells the importer where to look for the module.
 import pokemon
@@ -51,8 +56,18 @@ __builtin__.g_route_tilemap = tilemap.Tilemap( "route.map", [0, -64 * 64], 0 )
 # Create the player object.
 __builtin__.g_player = player.Player( [240*4/2-8*4, 160*4/2-4*4] )
 
+# Create oak, and add his different images to a list
+__builtin__.g_oak_grass = npc.NPC([1152, -64], pygame.image.load("resc\images\g_oak.png"), True, 0)
+__builtin__.g_oak_lab = npc.NPC([448, 256], pygame.image.load("resc\images\g_oak.png"), False, 0)
+__builtin__.g_oak_list = [g_oak_grass, g_oak_lab]
+
+
+#Create rest of the npc/trainers
+__builtin__.g_trainer_one = npc.NPC([1792, -656], pygame.image.load("resc\images\g_trainer.png"), False, 0)
+
 # Create the menu class.
 g_menu = menu.Menu(DISPLAY_SURFACE)
+g_story = story.Story(DISPLAY_SURFACE)
 
 # This function handles any input.  Called before update.
 def handle_input():
@@ -83,9 +98,20 @@ def draw():
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_outside_tilemap.draw(DISPLAY_SURFACE)
         g_route_tilemap.draw(DISPLAY_SURFACE)
+
+        g_trainer_one.draw(DISPLAY_SURFACE)
+
+        for i in range(len(g_oak_list)):
+            if g_oak_list[i] == g_oak_grass:
+                g_oak_grass.draw(DISPLAY_SURFACE)
+
     elif g_current_scene == LAB:
         DISPLAY_SURFACE.fill( (0, 0, 0) )
         g_lab_tilemap.draw(DISPLAY_SURFACE)
+
+        for i in range(len(g_oak_list)):
+	        if g_oak_list[i] == g_oak_lab:
+	            g_oak_lab.draw(DISPLAY_SURFACE)
     else:
         print "GAME IS NOT IN ANY SCENE."
 
@@ -111,7 +137,10 @@ def draw():
 
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
-    battle_manger.start_grass_battle(DISPLAY_SURFACE)
+    #pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
+    #battle_manger.start_grass_battle(DISPLAY_SURFACE)
+
+    g_story.update()
 
     # Move the player and give the movement value to the other scenes.
     player_offset = g_player.update(dt)
@@ -128,10 +157,13 @@ def update(dt):
         g_outside_tilemap.get_offset(player_offset)
         g_route_tilemap.update(dt)
         g_route_tilemap.get_offset(player_offset)
+        g_trainer_one.get_offset(player_offset)
+        g_oak_grass.get_offset(player_offset)
     elif g_current_scene == LAB:
         # Update the tilemap, then translate it.
         g_lab_tilemap.update(dt)
         g_lab_tilemap.get_offset(player_offset)
+        g_oak_lab.get_offset(player_offset)
     else:
         print "GAME IS NOT IN ANY SCENE."
 
