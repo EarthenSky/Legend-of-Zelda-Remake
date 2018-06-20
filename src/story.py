@@ -49,7 +49,8 @@ class Story:
         if self.player_pos[1] <= -16 and self.current_story_level == 0:
             self.oak_grass_pos[1] = -80
 
-            desc_manager.add_message_to_queue("It's dangerous out there", "come with me instead")
+            desc_manager.add_message_to_queue("Come with me to my lab", "...")
+            desc_manager.add_message_to_queue("Watch out for the tall grass,", "pokemon might be hiding there.")
             desc_manager.check_queue(self.surface)
             __builtin__.g_current_scene = LAB
             __builtin__.g_player.set_pos( (448, 384) )
