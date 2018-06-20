@@ -1,5 +1,7 @@
-import pygame
 import sys
+import pygame
+
+import pokemon_menu
 
 # The asset manager helps render images.
 sys.path.insert(0, 'src/managers/')  # This line tells the importer where to look for the module.
@@ -49,6 +51,7 @@ class Menu:
         # Amount of potions and pokeballs in your bag
         self.potions = 0
         self.pokeballs = 0
+        self.pokemon_menu_obj = pokemon_menu.Pokemon_Menu(self.screen)
 
     # Writes the menu options on the screen
     def display_menu_options(self):
@@ -60,6 +63,7 @@ class Menu:
     # Displays pokemon menu
     def pokemon_menu(self):
         self.screen.blit(self.pokemon_menu_image, (0, 0))
+        self.pokemon_menu_obj.update()
 
     # Displays pokemon bag
     def pokemon_bag(self):
@@ -191,7 +195,7 @@ class Menu:
         self.items_in_bag[0] = ("POTION        x " + str(self.m_bag.get_potions()))
         self.items_in_bag[1] = ("POKe BALL     x " + str(self.m_bag.get_pokeballs()))
 
-        print "POTION        x " + str(self.m_bag.get_potions())
+        #print "POTION        x " + str(self.m_bag.get_potions())
 
     # This function checks if the thing is quit.
     def _check_skip_box(self, event):

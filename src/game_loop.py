@@ -32,11 +32,8 @@ import battle_manger
 import pokemon_manager
 
 import player  # The player needs to move.
-
 import menu
-
 import story
-
 import npc
 
 sys.path.insert(0, 'src/objects/')  # This line tells the importer where to look for the module.
@@ -138,12 +135,13 @@ def draw():
 # This is the "do game math" function.  Put any math or functional code here.
 def update(dt):
     #pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
+    #pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
     #battle_manger.start_grass_battle(DISPLAY_SURFACE)
 
     g_story.update()
 
     # Move the player and give the movement value to the other scenes.
-    player_offset = g_player.update(dt)
+    player_offset = g_player.update(dt, DISPLAY_SURFACE)
 
     if g_current_scene == PLAYER_HOUSE_UPSTAIRS:
         g_player_house_up_tilemap.update(dt)

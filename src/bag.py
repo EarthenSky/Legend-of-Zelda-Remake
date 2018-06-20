@@ -8,8 +8,8 @@ import text_manager
 class Bag:
 
     def __init__(self):
-        self.potions = 0
-        self.pokeballs = 0
+        self.potions = 10
+        self.pokeballs = 10
 
     def add_to_potion(self, amount):
         self.potions += amount

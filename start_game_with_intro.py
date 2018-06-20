@@ -225,4 +225,4 @@ desc_manager.add_message_to_queue("Well then, we're all set", "for the two of")
 desc_manager.add_message_to_queue("So his name is", str(rival_name) + "?")
 
 desc_manager.check_queue( SCREEN )
-game_loop_hidden.start_gameloop()
+game_loop_hidden.start_gameloop( player, rival_name )  # Start the game.

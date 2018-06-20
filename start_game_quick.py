@@ -15,4 +15,4 @@ import game_loop_hidden
 #TODO: insert settings and name stuff here.
 
 # Start the game.
-game_loop_hidden.start_gameloop()
+game_loop_hidden.start_gameloop("PLAYER", "RIVAL")

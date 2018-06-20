@@ -2,6 +2,7 @@
 The player class interacts with this class.'''
 
 import sys
+import random
 import __builtin__  # TODO: PLEASE NO!!!
 
 # Constants.
@@ -14,6 +15,7 @@ sys.path.insert(0, 'src/managers/')  # This line tells the importer where to loo
 import asset_manager
 import desc_manager
 import pokemon_manager
+import battle_manger
 
 class Tilemap:
     # This function converts the tile map into a matrix of tuples.
@@ -91,8 +93,17 @@ class Tilemap:
         self._triggered_animations = []  # the format for animations is (x, y, animation_type, animation_frame, last_frame)
 
     # For type, 2 is grass...
-    def trigger_animation(self, x, y, animation_type):
+    def trigger_animation(self, x, y, animation_type, screen):
         self._triggered_animations.append( [x, y, animation_type, 0, 4] )
+
+        self._check_pokemon_in_grass(screen)  # Check if a pokemon appears from grass each step the player takes.
+
+    def _check_pokemon_in_grass(self, screen):
+        random_number = random.randint(1, 12)
+        if random_number == 1:
+            desc_manager.add_message_to_queue("A wild POKeMON has appeared!", "O: !!!")
+            desc_manager.check_queue(screen)
+            battle_manger.start_grass_battle(screen)  # Start a pokemon battle, likely, every ~15 steps
 
     # Gets the player's 'offset' tuple which contains a position and what to do with it.
     # The tuple can be translation or assignation.
@@ -213,7 +224,6 @@ class Tilemap:
     def update(self, dt):
         self._update_animation(dt)
 
-    # TODO: make sure x, y are in bounds.
     def get_tile(self, x, y):
         y += 1  # Just... I dunno.  It works.
 
@@ -232,9 +242,6 @@ class Tilemap:
             return( (self.map_matrix[y][x][3], self.map_matrix[y][x][4]) );  #return the toptile.
 
     def check_interaction_at_tile(self, x, y):
-        #tile = self.get_tile(x, y)
-
-        print (x, y)
         if __builtin__.g_current_scene == OUTSIDE:
             if x == 10 and y == 13:  # The sign's text.
                 desc_manager.add_message_to_queue("Pokemon can be found in tall", "grass.")
@@ -249,9 +256,9 @@ class Tilemap:
             elif x == 11 and y == 6:  # Other house
                 desc_manager.add_message_to_queue("The door is locked.  You guess", "it will never be opened.")
             elif x == 9 and y == 6:  # Other house
-                desc_manager.add_message_to_queue("RIVAL's house", "")
+                desc_manager.add_message_to_queue("{}'s house".format(__builtin__.rival_name), "")
             elif x == 18 and y == 6:  # Other house
-                desc_manager.add_message_to_queue("PLAYER's house", "")
+                desc_manager.add_message_to_queue("{}'s house".format(__builtin__.player_name), "")
             elif x == 20 and y == 6:  # Going into the player's house.
                 __builtin__.g_current_scene = PLAYER_HOUSE_DOWNSTAIRS
                 __builtin__.g_player.set_pos( (64 * 4, 64 * 9) )

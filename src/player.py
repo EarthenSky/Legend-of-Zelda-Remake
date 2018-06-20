@@ -211,7 +211,7 @@ class Player:
             if self._current_animation >= 4:
                 self._current_animation = 0
 
-    def _check_on_grass(self):
+    def _check_on_grass(self, screen):
         if g_current_scene == OUTSIDE:
             if self.position[1] <= 0:  # TODO: fix collision bug here?
                 # Check current tile.
@@ -224,7 +224,7 @@ class Player:
                 print "trigger grass animation"
 
                 # Trigger an animation.
-                __builtin__.g_route_tilemap.trigger_animation( int(round(self.position[0]/64)), int(round(self.position[1]/64)), 13 )
+                __builtin__.g_route_tilemap.trigger_animation( int(round(self.position[0]/64)), int(round(self.position[1]/64)), 13, screen )
 
     # Check if the player needs to move in another direction before stopping.
     def _check_new_move_dir(self, dt):
@@ -274,7 +274,7 @@ class Player:
                         self.position[1] += SPEED * dt * 2
 
     # This function handles calculating what amount the player needs to move.
-    def _move_player(self, dt):
+    def _move_player(self, dt, screen):
         if self.direction == 0:
             # Case: player needs to move more, until they are on / past the tile.
             if self.position[1] <= self._last_position[1] + 64:
@@ -289,7 +289,7 @@ class Player:
                 self._last_position[1] = self._last_position[1] + 64
                 self.position[1] = self._last_position[1]
 
-                self._check_on_grass()
+                self._check_on_grass(screen)
 
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
@@ -309,7 +309,7 @@ class Player:
                 self._last_position[1] = self._last_position[1] - 64
                 self.position[1] = self._last_position[1]
 
-                self._check_on_grass()
+                self._check_on_grass(screen)
 
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
@@ -328,7 +328,7 @@ class Player:
                 self._last_position[0] = self._last_position[0] - 64
                 self.position[0] = self._last_position[0]
 
-                self._check_on_grass()
+                self._check_on_grass(screen)
 
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
@@ -347,12 +347,12 @@ class Player:
                 self._last_position[0] = self._last_position[0] + 64
                 self.position[0] = self._last_position[0]
 
-                self._check_on_grass()
+                self._check_on_grass(screen)
 
                 self._check_new_move_dir(dt)
                 return (1, -self.position[0] + self._draw_position[0], -self.position[1] + self._draw_position[1])
 
-    def check_movement(self, dt):
+    def check_movement(self, dt, screen):
         # Check if on grass.
         if self._move == False and self._is_on_grass == False:
             if g_current_scene == OUTSIDE:
@@ -459,12 +459,12 @@ class Player:
                 return (0, 0, 0)  # No movement
             else:
                 # In this function the player is moved in a direction.
-                return self._move_player(dt)
+                return self._move_player(dt, screen)
 
-    def update(self, dt):
+    def update(self, dt, screen):
         # Check if the player should move, or moves the player.
         # output_offset holds the amount to move the scenes.
-        output_offset = self.check_movement(dt)
+        output_offset = self.check_movement(dt, screen)
 
         if self._set_pos == True:
             # Set offset to set to player pos.
