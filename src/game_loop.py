@@ -96,7 +96,7 @@ def draw():
         g_outside_tilemap.draw(DISPLAY_SURFACE)
         g_route_tilemap.draw(DISPLAY_SURFACE)
 
-        g_trainer_one.draw(DISPLAY_SURFACE)
+        #g_trainer_one.draw(DISPLAY_SURFACE)
 
         for i in range(len(g_oak_list)):
             if g_oak_list[i] == g_oak_grass:
@@ -155,7 +155,7 @@ def update(dt):
         g_outside_tilemap.get_offset(player_offset)
         g_route_tilemap.update(dt)
         g_route_tilemap.get_offset(player_offset)
-        g_trainer_one.get_offset(player_offset)
+        #g_trainer_one.get_offset(player_offset)
         g_oak_grass.get_offset(player_offset)
     elif g_current_scene == LAB:
         # Update the tilemap, then translate it.

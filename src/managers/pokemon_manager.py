@@ -95,7 +95,7 @@ def create_random_enemy_by_level(level_avg):
     elif random_pokemon_number == 8:
         random_pokemon_value = __builtin__.POKEMON["RATATA"]
 
-    random_level = random.randint(int(level_avg)-5, int(level_avg)-1)
+    random_level = random.randint(int(level_avg)-4, int(level_avg))
     if random_level <= 1:
         random_level = random.randint(2, 3)
 

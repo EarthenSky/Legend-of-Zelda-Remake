@@ -23,21 +23,21 @@ class Story:
         self.trainer_one = g_trainer_one
 
     def update(self):
-
         #print self.player_pos
-
         if self.inlab == True:
 
-            desc_manager.add_message_to_queue("Here, have a pokemon", "it will protect you...")
+            desc_manager.add_message_to_queue("Here, have a few pokemon", "they will protect you-")
 
+            pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
+            pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
+            pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
+            pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
             pokemon_manager.pokemon_list.append( pokemon_manager.create_random_enemy() )  # Give player a random pokemon.
 
             desc_manager.check_queue(self.surface)
-            desc_manager.add_message_to_queue("when you are in danger.", "You can also battle with it.")
+            desc_manager.add_message_to_queue("when you are in danger.", "You can also battle with them.")
             desc_manager.check_queue(self.surface)
-            desc_manager.add_message_to_queue("In the forest north of", "here there is a trainer,")
-            desc_manager.check_queue(self.surface)
-            desc_manager.add_message_to_queue("try to beat him in a battle.", "Good luck!")
+            desc_manager.add_message_to_queue("Try to get as strong a pokemon", "as possible Good luck!")
             desc_manager.check_queue(self.surface)
 
             self.current_story_level = 1
@@ -56,10 +56,10 @@ class Story:
             __builtin__.g_player.set_pos( (448, 384) )
             self.inlab = True
 
-        if self.current_story_level == 1:
-            if self.player_pos[1] == -656:
-                for i in range(5):
-                    self.trainer_one.walk_left(1, 2)
-                desc_manager.add_message_to_queue("Fight me bro!", "")
-                desc_manager.check_queue(self.surface)
-                self.current_story_level = 2
+        #if self.current_story_level == 1:
+        #    if self.player_pos[1] == -656:
+        #        for i in range(1):
+        #            self.trainer_one.walk_left(1, 2)
+        #        desc_manager.add_message_to_queue("Fight me bro!", "")
+        #        desc_manager.check_queue(self.surface)
+        #        self.current_story_level = 2

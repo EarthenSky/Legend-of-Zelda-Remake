@@ -101,7 +101,7 @@ class Tilemap:
     def _check_pokemon_in_grass(self, screen):
         random_number = random.randint(1, 12)
         if random_number == 1:
-            desc_manager.add_message_to_queue("A wild POKeMON has appeared!", "O: !!!")
+            desc_manager.add_message_to_queue("A wild POKeMON has appeared!", "!!!")
             desc_manager.check_queue(screen)
             battle_manger.start_grass_battle(screen)  # Start a pokemon battle, likely, every ~15 steps
 

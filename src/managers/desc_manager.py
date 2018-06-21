@@ -55,7 +55,6 @@ def loop_item(screen):
     # Create the object that handles framerate regulation and delta_time.
     framerate_clock = pygame.time.Clock()
     delta_time = framerate_clock.tick(60) / 1000.0
-    everysecond_val = 0
 
     # Continuously check for the z key (A button) being pressed.
     start_exit = False
@@ -75,10 +74,3 @@ def loop_item(screen):
 
         # Pause pygame and calculate delta time.
         delta_time = framerate_clock.tick(60) / 1000.0
-
-        everysecond_val += delta_time
-
-        # Tells person they are in a message
-        if everysecond_val > 1:
-            everysecond_val = 0
-            print "In a MESSAGE!"

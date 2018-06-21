@@ -33,9 +33,9 @@ def start_grass_battle(screen):
 
     set_active_pokemon( pokemon_manager.get_next_pokemon(screen, True) )
     if random.randint(1, 2) == 1:
-        set_other_pokemon( pokemon_manager.create_random_enemy_by_level( pokemon_manager.get_next_pokemon(-1, True).get_level() ) )
+        set_other_pokemon( pokemon_manager.create_random_enemy_by_level( int(pokemon_manager.get_next_pokemon(-1, True).get_level())-1 ) )
     else:
-        set_other_pokemon( pokemon_manager.create_random_enemy_by_level(3) )
+        set_other_pokemon( pokemon_manager.create_random_enemy_by_level( int(pokemon_manager.get_next_pokemon(-1, True).get_level())+2 ) )
 
     # Do init stuff.
     current_battle_stage = CHOOSE_ATTACK_STAGE
@@ -72,21 +72,19 @@ def _player_attack(active_pokemon_move, other_pokemon_move):
         g_active_pokemon.get_moves()[g_selected_move-1].pp -= 1  # Make pp go down by one
 
         if active_pokemon_move.stat_boost == STAT_BOOST["OP_DEF_DOWN"]:
-            enemy_defence_mod -= 10
+            enemy_defence_mod -= 8
             desc_manager.add_message_to_queue("The opponent POKeMON's", "defence is lowered...")
         elif active_pokemon_move.stat_boost == STAT_BOOST["OP_ATK_DOWN"]:
-            enemy_attack_mod -= 10
+            enemy_attack_mod -= 8
             desc_manager.add_message_to_queue("The opponent POKeMON's", "attack is lowered...")
         elif active_pokemon_move.stat_boost == STAT_BOOST["PLAYER_DEF_UP"]:
-            player_defence_mod += 10
+            player_defence_mod += 8
             desc_manager.add_message_to_queue("Your POKeMON's defence is", "increased...")
         elif active_pokemon_move.stat_boost == STAT_BOOST["PLAYER_ATK_UP"]:
-            player_attack_mod += 10
+            player_attack_mod += 8
             desc_manager.add_message_to_queue("Your POKeMON's attack is", "increased...")
 
         attack_dif = (g_other_pokemon.defence - g_active_pokemon.attack) + enemy_defence_mod - player_attack_mod
-
-        print "player's attack_dif: " + str(attack_dif)
 
         damage = int(active_pokemon_move.damage * (1 - (0.03 * attack_dif)) / 3)  # Big attack dif means less damage.  Negitave means more damage.
 
@@ -215,8 +213,6 @@ def _player_attack(active_pokemon_move, other_pokemon_move):
 
     g_other_pokemon.current_health -= int(damage)  # Decrement the enemy's hp.
 
-    print "player deals " + str(damage) + " damage"
-
     # Check if the opponent is dead.
     if g_other_pokemon.current_health <= 0:
         g_other_pokemon.current_health = 0
@@ -228,7 +224,6 @@ def _player_attack(active_pokemon_move, other_pokemon_move):
         desc_manager.add_message_to_queue("Your POKeMON uses " + active_pokemon_move.name, "It deals {} damage".format( int(damage) ))
 
     if g_other_pokemon.current_health <= 0:
-        print "end battle"
         return 1  # This means stop the battle.
 
     return 0
@@ -241,21 +236,19 @@ def _enemy_attack(active_pokemon_move, other_pokemon_move, enemy_random_move):
         g_other_pokemon.get_moves()[enemy_random_move-1].pp -= 1  # Make pp go down by one.
 
         if other_pokemon_move.stat_boost == STAT_BOOST["OP_DEF_DOWN"]:
-            player_defence_mod -= 10
+            player_defence_mod -= 8
             desc_manager.add_message_to_queue("Your POKeMON's defence is", "lowered...")
         elif other_pokemon_move.stat_boost == STAT_BOOST["OP_ATK_DOWN"]:
-            player_attack_mod -= 10
+            player_attack_mod -= 8
             desc_manager.add_message_to_queue("Your POKeMON's attack is", "lowered...")
         elif other_pokemon_move.stat_boost == STAT_BOOST["PLAYER_DEF_UP"]:
-            enemy_defence_mod += 10
+            enemy_defence_mod += 8
             desc_manager.add_message_to_queue("The opposing POKeMON's", "defence is increased...")
         elif other_pokemon_move.stat_boost == STAT_BOOST["PLAYER_ATK_UP"]:
-            enemy_attack_mod += 10
+            enemy_attack_mod += 8
             desc_manager.add_message_to_queue("The opposing POKeMON's", "attack is increased...")
 
         attack_dif = (g_active_pokemon.defence - g_other_pokemon.attack) + player_defence_mod - enemy_attack_mod
-
-        print "enemy's attack_dif: " + str(attack_dif)
 
         damage = int(other_pokemon_move.damage * (1 - (0.03 * attack_dif)) / 3)  # Big attack dif means less damage.  Negitave means more damage.
 
@@ -383,8 +376,6 @@ def _enemy_attack(active_pokemon_move, other_pokemon_move, enemy_random_move):
         damage = 1
 
     g_active_pokemon.current_health -= int(damage)  # Decrement the player's hp.
-
-    print "enemy deals " + str(damage) + " damage"
 
     # Check if the player's pokemon is dead.
     if g_active_pokemon.current_health <= 0:
@@ -600,7 +591,6 @@ def battle_loop(screen):
     # Create the object that handles framerate regulation and delta_time.
     framerate_clock = pygame.time.Clock()
     delta_time = framerate_clock.tick(60) / 1000.0
-    everysecond_val = 0
 
     while keep_looping:
         draw(screen)
@@ -613,10 +603,3 @@ def battle_loop(screen):
 
         # Pause pygame and calculate delta time.
         delta_time = framerate_clock.tick(60) / 1000.0
-
-        everysecond_val += delta_time
-
-        # Tells person they are in a message
-        if everysecond_val > 2:
-            everysecond_val = 0
-            print "In a BATTLE!"

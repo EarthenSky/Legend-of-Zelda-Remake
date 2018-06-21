@@ -23,12 +23,10 @@ class NPC:
         # Rounds the position to every 4 pixels.
         self.pos = (round(self.position[0] / 4) * 4, round(self.position[1] / 4) * 4)
 
-
         if self.in_grass == True:
             self.img_rect = (0, self.group * 20, 16, 11)
         else:
             self.img_rect = (0, self.group * 20, 16, 20)
-
 
         self.cut_img = self.spritesheet.subsurface(self.img_rect)
         self.cut_img = pygame.transform.scale(self.cut_img, (self.cut_img.get_width() * 4, self.cut_img.get_height() * 4))
