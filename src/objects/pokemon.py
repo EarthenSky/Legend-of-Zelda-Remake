@@ -120,6 +120,8 @@ class pokemon:
 
             if self._level >= 8:
                 self._moves_list.append( move("vine whip") )
+                if self._level >= 11:
+                    self._moves_list.append( move("razor leaf") )
 
         elif self.pokemon_val == POKEMON["IVYSAUR"]:
             self._moves_list.append( move("tackle") )
@@ -133,12 +135,13 @@ class pokemon:
 
             if self._level >= 8:
                 self._moves_list.append( move("ember") )
+                if self._level >= 11:
+                    self._moves_list.append( move("fire blast") )
 
         elif self.pokemon_val == POKEMON["CHARMELEON"]:
             self._moves_list.append( move("scratch") )
             self._moves_list.append( move("tail whip") )
             self._moves_list.append( move("ember") )
-            self._moves_list.append( move("fire blast") )
 
         elif self.pokemon_val == POKEMON["SQUIRTLE"]:
             self._moves_list.append( move("scratch") )
@@ -146,6 +149,8 @@ class pokemon:
 
             if self._level >= 8:
                 self._moves_list.append( move("water gun") )
+                if self._level >= 11:
+                    self._moves_list.append( move("bubble beam") )
 
         elif self.pokemon_val == POKEMON["WARTORTLE"]:
             self._moves_list.append( move("scratch") )
@@ -160,6 +165,9 @@ class pokemon:
             if self._level >= 8:
                 self._moves_list.append( move("slash") )
 
+                if self._level >= 11:
+                    self._moves_list.append( move("drill peck") )
+
         elif self.pokemon_val == POKEMON["PIDGEOTTO"]:
             self._moves_list.append( move("gust") )
             self._moves_list.append( move("peck") )
@@ -172,6 +180,9 @@ class pokemon:
 
             if self._level >= 8:
                 self._moves_list.append( move("rock throw") )
+
+                if self._level >= 11:
+                    self._moves_list.append( move("rage") )
 
         elif self.pokemon_val == POKEMON["GRAVELER"]:
             self._moves_list.append( move("tackle") )
@@ -212,12 +223,13 @@ class pokemon:
         elif self.pokemon_val == POKEMON["RATATA"]:
             self._moves_list.append( move("tackle") )
             self._moves_list.append( move("growl") )
-
+            self._moves_list.append( move("stomp") )
+            self._moves_list.append( move("rage") )
+            
         elif self.pokemon_val == POKEMON["RATICATE"]:
             self._moves_list.append( move("tackle") )
             self._moves_list.append( move("growl") )
-            self._moves_list.append( move("slash") )
-            self._moves_list.append( move("rage") )
+
 
     def level_up(self):
         self._level += 1  # Increase level count by one.
