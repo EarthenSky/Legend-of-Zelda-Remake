@@ -2,6 +2,7 @@
 
 import pygame
 import game_loop  # Import the main gameloop to call its functions.
+import __builtin__  # NOOOOOooOOoOoO.
 
 # This is the gameloop section of code.
 def _gameloop():
@@ -46,5 +47,7 @@ def _gameloop():
     print "DEBUG: Application Complete."
 
 # This function is used to start the main seciton of the game.
-def start_gameloop():
+def start_gameloop(player_name, rival_name):
+    __builtin__.player_name = player_name
+    __builtin__.rival_name = rival_name
     _gameloop()

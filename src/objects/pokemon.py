@@ -11,8 +11,8 @@ __builtin__.POKEMON["SQUIRTLE"]     =   (2, 0)
 __builtin__.POKEMON["WARTORTLE"]    =   (2, 1)
 __builtin__.POKEMON["PIDGEY"]       =   (0, 3)
 __builtin__.POKEMON["PIDGEOTTO"]    =   (0, 4)
-__builtin__.POKEMON["GEODUDE"]      =   (4, 14)
-__builtin__.POKEMON["GRAVELER"]     =   (5, 0)
+__builtin__.POKEMON["GEODUDE"]      =   (4, 13)
+__builtin__.POKEMON["GRAVELER"]     =   (4, 14)
 __builtin__.POKEMON["SANDSHREW"]    =   (3, 5)
 __builtin__.POKEMON["CATERPIE"]     =   (3, 0)
 __builtin__.POKEMON["METAPOD"]      =   (3, 1)
@@ -220,24 +220,26 @@ class pokemon:
             self._moves_list.append( move("rage") )
 
     def level_up(self):
+        self._level += 1  # Increase level count by one.
+
         # Make random stats go up.
-        gained_stat_points = random.randint(1, 4)  # both numbers are inclusive
+        gained_stat_points = random.randint(2, 6)  # both numbers are inclusive
         for index in range(gained_stat_points):
-            stat = random.randint(0, 3)  # both numbers are inclusive
+            stat = random.randint(0, 4)  # both numbers are inclusive
             stat_increment = random.randint(1, 2)
 
-            if stat == 0:
-                self.max_health += stat_increment * 10
-                self.current_health += stat_increment * 10
+            if stat == 0 or stat == 4:
+                self.max_health += stat_increment * 8
+                self.current_health += stat_increment * 8
 
             elif stat == 1:
-                self._attack += stat_increment
+                self.attack += stat_increment
 
             elif stat == 2:
-                self._attack += stat_increment
+                self.defence += stat_increment
 
             elif stat == 3:
-                self._speed += stat_increment
+                self.speed += stat_increment
 
         self._moves_list = []  # Reset the moves list.
 
@@ -252,10 +254,6 @@ __builtin__.STAT_BOOST["PLAYER_DEF_UP"]     =    0
 __builtin__.STAT_BOOST["OP_DEF_DOWN"]       =    1
 __builtin__.STAT_BOOST["PLAYER_ATK_UP"]     =    2
 __builtin__.STAT_BOOST["OP_ATK_DOWN"]       =    3
-__builtin__.STAT_BOOST["PLAYER_ACC_UP"]     =    4
-__builtin__.STAT_BOOST["OP_ACC_DOWN"]       =    5
-__builtin__.STAT_BOOST["PLAYER_EVASION_UP"] =    6
-__builtin__.STAT_BOOST["OP_EVASION_DOWN"]   =    7
 
 ''' This class holds the information for each move in the game.  (this is more like a data structure [struct] than a class.) '''
 class move:
@@ -293,7 +291,7 @@ class move:
 
         elif name == "growl":
             self.damage = 0
-            self.stat_boost = STAT_BOOST["OP_ATK_DOWN"]
+            self.stat_boost = STAT_BOOST["PLAYER_ATK_UP"]
             self.type = TYPE["NORMAL"]
             self.pp = 30
             self.accuracy = 100
@@ -328,7 +326,7 @@ class move:
 
         elif name == "string shot":
             self.damage = 0
-            self.stat_boost = STAT_BOOST["OP_EVASION_DOWN"]
+            self.stat_boost = STAT_BOOST["OP_DEF_DOWN"]
             self.type = TYPE["FLYING"]
             self.pp = 25
             self.accuracy = 90
@@ -355,8 +353,8 @@ class move:
             self.accuracy = 100
 
         elif name == "sand attack":
-            self.damage = 0
-            self.stat_boost = STAT_BOOST["OP_ACC_DOWN"]
+            self.damage = 5
+            self.stat_boost = STAT_BOOST["OP_ATK_DOWN"]
             self.type = TYPE["GROUND"]
             self.pp = 15
             self.accuracy = 100
